@@ -8,267 +8,258 @@
 ## Labori eesmärgid
 
 Selle labori lõppedes oskad:
-- Järgida serveriruu ohutusnõudeid ja etiketit
 - Ühendada Cisco seadmega konsooli kaabli kaudu
-- Navigeerida Cisco IOS käsureas (CLI)
-- Eristada käsurea režiime (User EXEC, Privileged EXEC, Global Config)
+- Navigeerida Cisco IOS käsureas (CLI) kolmes režiimis
 - Seadistada seadme hostname ja banner sõnumit
-- Salvestada seadme konfiguratsiooni
+- Salvestada seadme konfiguratsiooni püsivalt
 - Kasutada CLI abistavat funktsionaalsust
+- Läbi viia PT Lab 2.1: "Basic Switch Configuration"
 
 ## Vajalikud materjalid
 
+**Serveriruu töö:**
 - Cisco 2960 lüliti (serveriruu)
-- Konsooli kaabel (RJ-45 to DB-9 või USB)
-- Arvuti terminali tarkvaraga (PuTTY, Tera Term)
-- Notepad märkmete tegemiseks
-- **TÄHTIS:** Kandke suletud jalatseid serveriruu
+- Konsooli kaabel (RJ-45 to USB)
+- Laptop terminali tarkvaraga (PuTTY)
 
-## OHUTUSNÕUDED JA ETIKETT
+**PT võrdlus:**
+- Packet Tracer avatud eelmisest laborist
+- Labor 1 PT fail
 
-### Serveriruu ohutusnõuded
-- **Kandke ALATI suletud jalatseid** (mitte sandaalid)
-- **Ärge kunagi lülitage seadmeid välja** ilma õppejõu loata
-- **Ärge eemaldage kaableid** teiste seadmete küljest
-- **Liigutage ettevaatlikult** - serveriruu on kitsa ruumiga
-- **Tõstke rasket kabinetit KOOS** - mitte üksinda
-- **Hädaolukord:** Väljalüliti on ukse kõrval
+## Samm 1: Füüsilised seadmed ja ühendused (10 minutit)
 
-### Serveriruu etikett
-- **Vaikne töö** - teised rühmad töötavad samuti
-- **Puhas töökoht** - jätke kõik algsesse kohta
-- **Jagamine** - seadmed on kõigi jaoks
-- **Küsimised** - küsige julgelt, kui midagi pole selge
+### 1.1 Cisco 2960 lüliti tutvustus
+**Leia oma lüliti serveriruu** (õppejõu juhendamisel):
 
-## Samm 1: Seadmete tutvustus (10 minutit)
+**Esikülje portid:**
+- **24x FastEthernet porti** (Fa0/1 kuni Fa0/24) - 100 Mbps
+- **2x GigabitEthernet porti** (Gi0/1, Gi0/2) - 1000 Mbps uplink
+- **LED indikaatorid:** System (roheline = töötab), portide staatused
 
-### 1.1 Cisco 2960 lüliti uurimine
-**Füüsilise seadme vaatlus:**
-- **Esiküljel:** 24x FastEthernet porti (Fa0/1 - Fa0/24)
-- **Tagaküljel:** Toitejuhe, konsooliport
-- **LED-id:** System, RPS, Status igal pordil
-- **Ventilaatorid:** Kuulda tagant
+**Tagakülje ühendused:**
+- **Console port** (sinine RJ-45) - meie täna kasutame
+- **Toitejuhe** - 110-240V AC
+- **Ventilaatorid** - kuuled neid töötamas
 
-**Portide tüübid:**
-- **FastEthernet (Fa0/1-24):** 100 Mbps kiirusega
-- **GigabitEthernet (Gi0/1-2):** 1000 Mbps uplink portid
-- **Console port:** Halduseks (sinine RJ-45 port)
+### 1.2 Konsooli kaabli ühendamine
+**1. Leia õige kaabel:**
+- **RJ-45 to USB** kaabel (sinine ots)
+- **"Rollover" tüüp** - eripärane juhtmete järjestus
 
-### 1.2 Konsooli kaabli uurimine
-**Kaabli tüübid:**
-- **RJ-45 to DB-9:** Vanem standard, nõuab adapter
-- **RJ-45 to USB:** Uuem, otsene USB ühendus
-- **"Rollover" kaabel:** Eripärane juhtmete järjestus
+**2. Ühenda füüsiliselt:**
+- **Lüliti pool:** Console port (sinine RJ-45)
+- **Laptop pool:** USB port
+- **Kontrolli:** Windows peaks "USB Serial" draiveri leidma
 
-**Ühenduspunktid:**
-- **Lüliti pool:** Console port (sinine)
-- **Arvuti pool:** COM port või USB
+**3. Vaata LED-e:**
+- **System LED:** Roheline = lüliti töötab
+- **Portide LED-id:** Kollased/rohelised = aktiivsed
 
-## Samm 2: Ühenduse loomine (10 minutit)
+## Samm 2: PuTTY ühenduse seadistamine (10 minutit)
 
-### 2.1 Füüsiline ühendus
-1. **Leia serveriruu Cisco 2960 lüliti** (küsi õppejõult)
-2. **Ühenda konsooli kaabel:**
-   - Lüliti poolne ots: Console porti (sinine RJ-45)
-   - Arvuti poolne ots: USB või COM porti
-3. **Kontrolli ühendust:** LED-id lülitil peavad põlema
+### 2.1 PuTTY konfigureerimine
+**Käivita PuTTY ja seadista:**
 
-### 2.2 Terminali tarkvara seadistamine
-**PuTTY kasutamine (soovitatud):**
-1. Käivita PuTTY
-2. Vali "Serial" ühenduse tüüp
-3. Seaded:
-   - **Serial line:** COM3 (või teine, mida Windows näitab)
-   - **Speed:** 9600
-   - **Data bits:** 8
-   - **Stop bits:** 1
-   - **Parity:** None
-   - **Flow control:** None
-4. Kliki "Open"
+1. **Connection type:** Serial (vali radio button)
+2. **Serial line:** COM3 (või mis Windows Device Manager näitab)
+3. **Speed (baud):** 9600
+4. **Data bits:** 8
+5. **Stop bits:** 1
+6. **Parity:** None
+7. **Flow control:** None
 
-**Alternatiiv - Windows Hyperterminal:**
-1. Start → Programs → Accessories → Communications → HyperTerminal
-2. Loo uus ühendus nimega "Cisco Console"
-3. Vali COM port
-4. Sama seaded nagu PuTTY puhul
+**Kliki "Open"** - avaneb must terminali aken
 
-### 2.3 Esimene ühendus
-1. **Vajuta Enter** terminali aknas
+### 2.2 Esimene kontakt CLI-ga
+**Terminali aknas:**
+1. **Vajuta Enter mitu korda**
 2. Peaksid nägema:
    ```
    Switch>
    ```
-   Kui midagi ei näe, vajuta Ctrl+Break või restartida ühendus.
+3. **Kui midagi ei näe:** Vajuta Ctrl+Break või restart PuTTY
 
-## Samm 3: IOS CLI navigeerimine (15 minutit)
+**Kui näed Switch> märki - oled edukalt ühendunud!**
+
+## Samm 3: CLI kolm režiimi (15 minutit)
 
 ### 3.1 User EXEC režiim
-**Märk:** `Switch>`
+**Märk:** `Switch>`  
+**Võimalused:** Ainult põhilised vaatamise käsud
 
-**Põhikäsud:**
+**Harjutus 1 - Seadme info:**
 ```bash
-Switch> ?                    # Kõik võimalikud käsud
-Switch> show version         # Seadme info
-Switch> show interfaces     # Võrgu liideste info
-Switch> show ip interface brief  # Lühike liideste ülevaade
+Switch> show version
 ```
+**Leia ja märgi üles:**
+- IOS-i versioon
+- Seadme mudel  
+- MAC aadress
 
-**Harjutus:**
-1. Sisesta `show version` 
-2. Leia IOS-i versioon ja seadme mudel
-3. Märgi üles MAC aadressi
+**Harjutus 2 - Liideste info:**
+```bash
+Switch> show interfaces brief
+Switch> show ip interface brief
+```
 
 ### 3.2 Privileged EXEC režiim
 **Sisenemine:** `enable` käsk  
-**Märk:** `Switch#`
+**Märk:** `Switch#`  
+**Võimalused:** Kõik show käsud + konfiguratsioon
 
 ```bash
 Switch> enable
 Switch# 
 ```
 
-**Uued käsud:**
+**Harjutus 3 - Konfiguratsioonide vaatamine:**
 ```bash
-Switch# show running-config    # Aktiivne konfiguratsioon
-Switch# show startup-config    # Salvestatud konfiguratsioon
-Switch# copy running-config startup-config  # Konfiguratsiooni salvestamine
+Switch# show running-config
+Switch# show startup-config
 ```
 
-**Harjutus:**
-1. Mine Privileged EXEC režiimi
-2. Vaata `show running-config`
-3. Märka erinevust User EXEC-iga
+**Võrdle tulemusi:** Mida märkad kahe konfiguratsiooni vahel?
 
 ### 3.3 Global Configuration režiim
 **Sisenemine:** `configure terminal`  
-**Märk:** `Switch(config)#`
+**Märk:** `Switch(config)#`  
+**Võimalused:** Seadme konfigureerimine
 
 ```bash
 Switch# configure terminal
 Switch(config)# 
 ```
 
-**Konfiguratsioon käsud:**
+**Pane tähele:** Käsurida muutus! Nüüd saad seadistada.
+
+## Samm 4: Esimesed konfiguratsioonid (10 minutit)
+
+### 4.1 Seadme nime muutmine
 ```bash
-Switch(config)# hostname [nimi]           # Seadme nime muutmine
-Switch(config)# banner motd #[sõnum]#     # Tervitussõnum
-Switch(config)# enable password [parool]  # Privileged EXEC parool
-Switch(config)# exit                      # Tagasi eelmisse režiimi
+Switch(config)# hostname RUHM[X]-SW1
+RUHM[X]-SW1(config)# 
 ```
+**Asenda [X] oma rühma numbriga** (nt. RUHM2-SW1)
 
-## Samm 4: Põhikonfiguratsioon (10 minutit)
+**Tulemus:** Käsurida näitab nüüd uut nime!
 
-### 4.1 Hostname seadistamine
+### 4.2 Banner sõnumi seadistamine
 ```bash
-Switch# configure terminal
-Switch(config)# hostname Labor2-SW1
-Labor2-SW1(config)# 
-```
-
-**Tulemus:** Käsurida muutub - näitab nüüd uut nime!
-
-### 4.2 Banner sõnumi lisamine
-```bash
-Labor2-SW1(config)# banner motd #
-Sisesta sõnum, lõpeta '#'-ga:
-HOIATUS: Ainult volitatud kasutajad!
-Kooli serveriruu - Labor 2
+RUHM[X]-SW1(config)# banner motd #
+Enter TEXT message. End with the character '#'.
+=== HOIATUS ===
+Ainult volitatud kasutajad!
+Labor 2 - [Sinu nimi]
+===============
 #
-Labor2-SW1(config)# 
+RUHM[X]-SW1(config)# 
 ```
 
-### 4.3 Parool seadistamine (valikuline)
+### 4.3 Konfiguratsioon testimine
+**1. Välju config režiimist:**
 ```bash
-Labor2-SW1(config)# enable password cisco
-Labor2-SW1(config)# exit
-Labor2-SW1# 
+RUHM[X]-SW1(config)# exit
+RUHM[X]-SW1# 
 ```
 
-**Test:** 
-1. Sisesta `exit` (tagasi User EXEC)
-2. Sisesta `enable` 
-3. Peaks küsima parooli
-
-### 4.4 Konfiguratsiooni salvestamine
+**2. Vaata oma muudatusi:**
 ```bash
-Labor2-SW1# copy running-config startup-config
+RUHM[X]-SW1# show running-config
+```
+
+**3. Leia oma hostname ja banner seaded**
+
+### 4.4 KRIITILISELT OLULINE - Salvestamine
+```bash
+RUHM[X]-SW1# copy running-config startup-config
 Destination filename [startup-config]? [vajuta Enter]
 Building configuration...
 [OK]
 ```
 
-**TÄHTIS:** Ilma salvestamata kaob konfiguratsioon restartiga!
+**MIKS OLULINE:** Ilma salvestamata kaob kõik restart korral!
 
 ## CLI abistavad funktsioonid
 
 ### Tab täiendamine
 ```bash
-Switch# sh[Tab]          # Laiendab "show"-ks
-Switch# show int[Tab]    # Laiendab "interfaces"-ks
+Switch# sh[Tab]          → "show"
+Switch# show int[Tab]    → "show interfaces"
 ```
 
-### Käsu ajalugu
+### Käsuajalugu
 - **Üles nool (↑):** Eelmine käsk
-- **Alla nool (↓):** Järgmine käsk
+- **Alla nool (↓):** Järgmine käsk  
+- **Ctrl+A:** Rea algusesse
+- **Ctrl+E:** Rea lõppu
 
 ### Konteksti abi
 ```bash
-Switch# show ?           # Kõik "show" alamkäsud
-Switch# show int ?       # "show interface" valikud
+Switch# show ?           # Kõik "show" valikud
+Switch# show interfaces ?    # "show interfaces" valikud
 ```
 
-### Vea sõnumid
+### Veateated
 ```bash
 Switch# shwo version
            ^
 % Invalid input detected at '^' marker.
 ```
 
+## PT Lab 2.1: Basic Switch Configuration
+
+**Nüüd harjuta sama PT-s:**
+
+1. **Ava PT** ja loo uus fail
+2. **Lisa 2960 lüliti** workspace-i
+3. **Kliki lüliti peal** → "CLI" tab
+4. **Korda samu käske:**
+   - `enable`
+   - `configure terminal`
+   - `hostname PT-SW1`
+   - `banner motd # Tere PT! #`
+   - `copy running-config startup-config`
+
+**Võrdle:** Kuidas on PT lihtsam kui päris seade?
+
 ## Kontrolliküsimused
 
-1. **Mis on erinevus User EXEC ja Privileged EXEC vahel?**
-2. **Kuidas salvestada konfiguratsiooni püsivalt?**
-3. **Mida tähendab `Switch(config)#` märk?**
-4. **Kuidas väljuda Global Configuration režiimist?**
-5. **Mis juhtub kui ei salvesta konfiguratsiooni?**
+1. **Miks on kolm erinevat CLI režiimi?**
+2. **Mis juhtub kui ei salvesta konfiguratsiooni?**
+3. **Kuidas erineb running-config startup-config-ist?**
+4. **Mida tähendab Switch(config)# märk?**
+5. **Millal kasutad Tab klahvi CLI-s?**
 
 ## Tõrkeotsing
 
-### Probleem: Terminalis pole teksti näha
+### Probleem: PuTTY ei näita teksti
 **Lahendused:**
-- Vajuta Enter või Ctrl+Break
 - Kontrolli konsooli kaabli ühendusi
-- Restartita PuTTY ühendus
-- Proovi teist COM porti
-
-### Probleem: Käsud ei tööta
-- Veendu, et oled õiges režiimis
-- Kasuta Tab täiendamist
-- Sisesta `?` käsu konteksti abi saamiseks
+- Proovi teist COM porti (Device Manager-ist)
+- Vajuta Ctrl+Break
+- Restart PuTTY ja proovi uuesti
 
 ### Probleem: "% Invalid input" viga
+**Lahendused:**
 - Kontrolli käsu õigekirja
-- Kasuta `?` võimalike valikute nägemiseks
-- Proovi käsk sammhaaval (kasuta Tab)
+- Kasuta Tab täiendamist
+- Sisesta `?` võimalike valikute nägemiseks
+- Veendu õiges režiimis olemises
 
-## PT võrdlus
-
-**Packet Traceris sama tegevus:**
-1. Loo lüliti topoloogiasse
-2. Kliki lüliti peal → "CLI" tab
-3. Same käsud töötavad!
-
-**Erinevused:**
-- **Päris seade:** Füüsilised ühendused, aeglasem
-- **PT:** Simulatsioon, kiirem, alati kättesaadav
+### Probleem: Ei pääse Privileged režiimi
+**Lahendused:**
+- Veendu, et sisestasid `enable` õigesti
+- Mõnel seadmel võib olla parool (küsi õppejõult)
 
 ## Kodutöö
 
-1. **Harjutamine:** Korda CLI käske Packet Traceri lülitil
-2. **Uurimine:** Loe `show version` väljundi kohta - mis info on oluline?
-3. **NetAcad:** Lõpeta Moodul 2 NetAcad platvormil
-4. **Küsimus:** Miks on vaja erinevaid käsurežiime? (järgmisel tunnil arutame)
+1. **CLI harjutamine PT-s:** Korda täna õpitud käske Packet Traceris
+2. **NetAcad Moodul 2:** Lõpeta "Basic Switch and End Device Configuration" 
+3. **Uurimine:** Vaata `show version` väljundit - mis info on oluline süsteemiadministraatorile?
+4. **Küsimus järgmiseks korraks:** Miks on vaja CLI-d, kui on ka graafiline liides?
 
-## Järgmine tund
+## Järgmine nädal
 
-Järgmisel nädalal uurime protokolle ja mudeleid ning kasutame Wireshark tarkvara!
+**Nädal 3:** Protokollid ja mudelid + Wireshark sissejuhatus!
+
+**Edu laboriga!** Küsi julgelt abi, kui midagi on ebaselge.
