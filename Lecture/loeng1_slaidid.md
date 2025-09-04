@@ -1,34 +1,35 @@
-# Loeng 1: Võrgude alused
+# Loeng 1: **Sissejuhatus arvutivõrkudesse**
 
 ---
 
-## 1: Tere tulemast!
+## 1. Tere tulemast!
 
-### Arvutivõrkude alused
-- **16 nädalat**
-- **Praktilised oskused**
-- **Cisco seadmed**
-- **CCNA ettevalmistus**
+**Kursuse fookus:**
 
-"Kellel on kodus ruuter?"
+* Kestus: **16 nädalat**
+* Õpime **praktilisi oskusi**
+* Kasutame **päris Cisco seadmeid*
 
----
-
-## 2: Mis on võrk?
-
-### Lihtne definitsioon
-**Võrk = kaks või rohkem seadet, mis saavad omavahel suhelda**
-
-### Igapäevaelus:
-- Kodus: WiFi ühendab telefoni, arvuti, TV
-- Koolis: arvutiklassi arvutid
-- Internetis: WhatsApp sõpradega
-
-"Nimetage 3 seadet, mis on teie kodus võrgus!"
+👉 Küsimus: *“Kellel on kodus ruuter?”*
 
 ---
 
-## 3: Miks võrke vaja?
+## 2. Mis on võrk?
+
+**Lihtne definitsioon:**
+👉 Võrk = vähemalt kaks seadet, mis saavad omavahel suhelda.
+
+**Igapäeva näited:**
+
+* Kodus: WiFi ühendab telefoni, arvuti ja teleri
+* Koolis: arvutiklassi arvutid
+* Internetis: WhatsAppi sõnumid sõpradega
+
+👉 Harjutus: *Nimetage kolm seadet, mis on teie kodus võrgus!*
+
+---
+
+## 3. Milleks on võrke vaja?
 
 ```mermaid
 mindmap
@@ -51,29 +52,30 @@ mindmap
       Wikipedia
 ```
 
-Mis juhtuks, kui internet kadugu 1 nädalaks?
+👉 Aruteluküsimus: *Mis juhtuks, kui internet kaoks nädalaks?*
 
 ---
 
-## 4: Võrgu osad
+## 4. Võrgu osad
 
-### 3 peamist komponenti:
+Kolm peamist komponenti:
 
 ```mermaid
 graph TD
-    A[SEADMED<br/>Telefon, Arvuti, Server] --> B[ÜHENDUSED<br/>WiFi, Kaablid, 4G]
-    B --> C[VAHENDAJAD<br/>Router, Switch, Telefonimaster]
+    A[Seadmed<br/>Telefon, Arvuti, Server] --> B[Ühendused<br/>WiFi, Kaablid, 4G]
+    B --> C[Vahendajad<br/>Ruuter, Switch]
     C --> A
 ```
 
-**Analoogia:** Postisüsteem
-- Seadmed = inimesed
-- Ühendused = teed
-- Vahendajad = postkontor
+**Analoogia: Postisüsteem**
+
+* Seadmed = inimesed
+* Ühendused = teed
+* Vahendajad = postkontor
 
 ---
 
-## 5: Star Topoloogia
+## 5. Star-topoloogia
 
 ```mermaid
 graph TD
@@ -84,16 +86,17 @@ graph TD
     SW --- Server[Server]
 ```
 
-### Omadused:
-- **Eelised:** Lihtne hallata, üks PC rike ei mõjuta teisi
-- **Puudused:** Switch rike = kogu võrk seiskub
-- **Näited:** Kodune WiFi, kooli võrk
+**Omadused:**
 
-"Mis juhtub kui WiFi ruuter kodus läheb katki?"
+* **Plussid:** lihtne hallata, ühe arvuti rike ei sega teisi
+* **Miinused:** kui switch läheb katki, seisab kogu võrk
+* **Näited:** kodune WiFi, kooli võrk
+
+👉 Küsimus: *Mis juhtub, kui kodune WiFi-ruuter läheb katki?*
 
 ---
 
-## 6: Bus Topoloogia
+## 6. Bus-topoloogia
 
 ```mermaid
 graph LR
@@ -103,16 +106,15 @@ graph LR
     PC4 --- Server[Server]
 ```
 
-### Omadused:
-- **Eelised:** Vähe kaablit, odav
-- **Puudused:** Peakaabli rike = kõik seiskub
-- **Kasutamine:** Vanemad võrgud
+* **Plussid:** odav, vähe kaablit
+* **Miinused:** üks kaablirike peatab kogu võrgu
+* **Kasutati peamiselt vanasti**
 
-**Analoogia:** Bussiliin - kõik peatused ühel teel
+**Analoogia:** Bussiliin – kõik peatused ühel teel.
 
 ---
 
-## 7: Ring Topoloogia
+## 7. Ring-topoloogia
 
 ```mermaid
 graph LR
@@ -122,18 +124,17 @@ graph LR
     PC4 --- PC1
 ```
 
-### Omadused:
-- **Eelised:** Igal seadmel võrdne juurdepääs
-- **Puudused:** Ühe seadme rike mõjutab kogu võrku
-- **Andmed:** Liiguvad ühes suunas
+* **Plussid:** kõik seadmed on võrdses seisus
+* **Miinused:** ühe seadme rike mõjutab kõiki
+* **Andmed liiguvad ühes suunas**
 
 ---
 
-## 8: Võrgu seadmed - Lõppseadmed
+## 8. Lõppseadmed
 
 ```mermaid
 graph TD
-    A[Lõppseadmed<br/>End Devices] --> B[Telefon]
+    A[Lõppseadmed] --> B[Telefon]
     A --> C[Arvuti]
     A --> D[PlayStation]
     A --> E[Printer]
@@ -141,105 +142,106 @@ graph TD
     A --> G[Smart TV]
 ```
 
-### Funktsioonid:
-- Andmete genereerimine
-- Andmete tarbimine
-- Võivad olla klient VÕI server
+**Funktsioonid:**
 
- "Võtke telefon välja - see on lõppseade!"
+* Andmete loomine ja kasutamine
+* Võivad olla nii kliendid kui ka serverid
+
+👉 Harjutus: *Võtke telefon välja – see on lõppseade!*
 
 ---
 
-## 9: Võrgu seadmed - Vahendajad
+## 9. Vahendajad
 
 ```mermaid
 graph TD
-    A[Vahendajad<br/>Intermediary Devices] --> B[Switch<br/>24-pesane pikendus]
-    A --> C[Router<br/>Postiljon - teab kuhu saata]
-    A --> D[WiFi Access Point<br/>Raadiotorn]
-    A --> E[Firewall<br/>Turvamees]
+    A[Vahendajad] --> B[Switch<br/>võrgu pikendus]
+    A --> C[Router<br/>postiljon – teab kuhu saata]
+    A --> D[WiFi Access Point<br/>raadiotorn]
+    A --> E[Firewall<br/>turvamees]
 ```
 
-### Funktsioonid:
-- Andmete edastamine
-- Õige sihtkoha leidmine
-- Turvalisuse tagamine
+**Funktsioonid:**
 
-Vaata meie klassis switchi
+* Suunavad andmeid õigesse kohta
+* Tagavad turvalisuse
+
+👉 Vaata meie klassi switchi!
 
 ---
 
-## 10: Ühendused
+## 10. Ühendused
 
 ```mermaid
 graph TD
-    A[Network Media<br/>Ühendused] --> B[Ethernet kaabel<br/>Vaskjuhtmed]
-    A --> C[WiFi<br/>Raadiolained]
-    A --> D[Fiber Optic<br/>Valgus klaaskius]
-    A --> E[4G/5G<br/>Telefonimaster]
+    A[Ühendused] --> B[Ethernet<br/>vaskjuhe]
+    A --> C[WiFi<br/>raadiolained]
+    A --> D[Fiber Optic<br/>valgus klaaskius]
+    A --> E[4G/5G<br/>mobiilside]
 ```
 
-### Omadused:
-- **Ethernet:** Stabiilne, kiire
-- **WiFi:** Mugav, mobiilne  
-- **Fiber:** Ülikiire, kallis
-- **Mobiilne:** Kõikjal kättesaadav
+* **Ethernet:** stabiilne, kiire
+* **WiFi:** mugav, mobiilne
+* **Fiber:** ülikiire, aga kallis
+* **Mobiilne:** töötab peaaegu kõikjal
 
 ---
 
-## 11: Võrgu tüübid suuruse järgi
+## 11. Võrgu tüübid
 
 ```mermaid
 graph TD
-    PAN[PAN<br/>Personal Area Network<br/>1-10m] --> LAN[LAN<br/>Local Area Network<br/>Hoone/Campus]
-    LAN --> MAN[MAN<br/>Metropolitan Area Network<br/>Linn]
-    MAN --> WAN[WAN<br/>Wide Area Network<br/>Riik/Maailm]
+    PAN[PAN<br/>isiklik – 1-10m] --> LAN[LAN<br/>kohalik – hoone]
+    LAN --> MAN[MAN<br/>linna võrk]
+    MAN --> WAN[WAN<br/>riik / maailm]
 ```
 
 **Näited:**
-- **PAN:** Telefon + kõrvaklapid
-- **LAN:** Kodune WiFi
-- **MAN:** Linna avalik WiFi
-- **WAN:** Internet
 
-"Millist võrku kasutate kõige rohkem?"
+* **PAN:** telefon + kõrvaklapid
+* **LAN:** kodune WiFi
+* **MAN:** linna avalik WiFi
+* **WAN:** internet
+
+👉 Küsimus: *Millist võrku kasutate kõige rohkem?*
 
 ---
 
-## 12: Internet kui WAN
+## 12. Internet kui WAN
 
 ```mermaid
 graph TD
-    ISP1[Tier 1 ISP<br/>AT&T, Verizon] --- ISP2[Tier 2 ISP<br/>Elion, Tele2]
-    ISP2 --- ISP3[Tier 3 ISP<br/>Kohalik teenuse pakkuja]
+    ISP1[Tier 1 ISP] --- ISP2[Tier 2 ISP]
+    ISP2 --- ISP3[Tier 3 ISP]
     ISP3 --- HOME[Kodune võrk]
     ISP1 --- GOOGLE[Google]
     ISP1 --- FACEBOOK[Facebook]
 ```
 
-### Internet = võrkude võrk
-- Tuhandeid erinevaid võrke
-- Ühised protokollid
-- Globaalne ühenduvus
+**Internet = võrkude võrk**
+
+* Tuhanded võrgud, mis on omavahel seotud
+* Kasutavad samu protokolle
+* Tagavad globaalse ühenduvuse
 
 ---
 
-## 13: Miks Cisco?
+## 13. Miks Cisco?
 
-### Cisco faktid:
-- **50%** maailma ruuteritest
-- **70%** Internet'i liiklusest läbib Cisco seadmeid
-- **CCNA** sertifikaat tunnustatud kogu maailmas
-- **200+ riigis** kasutusel
+* Cisco ruuterid = \~**50% maailma turust**
+* \~**70% Interneti liiklusest** liigub läbi Cisco seadmete
+* **CCNA** sertifikaat on rahvusvaheliselt tunnustatud
+* Kasutusel **200+ riigis**
 
-### Meie koolis:
-- Päris Cisco seadmed serveriruu
-- Sama käsud mis ettevõtetes
-- Reaalse töökogemuse simulatsioon
+**Meie koolis:**
+
+* Õpime päris seadmete peal
+* Sama käsud, mis ettevõtetes
+* Hea ettevalmistus päris tööks
 
 ---
 
-## 14: Packet Tracer
+## 14. Packet Tracer
 
 ```mermaid
 graph TD
@@ -250,53 +252,47 @@ graph TD
     A --> F[Visuaalne õppimine]
 ```
 
-### Järgmise tunni eelvaade:
-- Installeerime/avame PT
-- Loome esimese võrgu
-- Testimg ping käsuga
-- 2 PC + 1 Switch
+**Järgmises tunnis:**
 
-**NB:** Vajate Google kontot!
+* Installime / avame Packet Traceri
+* Loome esimese võrgu
+* Testime `ping` käsuga
+* 2 arvutit + 1 switch
 
----
-
-## 15: Kontrollküsimused
-
-### 1. Mis on võrgu kolm peamist osa?
-
-
-### 2. Millise topoloogia näete kõige rohkem?
-
-
-### 3. Mis vahe on lõppseadmel ja vahendajal?
-
-
-### 4. Nimetage 4 erinevat võrgu tüüpi!
-
+👉 NB: Vajate Google kontot!
 
 ---
 
-## 16: Järgmiseks tunniks
+## 15. Kontrollküsimused
 
-### Ootused:
-- **Google konto** Packet Tracer jaoks
-- **Avatud meel** uute asjade õppimiseks
-
-### Kuhu liigume:
-1. **Täna:** Packet Tracer esimene võrk
-2. **Järgmine nädal:** Päris Cisco seadmed
-3. **Kuu pärast:** Oma võrk serveriruumis
-
-### Küsimused?
-
-**"IT-s töötamiseks tuleb alustada algusest - täna teeme selle esimese sammu!"**
+1. Mis on võrgu kolm peamist osa?
+2. Millist topoloogiat kohtate kõige sagedamini?
+3. Mis vahe on lõppseadmel ja vahendajal?
+4. Nimetage neli võrgu tüüpi!
 
 ---
 
+## 16. Järgmiseks tunniks
 
-### Analoogiad:
+**Ootused:**
 
-**Võrk = Inimeste grupp**
-- Lõppseadmed = Inimesed kes räägivad
-- Vahendajad = Tõlkijad
-- Ühendused = Keel mida kasutavad
+* Teil peab olema Google konto (Packet Tracer jaoks)
+* Tulge avatud meelega
+
+**Edasine plaan:**
+
+1. Täna: Packet Tracer esimene võrk
+2. Järgmisel nädalal: päris Cisco seadmed
+3. Paari nädala pärast: oma väike võrk serveriruumis
+
+👉 Küsimused?
+
+---
+
+### Lihtne analoogia
+
+**Võrk = inimeste grupp**
+
+* **Lõppseadmed** = inimesed, kes räägivad
+* **Vahendajad** = tõlgid
+* **Ühendused** = keel, mida nad kasutavad
