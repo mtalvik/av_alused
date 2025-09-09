@@ -1,4 +1,4 @@
-# Kodutöö 2: Kodutöö ja iseseisev töö
+# Kodutöö 2: Cisco CLI
 **Tähtaeg:** Järgmine tund (Nädal 3)
 
 ## PACKET TRACER HARJUTUSED
