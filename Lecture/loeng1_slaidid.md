@@ -8,9 +8,9 @@
 
 * Kestus: **16 nädalat**
 * Õpime **praktilisi oskusi**
-* Kasutame **päris Cisco seadmeid*
+* Kasutame **päris Cisco seadmeid**
 
-👉 Küsimus: *“Kellel on kodus ruuter?”*
+👉 Küsimus: *"Kellel on kodus ruuter?"*
 
 ---
 
@@ -228,8 +228,8 @@ graph TD
 
 ## 13. Miks Cisco?
 
-* Cisco ruuterid = \~**50% maailma turust**
-* \~**70% Interneti liiklusest** liigub läbi Cisco seadmete
+* Cisco ruuterid = ~**50% maailma turust**
+* ~**70% Interneti liiklusest** liigub läbi Cisco seadmete
 * **CCNA** sertifikaat on rahvusvaheliselt tunnustatud
 * Kasutusel **200+ riigis**
 
