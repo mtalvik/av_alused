@@ -1,4 +1,4 @@
-# Moodul 3: Juhtmevabad ja mobiilsed võrgud
+# Loeng 3: Juhtmevabad ja mobiilsed võrgud
 
 ## 3.0 Sissejuhatus
 
