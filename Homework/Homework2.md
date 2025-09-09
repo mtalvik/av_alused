@@ -1,4 +1,4 @@
-# Nädal 2: Kodutöö ja iseseisev töö
+# Kodutöö 2: Kodutöö ja iseseisev töö
 **Tähtaeg:** Järgmine tund (Nädal 3)
 
 ## PACKET TRACER HARJUTUSED
