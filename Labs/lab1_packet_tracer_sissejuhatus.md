@@ -212,4 +212,4 @@ Approximate round trip times in milli-seconds:
 
 ## Järgmine nädal
 
-**Nädal 2:** Läheme serveriruu ja töötame päris Cisco seadmetega! Õpime CLI (käsurida) kasutamist.
+**Nädal 2:** Lähme serveriruumi ja töötame päris Cisco seadmetega! Õpime CLI (käsurida) kasutamist.
