@@ -1,250 +1,347 @@
-# Loeng 4: Seadmete konfigureerimine
-##  Kuidas "rääkida" võrguseadmetega
+# Loeng 3: Ruuteri seadistamine - Packet Tracer praktika
 
-## Miks me seda õpime?
+*Tere! Täna õpime, kuidas kaks erinevat võrku omavahel rääkima panna. Kasutame Packet Tracerit!*
 
-Kujutage ette, et võrguseade (switch või ruuter) on nagu nutitelefon ilma ekraanita. Kuidas te seda seadistaksite? **Me õpime täna "rääkima" võrguseadmetega** läbi käsurea.
+## Meenutame eelmist nädalat (5 min)
 
-See on nagu:
-- WhatsAppi asemel kirjutate SMSe
-- Graafilise menüü asemel kirjutate käske
-- Arvuti kuulab ja teeb, mida ütlete
+**Switch:** Ühendab arvuteid **samas** võrgus
+**Ruuter:** Ühendab **erinevaid** võrke
 
----
+Täna teeme ruuteri tööle!
 
-## Osa 1: Kuidas võrguseadmega ühenduda?
+## Osa 1: Mis on ruuter? (10 min)
 
-### Analoogia: Telefoni lukust avamine
+### Ruuter on nagu postkontori sorteerija
 
-```mermaid
-graph LR
-    A[Lukustatud telefon] -->|Sisesta PIN| B[Avatud telefon]
-    B -->|Seaded menüü| C[Saad muuta]
-```
-
-**Cisco seade töötab samamoodi:**
-
-```mermaid
-graph LR
-    A[Tavakasutaja<br/>Switch>] -->|enable<br/>parool| B[Administraator<br/>Switch#]
-    B -->|configure terminal| C[Seadete muutmine<br/>Switch config]
-```
-
----
-
-## Osa 2: Kolm põhilist "ruumi" Cisco seadmes
-
-### 1. ESIK - Tavakasutaja režiim 🏠
-**Tunnus:** `Switch>`
-
-Nagu maja esik - saate vaadata, aga mitte muuta:
-- Vaadata kas internet töötab
-- Kontrollida ühendusi
-- Testida teiste seadmetega ühendust
+**Switch** = Korteri postkastid (kõik samas majas)
+**Ruuter** = Postkontor (saadab kirju eri majadesse)
 
 ```
-Switch> show version        ← Mis mudel see on?
-Switch> ping 8.8.8.8        ← Kas internet töötab?
+Maja A (192.168.1.x) ---[RUUTER]--- Maja B (192.168.2.x)
 ```
 
-### 2. ELUTUBA - Administraatori režiim 🔑
-**Tunnus:** `Switch#`
+Ilma ruuterita need kaks "maja" ei saa omavahel suhelda!
 
-Nagu elutuba - rohkem õigusi, saate vaadata kõike:
-- Näha kõiki seadeid
-- Vaadata paroole
-- Salvestada muudatusi
+## Osa 2: Avame Packet Tracer (5 min)
 
+### Ehitame lihtsa võrgu koos
+
+**SAMM 1:** Lisa komponendid
+1. Võta 1 ruuter (Router 2911)
+2. Võta 2 switchi (2960)
+3. Võta 4 arvutit (PC)
+
+**SAMM 2:** Ühenda kaablitega
 ```
-Switch> enable              ← "Tahan adminiks"
-Switch# show running-config ← Näita kõik seaded
-```
-
-### 3. KONTOR - Seadistuste režiim ⚙️
-**Tunnus:** `Switch(config)#`
-
-Nagu kontor - siin teete päris muudatusi:
-- Muudate nime
-- Lisate paroole
-- Seadistate võrku
-
-```
-Switch# configure terminal      ← "Tahan midagi muuta"
-Switch(config)# hostname Kool-SW1  ← Annan uue nime
+[PC0]---[Switch0]---[Router]---[Switch1]---[PC2]
+[PC1]---↑                           ↑---[PC3]
 ```
 
----
+⚠️ **NB! Ruuter-Switch = sirge kaabel (mitte rist!)**
 
-## Osa 3: Kõige olulisemad käsud algajale
+## Osa 3: Anname arvutitele IP aadressid (10 min)
 
-### TOP 5 käsku mida ALATI vaja
+### Vasak pool - Võrk A (192.168.1.0)
 
-| Käsk | Mida teeb | Millal kasutada |
-|------|-----------|-----------------|
-| `?` | Näitab abi | Kui ei tea, mida teha |
-| `enable` | Saad adminiks | Alguses alati |
-| `show ip interface brief` | Näitab kõiki porte | Kontrolli ühendusi |
-| `copy run start` | Salvesta töö | Enne väljalülitamist |
-| `exit` | Mine tagasi | Kui eksid ära |
+**PC0:**
+- IP: 192.168.1.10
+- Mask: 255.255.255.0
+- Gateway: 192.168.1.1
 
-### Näide: Esimene kord switchiga
+**PC1:**
+- IP: 192.168.1.11
+- Mask: 255.255.255.0
+- Gateway: 192.168.1.1
+
+### Parem pool - Võrk B (192.168.2.0)
+
+**PC2:**
+- IP: 192.168.2.10
+- Mask: 255.255.255.0
+- Gateway: 192.168.2.1
+
+**PC3:**
+- IP: 192.168.2.11
+- Mask: 255.255.255.0
+- Gateway: 192.168.2.1
+
+**Küsimus klassile:** Miks gateway on .1 mõlemal pool?
+*Vastus: See on ruuteri aadress selles võrgus!*
+
+## Osa 4: Seadistame ruuteri - DEMO (15 min)
+
+### Klikime ruuteril → CLI
 
 ```cisco
-Vajuta Enter
-Switch>                        ← Oled esikus
-Switch> enable                 ← Tahan admin olla
-Switch#                        ← Nüüd oled admin
-Switch# show ip interface brief  ← Vaata porte
+--- Vajuta ENTER et alustada ---
 
-Interface    IP-Address    Status    Protocol
-Fa0/1        unassigned    up        up        ← Port töötab!
-Fa0/2        unassigned    down      down      ← Port ei tööta
+Router>
+Router> enable
+Router#
 ```
 
----
+**Seletame:** 
+- `>` = Tavakasutaja (nagu külaline)
+- `#` = Admin (nagu omanik)
 
-## Osa 4: Praktiline näide - Anname switchile nime
-
-### Samm-sammult juhend
-
-**1. ÜHENDU** (nagu telefoni avamine)
-```
-Vajuta Enter
-Switch>
-```
-
-**2. SAA ADMINIKS** (nagu administraatori õigused)
-```
-Switch> enable
-Switch#
-```
-
-**3. MINE SEADISTUSTESSE** (nagu Settings menüü)
-```
-Switch# configure terminal
-Switch(config)#
-```
-
-**4. ANNA UUES NIMI** (nagu telefoni nime muutmine)
-```
-Switch(config)# hostname Minu-Switch
-Minu-Switch(config)#           ← Näed, nimi muutus!
-```
-
-**5. VÄLJU SEADISTUSTEST**
-```
-Minu-Switch(config)# exit
-Minu-Switch#
-```
-
-**6. SALVESTA** (VÄGA OLULINE!)
-```
-Minu-Switch# copy running-config startup-config
-[Enter]
-```
-
----
-
-## Osa 5: Kuidas mitte eksida?
-
-### Kui eksid ära - ÄRA PAANITESE!
-
-**Kust aru saada, kus sa oled:**
-
-| Mis näed | Kus oled | Kuidas välja |
-|----------|----------|--------------|
-| `>` | Tavakasutaja | `enable` et saada adminiks |
-| `#` | Admin | `conf t` et muuta seadeid |
-| `(config)#` | Seadistused | `exit` et minna tagasi |
-| `(config-if)#` | Pordi seaded | `exit` et minna tagasi |
-
-### Hädaabi käsud
+### Anname ruuterile nime
 
 ```cisco
-Ctrl+C    ← Katkesta käsk
-Ctrl+Z    ← Mine kohe admin režiimi
-exit      ← Üks samm tagasi
-end       ← Mine kohe admin režiimi
-?         ← Näita abi
+Router# configure terminal
+Router(config)# hostname Kool-Ruuter
+Kool-Ruuter(config)#
 ```
 
----
-
-## Labori harjutus: Teeme koos!
-
-### Harjutus 1: Switch ärkab ellu
-
-**Eesmärk:** Anda switchile nimi ja parool
+### Seadistame vasaku pordi (GigabitEthernet 0/0)
 
 ```cisco
-SAMM 1: Ühendu switchiga
-Switch>
-
-SAMM 2: Saa adminiks
-Switch> enable
-Switch#
-
-SAMM 3: Mine seadistustesse
-Switch# configure terminal
-Switch(config)#
-
-SAMM 4: Anna nimi (nt oma eesnimi)
-Switch(config)# hostname Mari-Switch
-Mari-Switch(config)#
-
-SAMM 5: Lisa parool admin režiimile
-Mari-Switch(config)# enable secret salajane123
-Mari-Switch(config)#
-
-SAMM 6: Välju ja salvesta
-Mari-Switch(config)# exit
-Mari-Switch# copy run start
+Kool-Ruuter(config)# interface gigabitEthernet 0/0
+Kool-Ruuter(config-if)# ip address 192.168.1.1 255.255.255.0
+Kool-Ruuter(config-if)# no shutdown
 ```
 
-### Harjutus 2: Vaatame, mis toimub
+**Mis just juhtus:**
+1. Valisime pordi g0/0
+2. Andsime IP 192.168.1.1 (gateway võrk A jaoks)
+3. Lülitasime pordi sisse
+
+*Ootame kuni port muutub roheliseks!*
+
+### Seadistame parema pordi (GigabitEthernet 0/1)
 
 ```cisco
-Mari-Switch# show running-config
-    ↑ Näitab kõik seaded
-
-Mari-Switch# show ip interface brief
-    ↑ Näitab kõik pordid
-
-Mari-Switch# show version
-    ↑ Näitab mudeli ja tarkvara
+Kool-Ruuter(config-if)# exit
+Kool-Ruuter(config)# interface gigabitEthernet 0/1
+Kool-Ruuter(config-if)# ip address 192.168.2.1 255.255.255.0
+Kool-Ruuter(config-if)# no shutdown
 ```
 
+### Vaatame kas töötab
+
+```cisco
+Kool-Ruuter(config-if)# end
+Kool-Ruuter# show ip interface brief
+
+Interface         IP-Address      Status    Protocol
+GigabitEthernet0/0    192.168.1.1     up        up    ✓
+GigabitEthernet0/1    192.168.2.1     up        up    ✓
+```
+
+Mõlemad pordid "up up" = töötab!
+
+## Osa 5: Testime võrku (10 min)
+
+### Test 1: Sama võrk
+
+**PC0 → PC1** (mõlemad võrgus A)
+1. Kliki PC0
+2. Desktop → Command Prompt
+3. `ping 192.168.1.11`
+
+**Tulemus:** Reply! ✅
+
+### Test 2: Üle ruuteri
+
+**PC0 → PC2** (eri võrkudes)
+1. PC0 Command Prompt
+2. `ping 192.168.2.10`
+
+**Tulemus:** Reply! ✅
+
+*Ruuter teeb oma tööd - ühendab võrgud!*
+
+### Test 3: Mis juhtub kui ruuter on maas?
+
+1. Lülita ruuter välja (kliki ja Power off)
+2. Proovi uuesti PC0 → PC2
+3. **Tulemus:** Request timed out ❌
+
+*Ilma ruuterita eri võrgud ei saa suhelda!*
+
+## Osa 6: Nüüd teie kord! (20 min)
+
+### Harjutus: Ehitage oma võrk
+
+**Ülesanne:**
+```
+Kontor (10.0.1.0) ---[Ruuter]--- Ladu (10.0.2.0)
+    2 arvutit                       2 arvutit
+```
+
+**Sammud:**
+1. Lisa ruuter + 2 switchi + 4 PC
+2. Ühenda kaablitega
+3. **Kontor:** 10.0.1.10, 10.0.1.11 (gateway 10.0.1.1)
+4. **Ladu:** 10.0.2.10, 10.0.2.11 (gateway 10.0.2.1)
+5. Seadista ruuter:
+   - g0/0 = 10.0.1.1
+   - g0/1 = 10.0.2.1
+6. Testi pingiga!
+
+**Abi käsud:**
+```cisco
+enable
+configure terminal
+interface gigabitEthernet 0/0
+ip address [IP] [MASK]
+no shutdown
+exit
+```
+
+## Osa 7: Olulised käsud (10 min)
+
+### Vaatame, mida ruuter "teab"
+
+```cisco
+Router# show ip route
+
+C    192.168.1.0/24 is directly connected, GigabitEthernet0/0
+C    192.168.2.0/24 is directly connected, GigabitEthernet0/1
+```
+
+**C = Connected** (otse ühendatud)
+
+### Käsud mida päriselt vaja
+
+**Vaatamise käsud (ei muuda midagi):**
+```cisco
+show version              ← Mis mudel ja tarkvara
+show ip interface brief   ← Kõik pordid korraga
+show running-config      ← Kõik seaded
+show ip route            ← Kuhu pakette saata
+```
+
+**Seadistamise käsud:**
+```cisco
+enable                   ← Saa adminiks
+configure terminal       ← Mine seadistustesse  
+hostname NIMI           ← Anna seadmele nimi
+interface g0/0          ← Vali port
+ip address IP MASK      ← Anna IP aadress
+no shutdown             ← Lülita sisse
+exit                    ← Mine tagasi
+```
+
+**Hädaabi:**
+```cisco
+?                       ← Näita abi
+Ctrl+C                  ← Katkesta käsk
+Ctrl+Z                  ← Mine kohe admin režiimi
+```
+
+## Osa 8: Parooli lisamine ruuterile (5 min)
+
+### Teeme ruuteri turvaliseks
+
+```cisco
+Kool-Ruuter(config)# enable secret minusalajane
+Kool-Ruuter(config)# exit
+Kool-Ruuter# exit
+
+Kool-Ruuter con0 is now available
+Press RETURN to get started.
+
+User Access Verification
+Password: [kirjuta minusalajane]
+Kool-Ruuter#
+```
+
+Nüüd küsib parooli!
+
+## Osa 9: Salvestamine (5 min)
+
+### OLULINE: Salvesta oma töö!
+
+**Packet Trackeris:**
+- File → Save
+- Pane nimi: "Nimi_Router_Lab.pkt"
+
+**Ruuteri config:**
+```cisco
+Router# copy running-config startup-config
+```
+
+See salvestab ruuteri seaded. Muidu kaob kõik kui ruuter restardib!
+
+## Osa 10: Mis juhtub kui... (10 min)
+
+### Vea otsimine - nagu detektiiv
+
+**"Ping ei tööta!"**
+
+**Samm 1:** Kontrolli IP-d
+```cisco
+PC> ipconfig
+    IP Address: 192.168.1.10
+    Subnet Mask: 255.255.255.0
+    Gateway: 192.168.1.1    ← Kas see on õige?
+```
+
+**Samm 2:** Kontrolli ruuterit
+```cisco
+Router# show ip interface brief
+
+Interface    IP-Address      Status    Protocol
+Gi0/0        192.168.1.1     up        up      ← Peab olema up up!
+Gi0/1        192.168.2.1     down      down    ← Probleem!
+```
+
+**Samm 3:** Paranda viga
+```cisco
+Router# configure terminal
+Router(config)# interface gi0/1
+Router(config-if)# no shutdown    ← Unustasid sisse lülitada!
+```
+
+### Tüüpilised vead
+
+| Viga | Põhjus | Lahendus |
+|------|--------|----------|
+| "Invalid input" | Kirjutasid valesti | Kasuta `?` abi saamiseks |
+| "Incomplete command" | Käsk poolik | Vajuta TAB et lõpetada |
+| Port "down down" | Pole sisse lülitatud | `no shutdown` |
+| Vale gateway | IP vale | Kontrolli ja paranda |
+
+## Kokkuvõte
+
+### Mida õppisime:
+
+✅ **Ruuter** ühendab erinevaid võrke
+✅ Igal võrgul oma IP vahemik (192.168.1.x vs 192.168.2.x)
+✅ Gateway = ruuteri aadress selles võrgus
+✅ Ilma ruuterita eri võrgud ei saa suhelda
+
+### Kodus proovimiseks:
+
+**Challenge:** Lisa kolmas võrk!
+```
+Võrk A ---[Ruuter]--- Võrk B
+            |
+          Võrk C
+```
+
+Vihje: Ruuteril on rohkem porte (g0/2)!
+
+## Spikker
+
+### Ruuteri seadistamise sammud:
+
+1. **enable** → saa adminiks
+2. **configure terminal** → mine seadistustesse
+3. **interface g0/0** → vali port
+4. **ip address [IP] [MASK]** → anna IP
+5. **no shutdown** → lülita sisse
+6. **exit** → tagasi
+7. **copy run start** → salvesta
+
+### IP aadresside näited:
+
+| Võrk | Network | Gateway | PC-d |
+|------|---------|---------|------|
+| Kodu | 192.168.1.0 | .1 | .10, .11, .12 |
+| Kontor | 10.0.1.0 | .1 | .10, .11, .12 |
+| Kool | 172.16.1.0 | .1 | .10, .11, .12 |
+
 ---
 
-## Mis juhtub kui midagi valesti läheb?
-
-### Tüüpilised vead ja lahendused
-
-| Probleem | Põhjus | Lahendus |
-|----------|--------|----------|
-| "Invalid input" | Kirjutasid valesti | Kontrolli õigekirja |
-| "Incomplete command" | Käsk poolik | Vajuta ? abi saamiseks |
-| "% Access denied" | Pole õigusi | Mine enable režiimi |
-| Ei saa ühendust | Vale COM port | Kontrolli Device Manager |
-| Tühi ekraan | Seade magab | Vajuta Enter |
-
-## Meelespea enne labori tundi
-
-### Mida kaasa võtta:
-- ✅ Sülearvuti
-- ✅ See juhend (prinditud või telefonis)
-- ✅ Märkmik ja pastakas
-- ✅ Julge meel - kõik teevad vigu!
-
-### Mida meeles pidada:
-1. **Kirjuta käsud üles** - hiljem on vaja
-2. **Küsi abi** - õpetaja on selleks
-3. **Ära karda eksida** - seadet ei saa ära rikkuda
-4. **Salvesta alati** - `copy run start`
-
-### Kolm kuldreeglit:
-1. **?** = sinu parim sõber
-2. **exit** = kui eksid ära
-3. **copy run start** = enne lõpetamist
-
----
+**Küsimused?** Küsi kohe - kõik õpivad!
