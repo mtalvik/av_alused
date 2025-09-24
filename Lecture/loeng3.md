@@ -1,657 +1,467 @@
-# Loeng 3: Juhtmevabad ja mobiilsed võrgud
+# Loeng 3: Juhtmevabad ja mobiilsed võrgud - algajatele
 
-## 3.0 Sissejuhatus
+*Tere hommikust! Täna sukeldume juhtmevabade võrkude maailma - tehnoloogiasse, mida kasutate iga päev ilma sellele mõtlemata.*
 
-### 3.0.1 Miks peaksin seda moodulit õppima?
+## Mida me täna õpime
 
-Tänapäeval on juhtmevabad tehnoloogiad igal pool
+Mõelge sellele - ärgates kontrollisite telefoni (mobiilsidevõrk), ühendusite kodus WiFi-ga, võib-olla sünkroonisid nutikella (Bluetooth) ja makssite kohvi eest telefoniga (NFC). Neli erinevat juhtmevaba tehnoloogiat enne kella 9 hommikul! Mõistame, kuidas need tegelikult töötavad.
 
+## Osa 1: WiFi - Internet ilma juhtmeteta
 
-### 3.0.2 Mida ma selles moodulis õpin?
+### Mis WiFi tegelikult on?
 
-- Erinevad juhtmevabad võrgutüübid
-- Mobiilseadmete võrguseaded
-- WiFi standardid ja konfiguratsioon
-- Bluetooth paaristamine
-- Andmeside tehnoloogiad (4G, 5G)
+WiFi on lihtsalt raadiolained, mis kannavad internetiandmeid. Kujutage ette karjumist üle toa versus megafoni kasutamist - see on põhimõtteliselt vahe teie sülearvuti WiFi ja ruuteri antenni vahel.
 
----
+**Nime lugu:**
+- WiFi ei tähenda tegelikult "Wireless Fidelity"
+- Ametlik nimi on IEEE 802.11 (aga keegi ei ütle seda peol)
+- WiFi Alliance andis meile sõbralikud nimed: WiFi 4, 5, 6 ja nüüd 7
 
-## 3.1 Juhtmevabad võrgud
+### WiFi põlvkonnad - nagu telefoni uuendused
 
-### 3.1.1 Juhtmevabade võrkude tüübid
+| Põlvkond | Millal | Reaalne kiirus | Mida see teile tähendas |
+|----------|--------|----------------|-------------------------|
+| **WiFi 4** | 2009 | ~50 Mbps | Netflix muutus võimalikuks |
+| **WiFi 5** | 2014 | ~200 Mbps | Mitu seadet, pole probleemi |
+| **WiFi 6** | 2019 | ~600 Mbps | Kogu pere striimib |
+| **WiFi 7** | 2024 | ~2000 Mbps | VR, 8K video, kõik kohe |
 
-```mermaid
-graph TD
-    A[Juhtmevabad võrgud] --> B[WPAN<br/>0-10m<br/>Bluetooth, NFC]
-    A --> C[WLAN<br/>10-100m<br/>WiFi]
-    A --> D[WMAN<br/>Mitu km<br/>WiMAX]
-    A --> E[WWAN<br/>Riik/Maailm<br/>4G, 5G]
+*Mõelge sellest kui teedest: WiFi 4 oli külatee, WiFi 6 on kiirtee, WiFi 7 on Autobahn.*
+
+### Kaks raadio "kiirteed", mida teie ruuter kasutab
+
+**2.4 GHz sagedusala:**
+- Läbib seinad paremini
+- Aeglasemad kiirused
+- Rohkem rahvast (kõik kasutavad)
+- Nagu AM-raadio - levib kaugele, aga kvaliteet pole imeline
+
+**5 GHz sagedusala:**
+- Kiiremad kiirused
+- Ei meeldi seinad
+- Vähem rahvast
+- Nagu FM-raadio - parem kvaliteet, aga lühem ulatus
+
+**Uus tulija: 6 GHz sagedusala (WiFi 6E/7)**
+- Superkiire
+- Väga lühike ulatus
+- Peaaegu tühi (praegu)
+- Nagu oma privaatne kiirtee
+
+### Miks kaob WiFi vannitoas?
+
+Raadiolained vihkavad vett ja metalli!
+- Betooniseinad = väike probleem
+- Vannitoaplaadid ja torud = suur probleem
+- Töötav mikrolaineahi = tohutu probleem (kasutab sama 2.4 GHz)
+
+## Osa 2: WiFi turvalisus - lukustage oma juhtmevaba uks
+
+### WiFi paroolide evolutsioon
+
+Mõelge WiFi turvalisusest kui ustele pandud lukkudest:
+
+1. **Turvalisus puudub** = Lukk puudub (igaüks astub sisse)
+2. **WEP (1999)** = Odav tabalukk (murtav 2 minutiga)
+3. **WPA (2003)** = Tavaline lukk (murdmiseks kulub vaeva)
+4. **WPA2 (2004)** = Hea turvariiv (praegune miinimum)
+5. **WPA3 (2018)** = Tark lukk alarmiga (parim valik)
+
+### Mis juhtub tegelikult, kui sisestate WiFi parooli?
+
+```
+Teie: "Siin on mu parool"
+Ruuter: "Laske mul luua teile unikaalne krüpteerimisvõti"
+Teie: "Suurepärane, nüüd on kõik meie jutud segamini aetud"
+Naaber: "??#$@%^&*" (ei saa millestki aru)
 ```
 
-#### WPAN (Wireless Personal Area Network)
-**Isiklik võrk - teie ümber**
+**WPA3 lahe trikk:** Isegi kui keegi homme teie parooli ära arvab, ei saa ta dekrüpteerida, mida täna tegite. See on nagu lukkude vahetamine pärast igat kasutust!
 
-- **Ulatus:** 0-10 meetrit
-- **Kiirus:** 1-3 Mbps (Bluetooth), 424 kbps (NFC)
-- **Kasutus:** Kõrvaklapid, nutikell, arvutihiir
-- **Eelised:** Väike energiatarve, lihtne ühendada
-- **Puudused:** Lühike ulatus, aeglane kiirus
+## Osa 3: Mobiilsidevõrgud - kõnedest kassivideoteni
 
-**Näited igapäevaelust:**
-- AirPods ühendus telefoniga
-- Smartwatch sünkroonimine
-- Kontaktivaba maksmine poes
-- Auto hands-free süsteem
+### Põlvkondade mäng
 
-#### WLAN (Wireless Local Area Network)
-**Kohalik võrk - kodu või kontor**
+Mobiilvõrgud uuenevad umbes iga 10 aasta tagant, nagu konsoolide põlvkonnad:
 
-- **Ulatus:** 10-100 meetrit (siseruumides)
-- **Kiirus:** 54 Mbps kuni 9.6 Gbps (WiFi 6)
-- **Kasutus:** Kodune internet, kontori võrk
-- **Eelised:** Kiire, mugav, palju seadmeid
-- **Puudused:** Seinte läbimine, häired
+**1G (1980ndad):** Ainult hääl - nagu juhtmeta telefon tohutu ulatusega
+**2G (1990ndad):** Digitaalne hääl + SMS - "Ussimäng" Nokial!
+**3G (2000ndad):** Mobiilne internet saabub - Facebook klapptelefonil
+**4G (2010ndad):** Kiire internet - Instagram, Uber, kõik
+**5G (2020ndad):** Ülikiire, madal viivitus - isejuhtivad autod, kaugkirurgia
 
-**WiFi sagedused:**
-- **2.4 GHz:** Parem levi, aeglasem
-- **5 GHz:** Kiirem, lühem ulatus
-- **6 GHz:** Ülikiire, väga lühike ulatus (WiFi 6E)
+### Miks 5G vajab nii palju maste?
 
-#### WMAN (Wireless Metropolitan Area Network)
-**Linnavõrk - terve linn**
+**Füüsika reegel: Kõrgem sagedus = lühem vahemaa**
 
-- **Ulatus:** Kuni 50 km
-- **Tehnoloogia:** WiMAX (praegu vähe kasutusel)
-- **Asendatud:** 4G/5G võrkudega
-- **Kasutus:** Avalik WiFi, linna teenused
+Mõelge sellest nii:
+- 4G on nagu taskulamp - valgustab kaugele
+- 5G on nagu laserpointer - väga täpne, aga lühem ulatus
+- 5G mmWave on nagu laualamp - superere, aga valgustab ainult teie lauda
 
-#### WWAN (Wireless Wide Area Network)
-**Lai võrk - riik või maailm**
-
-- **Ulatus:** Riigi- või maailmatasand
-- **Tehnoloogiad:** 3G, 4G LTE, 5G
-- **Kiirus:** 5 Mbps (3G) kuni 10 Gbps (5G)
-- **Kasutus:** Mobiilne internet
-
-**Põlvkonnad:**
-- **3G (2001):** 384 kbps - 2 Mbps
-- **4G LTE (2010):** 100 Mbps - 1 Gbps
-- **5G (2019):** 1 Gbps - 10 Gbps
-
-### 3.1.2 Telefoni interaktsioonid erinevate võrkudega
-
-Nutitelefon oskab automaatselt valida parima võrgu:
-
-```mermaid
-graph LR
-    TEL[Nutitelefon] --> WIFI[WiFi<br/>Kodus/Kontoris]
-    TEL --> MOB[Mobiilne<br/>4G/5G]
-    TEL --> BT[Bluetooth<br/>Kõrvaklapid]
-    TEL --> NFC[NFC<br/>Maksed]
+```
+2G mast: ████████████████ Katab terve linna
+4G mast: ████████ Katab linnaosa
+5G mast: ████ Katab mõned kvartalid
+5G mmWave: █ Katab ühe tänava
 ```
 
-**Võrgu prioriteedid:**
-1. **WiFi** - kui saadaval (säästab mobiilset andmemahtu)
-2. **Mobiilne** - kui WiFi pole või on nõrk
-3. **Bluetooth** - alati taustal aksessuaaride jaoks
-4. **NFC** - aktiveerub vajadusel
+### Mis teeb 5G eriliseks?
 
-**Näide:** YouTube video vaatamine
-- Kodus: WiFi (tasuta, kiire)
-- Bussis: 4G/5G (kasutab andmemahtu)
-- Üleminekul: automaatne vahetus
+Kolm supervõimet:
+1. **Kiirus:** Laadige film alla sekunditega
+2. **Madal latentsus:** Viivitus puudub (oluline mängimiseks/VR-ile)
+3. **Mahutavus:** Tuhandeid seadmeid masti kohta
 
-### 3.1.3 Muud juhtmevabad võrgud
+*Päris näide: Kontserdil 4G ebaõnnestub, sest 10 000 telefoni koormavad selle üle. 5G saab kõigiga hakkama.*
 
-#### Satelliitinternet
+## Osa 4: Bluetooth - sõbralik naabri protokoll
 
-**Traditsiooniline (GEO):**
-- Satelliit 36,000 km kõrgusel
-- Latentsus: 500-600ms
-- Kiirus: 25-100 Mbps
-- Sobib kaugetesse kohtadesse
+### Milleks Bluetooth on?
 
-**Uus põlvkond (LEO - Starlink):**
-- Satelliidid 500-2000 km kõrgusel
-- Latentsus: 20-40ms
-- Kiirus: 50-200 Mbps
-- Eestis saadaval 2023+
+WiFi ühendab teid internetiga. Bluetooth ühendab teie seadmed omavahel.
+- Kõrvaklapid telefoniga
+- Telefon autoga
+- Aktiivsusmonitor telefoniga
+- Hiir sülearvutiga
 
-#### RFID (Radio Frequency Identification)
+### Bluetoothi versioonid - vaikselt paremaks muutumine
 
-**Kasutusalad:**
-- Uksekaarid kontoris
-- Bussikaart (Ühiskaart)
-- Kauba jälgimine laos
-- Lemmiklooma kiip
+Erinevalt WiFi suurtest teadaannetest paraneb Bluetooth vaikselt:
+- **Bluetooth 4 (2010):** Low Energy saabub - aktiivsusmonitorid kestavad nädalaid
+- **Bluetooth 5 (2016):** 4x ulatus - töötab üle maja
+- **Uusim:** Audio jagamine - üks telefon, mitu kõrvaklappi
 
-#### IoT võrgud
+### Classic vs Low Energy
 
-**LoRaWAN:**
-- Ulatus: kuni 15 km
-- Väga väike energiatarve
-- Temperatuuriandurid, niiskuseandurid
+**Bluetooth Classic:** Teie kõrvaklapid striimivad muusikat (energianäljane)
+**Bluetooth Low Energy (LE):** Teie aktiivsusmonitor (töötab nädalaid)
 
-**NB-IoT:**
-- Kasutab mobiilsidevõrku
-- Nutikad elektri/gaasi/veearvestid
+See on nagu vahe auto ja jalgratta vahel - mõlemad transpordivad, aga üks kulutab palju vähem energiat.
 
-### 3.1.4 Enesekontroll - Juhtmevabad võrgud
+## Osa 5: NFC - maagiline puudutus
 
-**Põhimõisted:**
-- Juhtmevabad võrgud kasutavad raadiolaineid
-- Erinevad sagedused erinevateks otstarbeteks
-- Kompromiss ulatuse, kiiruse ja energiatarbe vahel
-- Kõrgem sagedus = kiirem, aga lühem ulatus
+### Mis on NFC?
 
----
+Near Field Communication - töötab ainult puudutades või peaaegu puudutades (4cm).
+See on meelega lühikese ulatusega turvalisuse huvides!
 
-## 3.2 Mobiilseadmete ühenduvus
+### Kus te seda iga päev kasutate
 
-### 3.2.1 Mobiilseadmed ja WiFi
+- Puudutades maksta (telefon/kaart)
+- Hotellitoakaardid
+- Bussi-/metrookaardid
+- Puuduta WiFi ühendamiseks
+- Digitaalsed visiitkaardid
 
-**Levinumad WiFi probleemid ja lahendused:**
+### Miks nii lähedal?
 
-| Probleem | Võimalik põhjus | Lahendus |
-|----------|-----------------|----------|
-| Ei näe võrku | Peidetud SSID | Sisesta võrgu nimi käsitsi |
-| Ei ühendu | Vale parool | Kontrolli parooli |
-| Aeglane kiirus | Häired | Vaheta kanalit |
-| Pidev katkemine | Energiasääst | Muuda energiaseadeid |
-| Nõrk signaal | Kaugus ruuterist | Liigu lähemale |
+**Turvalisus läheduse kaudu!**
+Keegi ei saa varastada teie makseinfot üle toa - nad peaksid teid niikuinii taskust varastama.
 
-### 3.2.2 WiFi seaded
+## Osa 6: Eriotstarbelised võrgud - LoRaWAN
 
-**Olulised WiFi konfiguratsioonid:**
+### Mis on LoRaWAN?
 
-**Turvalisuse protokollid (nõrgimast tugevaimani):**
-1. **Avatud** - Krüpteerimata (ÄRA KASUTA!)
-2. **WEP** - Vananenud, kergesti murutav (1999)
-3. **WPA** - Parem, aga ikka nõrk (2003)
-4. **WPA2** - Praegune miinimum standard (2004)
-5. **WPA3** - Uusim ja turvaline (2018)
+Kujutage ette, et peate kontrollima veemõõdikut metsas või jälgima lehma farmis. Teil on vaja:
+- Superpikamaalist (15+ km)
+- Aastaid aku kestvust
+- Kiirust pole vaja (ainult pisikesed andmepaketid)
 
-**Sageduse valik:**
-- **2.4 GHz:** Parem levi maja ulatuses
-- **5 GHz:** Kiirem, vähem häireid
-- **Automaatne:** Lase ruuteril valida
+LoRaWAN on selleks ideaalne - see on juhtmevabade võrkude "maratonijooksja":
+- Aeglane, aga jõuab igavesti
+- Üks lüüs katab terve linna
+- Aku kestab 10+ aastat
 
-### 3.2.3 Mobiilse WiFi ühenduse konfigureerimine
+### Päris näited Eestis
 
-**Android seadistus:**
-1. Seaded → Võrk ja internet → WiFi
-2. Lülita WiFi sisse
-3. Vali võrk nimekirjast
-4. Sisesta parool
-5. Täpsemad seaded → Staatiline IP (vajadusel)
+- Parkimisandurid teatavad äpile, kas koht on vaba
+- Prügikastid annavad teada, kui täis
+- Farmi andurid jälgivad mulda
+- Veelekete tuvastamine torudes
 
-**iOS seadistus:**
-1. Seaded → WiFi
-2. Lülita WiFi sisse
-3. Vali võrk
-4. Sisesta parool
-5. Võrgu info → Konfigureeri IP (vajadusel)
+## Osa 7: Satelliitinternet - Starlink ja teised
 
-**Nõuanded:**
-- Salvesta usaldusväärste võrkude paroolid
-- Väldi avalikke krüptimata võrke
-- Kasuta VPN-i avalikes kohtades
+### Elon Muski Starlink - internet kosmosest
 
-### 3.2.4 Mobiilse andmeside seaded
+**Probleem:** 40% maailmast pole internetti. Miks? Kaableid on liiga kallis vedada mägedesse, saaretele, kõrbetesse.
 
-**Andmemahu haldamine:**
+**Lahendus:** 6000+ satelliiti madalal orbiidil (550km kõrgusel)
+- Traditsiooniline satelliit: 35,786km kõrgusel = 600ms viivitus = mängimiseks kõlbmatu
+- Starlink: 550km = 20-40ms viivitus = peaaegu sama hea kui kaabel
 
-```mermaid
-graph TD
-    A[Andmeside seaded] --> B[Andmelimiit<br/>Määra kuulimiit]
-    A --> C[Taustaandmed<br/>Piira rakendusi]
-    A --> D[Andmesääst<br/>Komprimeeri andmeid]
-    A --> E[WiFi eelistus<br/>Uuendused ainult WiFis]
+### Kuidas Starlink töötab?
+
+```
+Teie maja → Satelliitantenn (pizza karbi suurune)
+    ↑↓ (Ku/Ka sagedus: 12-18/26-40 GHz)
+Satelliit 1 → Satelliit 2 → Satelliit 3 (laserühendused)
+    ↑↓
+Maajaama → Internet
 ```
 
-**Eesti operaatorite APN seaded:**
+**Tehnilised faktid:**
+- Kiirus: 50-500 Mbps (sõltub kasutajatest piirkonnas)
+- Latentsus: 20-40ms (hea mängimiseks!)
+- Hind Eestis: ~€65/kuu + €450 seadmed
+- Antenni võimsus: 100W (soojendab end talvel lume sulatamiseks)
 
-**Telia:**
-- APN: internet.telia.ee
-- Kasutajanimi: (tühi)
-- Parool: (tühi)
+### Starlinki konkurendid
 
-**Elisa:**
-- APN: internet
-- Kasutajanimi: (tühi)
-- Parool: (tühi)
+| Teenus | Satelliite | Kõrgus | Kiirus | Viivitus | Staatus |
+|--------|------------|---------|---------|----------|---------|
+| **Starlink** | 6000+ | 550km | 500 Mbps | 20ms | Töötab |
+| **OneWeb** | 600+ | 1200km | 200 Mbps | 70ms | Töötab |
+| **Amazon Kuiper** | 0/3236 | 590-630km | 400 Mbps | 30ms | 2025 |
+| **Hiina Guowang** | 0/13000 | 500-1145km | ? | ? | 2030 |
 
-**Tele2:**
-- APN: internet.tele2.ee
-- Kasutajanimi: (tühi)
-- Parool: (tühi)
+### Millal Starlink on mõttekas?
 
-### 3.2.5 Bluetoothi konfigureerimine Windows sülearvutis
+**SOBIB:**
+- Maakoht ilma fiiberühenduseta
+- Merel või ekspeditsioonil
+- Varuühendus kriitilisele äri
+- Digitaalsed nomadid
+- Ukraine sõjavägi (tasuta SpaceX-ilt)
 
-**Windows 11 seadistus:**
-1. Start → Seaded → Bluetooth ja seadmed
-2. Lülita Bluetooth sisse
-3. Lisa Bluetooth või muu seade
-4. Vali seadme tüüp:
-   - Bluetooth (hiired, klaviatuurid, kõlarid)
-   - Ekraan või dokk
-   - Kõik muu
+**EI SOBI:**
+- Linnas kus on fiiberkaabel (kallim ja aeglasem)
+- Tihedalt asustatud kortermajas (jagatud ribalaiust)
+- Pilvedega kaetud piirkonnad (vihm/lumi häirib signaali)
 
-### 3.2.6 Lihtne ühenduvus Bluetoothiga
+## Osa 8: Juhtmevaba internet kodus - WISP ja FWA
 
-**Bluetoothi profiilid ja kasutus:**
+### Fixed Wireless Access (FWA) - 5G kui koduinternet
 
-| Profiil | Kasutus | Näited |
-|---------|---------|--------|
-| A2DP | Kvaliteetne heli | Muusika kuulamine |
-| HFP | Hands-free kõned | Auto Bluetooth |
-| HID | Sisendseadmed | Hiir, klaviatuur |
-| PAN | Interneti jagamine | Telefoni hotspot |
-| BLE | Madal energiatarve | Fitness tracker |
+Mõelge: Miks vedada kaablit kui 5G on niigi kiire?
 
-### 3.2.7 Bluetoothi paaristamine
+**Kuidas töötab:**
+1. Operaator paigaldab 5G ruuteri teie koju
+2. See ühendub 5G mastiga (mitte WiFi!)
+3. Ruuter jagab internetti WiFi kaudu
 
-**Paaristamise protsess:**
+**Eestis saadaval:**
+- Telia 5G koduinternet: kuni 1 Gbps
+- Elisa 5G FWA: kuni 500 Mbps
+- Tele2: tulekul
 
-```mermaid
-graph LR
-    A[Tee seade<br/>nähtavaks] --> B[Otsi<br/>seadmeid]
-    B --> C[Vali<br/>seade]
-    C --> D[Kinnita<br/>PIN kood]
-    D --> E[Seadmed<br/>ühendatud]
+**Plussid:**
+- Paigaldus 1 päevaga (vs fiiberkaabel nädalad)
+- Saate kaasa võtta kui kolite
+- Pole vaja auke puurida
+
+**Miinused:**
+- Sõltub mastist (takistused = aeglasem)
+- Jagatud ribalaius (õhtul aeglasem)
+- Ilm mõjutab (26 GHz 5G ei tööta tugeva vihmaga)
+
+### Wireless ISP (WISP) - Küla internet
+
+Eestis on 50+ väikest WISP operaatorit kes teenindavad maapiirkondi:
+
+**Tehnoloogia:**
+- Punkt-punkt ühendused: 1-50km
+- Ubiquiti airFiber: kuni 10 Gbps
+- Mikrotik wireless: kuni 1 Gbps
+- Sagedused: 5 GHz (vaba) või 60 GHz (vaba) või litsentsitud
+
+```
+Operaatori mast
+    ↓ (5/60 GHz raadiolink)
+Küla mast
+    ↓↓↓ (WiFi või LTE)
+Majapidamised
 ```
 
-**Turvalisuse nõuanded:**
-- Paarista ainult tuntud seadmetega
-- Lülita Bluetooth välja kui ei kasuta
-- Eemalda vanad paaristused
-- Ära nõustu tundmatute paaristustega
+## Osa 9: WiFi 7 ja tuleviku tehnoloogiad
 
-### 3.2.8 Tutvu oma mobiilseadme võrguseadetega
+### WiFi 7 - mitte lihtsalt kiirem
 
-**Mida kontrollida:**
-- Praegune IP aadress
-- Ühendatud võrgu info
-- Andmemahu kasutus
-- Salvestatud võrgud
-- VPN seaded
+**Multi-Link Operation (MLO)** - revolutsioon!
+- Telefon ühendub korraga 2.4 + 5 + 6 GHz
+- Kui üks kanal on hõivatud, kasutab teist
+- Latentsus: 5ms → 1ms (VR jaoks kriitiline!)
 
-**Harjutus:** Leidke oma telefonis:
-1. WiFi MAC aadress
-2. Praegune IP aadress
-3. Tänane andmemahu kasutus
-4. Salvestatud WiFi võrkude arv
-
----
-
-## 3.3 Juhtmevabade ja mobiilsete võrkude kokkuvõte
-
-### 3.3.1 Mida ma selles moodulis õppisin?
-
-**Peamised teemad:**
-- ✅ Erinevad juhtmevabad võrgud (WPAN, WLAN, WMAN, WWAN)
-- ✅ WiFi konfiguratsioon ja turvalisus
-- ✅ Mobiilseadmete võrguseaded
-- ✅ Bluetooth ühendused
-- ✅ Andmeside haldamine
-
-### 3.3.2 Arutelu küsimused
-
-1. Miks valida 5GHz WiFi 2.4GHz asemel?
-2. Millist turvalisuse protokolli kasutada WiFi jaoks?
-3. Millal on satelliitinternet parim valik?
-4. Kuidas vähendada mobiilse andmemahu kasutust?
-
----
-
-# Moodul 4: Koduvõrgu ehitamine
-
-## 4.0 Sissejuhatus
-
-### Miks ehitada koduvõrk?
-
-**Tänapäeva kodus on palju seadmeid:**
-- Arvutid ja sülearvutid
-- Nutitelefonid ja tahvelarvutid
-- Nutikad telerid
-- Mängukonsoolid
-- Nutikodu seadmed
-- Turvakaameraid
-
-**Hästi planeeritud koduvõrk tagab:**
-- Kiire interneti kõigile
-- Turvalise ühenduse
-- Stabiilse töö
-- Lihtsa haldamise
-
----
-
-## 4.1 Koduvõrgu põhitõed
-
-### 4.1.1 Tüüpiline koduvõrgu ülesehitus
-
-```mermaid
-graph TD
-    ISP[Interneti teenusepakkuja] --> MODEM[Modem]
-    MODEM --> ROUTER[WiFi ruuter]
-    ROUTER --> PC[Lauaarvuti]
-    ROUTER -.-> LAPTOP[Sülearvuti]
-    ROUTER -.-> PHONE[Nutitelefonid]
-    ROUTER -.-> TV[Nutiteler]
-    ROUTER --> PRINTER[Võrguprinter]
-    ROUTER -.-> IOT[Nutikodu seadmed]
+**320 MHz kanalid:**
+```
+WiFi 6:  ████████ (160 MHz)
+WiFi 7:  ████████████████ (320 MHz)
+Teooria: 46 Gbps (praktikas ~5 Gbps)
 ```
 
-**Ühenduse tüübid:**
-- Pidevjoon = Kaabliga (Ethernet)
-- Katkendjoon = WiFi
+### Li-Fi - internet läbi valguse
 
-### 4.1.2 Koduvõrgu komponendid
+**Kuidas töötab:** LED lamp vilgub miljon korda sekundis, silm ei näe, aga sensor loeb.
 
-#### Põhikomponendid
+**Plussid:**
+- Kiirus: 224 Gbps laboritingimustes
+- Turvalisus: valgus ei läbi seinu
+- Tervislik: pole raadiolaineid
 
-**1. Modem**
-- Ühendab ISP-ga
-- Muundab signaali (kaabel/DSL/fiber → Ethernet)
-- Tavaliselt ISP poolt antud
-- Võib olla ühendatud ruuteriga
+**Miinused:**
+- Vajab otsenähtavust
+- Päikesevalgus segab
+- Ei tööta taskus
 
-**2. Ruuter (Router)**
-- Loob koduse võrgu
-- Jagab IP aadresse (DHCP)
-- Pakub WiFi ühendust
-- Võrgu turvalisus (firewall)
+**Kus kasutatakse:** Haiglad (ei sega aparatuuri), lennukid, salajased ruumid
 
-**3. Ethernet kaablid**
-- **Cat5e:** Kuni 1 Gbps (piisav koduseks)
-- **Cat6:** Kuni 10 Gbps (tulevikukindel)
-- **Cat6a/Cat7:** Professionaalne kasutus
+### 6G (2030) - mitte ainult kiirus
 
-**4. Võrgulüliti (Switch) - valikuline**
-- Lisab Ethernet porte
-- Ei vaja seadistamist
-- Laiendab kaablivõrku
+**Tehnilised eesmärgid:**
+- 1 Tbps kiirus (100x 5G)
+- 0.1ms latentsus (10x 5G)
+- 10 miljonit seadet/km²
+- Terahertz sagedused (0.1-10 THz)
 
-### 4.1.3 Tüüpilised koduvõrgu ruuterid
+**Uued võimalused:**
+- **Digital twin:** Terve linn digitaalses koopias reaalajas
+- **Holograafilised kõned:** 3D inimene teie toas
+- **Brain-computer interface:** Mõtted otse võrku (Neuralink)
+- **Energiaharvesting:** Võrk laeb seadmeid õhu kaudu
 
-**Ruuteri omadused vastavalt eelarvele:**
+### Mesh võrgud - tuleviku WiFi
 
-| Omadus | Soodne (30-60€) | Keskmine (60-150€) | Kallis (150€+) |
-|--------|-----------------|---------------------|----------------|
-| WiFi standard | WiFi 5 (AC) | WiFi 6 (AX) | WiFi 6E/7 |
-| Kiirus | AC1200 | AX3000 | AX6000+ |
-| Sagedused | Dual-band | Dual-band | Tri-band |
-| Ethernet pordid | 4 | 4-8 | 8+ |
-| USB pordid | 0-1 | 2 | 2-3 |
-| Sobib | 1-2 tuba | 3-4 tuba | Suur maja |
+**Traditsiooniline:** Üks ruuter → nõrk signaal kaugel
+**Mesh:** Palju väikeseid ruutereid → tugev signaal kõikjal
 
-**Populaarsed ruuteri tootjad:**
-- **ASUS:** Mängijatele, palju funktsioone
-- **TP-Link:** Soodne, hea kvaliteet
-- **Netgear:** Usaldusväärne, stabiilne
-- **Linksys:** Lihtne seadistada
-- **Ubiquiti:** Professionaalne
+```
+Traditsiooniline:
+    [Ruuter] ----nõrk----> [Teie]
 
-### 4.1.4 Enesekontroll - Koduvõrgu põhitõed
-
-**Põhipunktid:**
-- Modem ühendab internetti
-- Ruuter loob koduse võrgu
-- Kaabliühendus on kiirem ja stabiilsem
-- WiFi on mugav aga võib olla häireid
-
----
-
-## 4.2 Võrgutehnoloogiad kodus
-
-### 4.2.1 LAN juhtmevabad sagedused
-
-#### 2.4 GHz sagedusala
-
-**Omadused:**
-- **Ulatus:** Pikem (läbib seinu paremini)
-- **Kiirus:** Aeglasem (kuni 600 Mbps)
-- **Kanalid:** 11 USA-s, 13 EL-is
-- **Häired:** Rohkem (mikrolaineahi, Bluetooth)
-
-**Sobib:**
-- IoT seadmetele
-- Tavaliseks veebilehitsemiseks
-- Kaugemal ruuterist olevatele seadmetele
-
-#### 5 GHz sagedusala
-
-**Omadused:**
-- **Ulatus:** Lühem (seinte läbimine kehv)
-- **Kiirus:** Kiirem (kuni 4.8 Gbps)
-- **Kanalid:** 24+ mittekattuvat
-- **Häired:** Vähem ummistusi
-
-**Sobib:**
-- 4K video voogedastusele
-- Online mängimisele
-- Suurte failide edastamisele
-- Ruuteri lähedal olevatele seadmetele
-
-#### 6 GHz sagedusala (WiFi 6E/7)
-
-**Omadused:**
-- **Ulatus:** Kõige lühem
-- **Kiirus:** Kõige kiirem (kuni 9.6 Gbps)
-- **Kanalid:** 59 saadaval
-- **Häired:** Minimaalsed (uus sagedus)
-
-**Sobib:**
-- VR/AR rakendustele
-- 8K voogedastusele
-- Ülimadala latentsusega mängimisele
-
-### 4.2.2 Kaabliga võrgutehnoloogiad
-
-#### Etherneti standardid
-
-```mermaid
-graph LR
-    ETH[Etherneti areng] --> FE[Fast Ethernet<br/>100 Mbps]
-    FE --> GE[Gigabit Ethernet<br/>1 Gbps]
-    GE --> TGE[10 Gigabit<br/>10 Gbps]
-    TGE --> FGE[40/100 Gigabit<br/>Tulevik]
+Mesh:
+    [Ruuter1] ←→ [Ruuter2] ←→ [Ruuter3]
+         ↓            ↓            ↓
+      [Tugev]     [Tugev]     [Tugev]
 ```
 
-#### Powerline võrk
+**Eestis populaarsed:**
+- Asus ZenWiFi (WiFi 6E)
+- Google Nest WiFi
+- Eero Pro 6E
 
-**Kasutab elektrijuhtmeid:**
-- Kiirus: 200-2000 Mbps
-- Sobib raskesti kaabeltatavates kohtades
-- Võib olla elektrilisi häireid
-- Lihtne paigaldada
+### Quantum Internet - kaugem tulevik
 
-#### MoCA (Multimedia over Coax)
+**Mis see on:** Kvantseisundite edastamine, mitte bitid
 
-**Kasutab TV koakskaableid:**
-- Kiirus: kuni 2.5 Gbps
-- Väga stabiilne
-- Sobib kodudele olemasoleva TV-kaabliga
-- Kallis
+**Miks oluline:**
+- Murdmatu krüpteerimine (füüsika seadused kaitsevad)
+- Kvantarvutite ühendamine
+- Teleportatsioon (info, mitte inimesed... veel)
 
-### 4.2.3 Enesekontroll - Võrgutehnoloogiad
+**Praegune seis:**
+- Hiina: 2000km kvant-satelliitside
+- Holland: 3 linna kvant-testimisvõrk
+- Eesti: TalTech teeb kvant-krüpto uuringuid
 
-**Võrdlustabel:**
+## Osa 10: Küberoht juhtmevabastes võrkudes
 
-| Tehnoloogia | Kiirus | Usaldusväärsus | Hind | Paigaldus |
-|-------------|--------|----------------|------|-----------|
-| Ethernet | Suurepärane | Suurepärane | Odav | Keskmine |
-| WiFi 2.4GHz | Hea | Hea | Odav | Lihtne |
-| WiFi 5GHz | Väga hea | Hea | Odav | Lihtne |
-| Powerline | Varieeruv | Rahuldav | Keskmine | Lihtne |
-| MoCA | Suurepärane | Suurepärane | Kallis | Keskmine |
+### WiFi ründed mida IT tudeng peab teadma
 
----
-
-## 4.3 Juhtmevabad standardid
-
-### 4.3.1 WiFi võrgud
-
-#### WiFi standardite areng
-
-| Standard | Nimi | Max kiirus | Sagedus | Aasta |
-|----------|------|------------|---------|-------|
-| 802.11b | WiFi 1 | 11 Mbps | 2.4 GHz | 1999 |
-| 802.11a | WiFi 2 | 54 Mbps | 5 GHz | 1999 |
-| 802.11g | WiFi 3 | 54 Mbps | 2.4 GHz | 2003 |
-| 802.11n | WiFi 4 | 600 Mbps | 2.4/5 GHz | 2009 |
-| 802.11ac | WiFi 5 | 3.5 Gbps | 5 GHz | 2014 |
-| 802.11ax | WiFi 6 | 9.6 Gbps | 2.4/5 GHz | 2019 |
-| 802.11ax | WiFi 6E | 9.6 Gbps | 2.4/5/6 GHz | 2020 |
-| 802.11be | WiFi 7 | 40+ Gbps | 2.4/5/6 GHz | 2024 |
-
-### 4.3.2 Juhtmevabad seaded
-
-**Olulised WiFi konfiguratsioonid:**
-
-1. **SSID (võrgu nimi)**
-   - Tehke unikaalne aga mitte isiklik
-   - Vältige vaikenimesid
-   - Saab peita (pole soovitatav)
-
-2. **Turvaseaded**
-   - Kasutage minimaalselt WPA2
-   - WPA3 kui kõik seadmed toetavad
-   - Tugev parool (12+ tähemärki)
-
-3. **Kanali valik**
-   - 2.4 GHz: Kasutage 1, 6 või 11
-   - 5 GHz: Auto töötab hästi
-   - Kasutage WiFi analüsaatori rakendusi
-
-4. **Kanali laius**
-   - 2.4 GHz: 20 MHz (vältige 40 MHz)
-   - 5 GHz: 40 või 80 MHz
-   - Laiem = kiirem aga rohkem häireid
-
-### 4.3.3 Enesekontroll - Juhtmevabad standardid
-
-**Parimad praktikad:**
-- Kasutage uusimat standardit mida seadmed toetavad
-- Eraldage IoT seadmed külalisvõrku
-- Regulaarsed püsivara uuendused
-- Muutke vaikeparoolid
-
----
-
-## 4.4 Koduvõrgu ruuteri seadistamine
-
-### 4.4.1 Esmakordne seadistamine
-
-#### Samm-sammult ruuteri seadistus
-
-**1. Füüsiline ühendus**
+**Evil Twin** - vale WiFi punkt
 ```
-ISP kaabel → Modem → (Ethernet) → Ruuteri WAN port
-Ruuteri LAN port → (Ethernet) → Arvuti (seadistamiseks)
+Õige: "Kohvik_WiFi"
+Vale: "Kohvik_WiFi" (häkker)
+Teie telefon: ühendub automaatselt valega!
 ```
+Kaitse: Kasuta VPN-i avalikes kohtades
 
-**2. Ruuteri liidesesse sisenemine**
-- Tavaline aadress: 192.168.1.1 või 192.168.0.1
-- Vaikeparoolid ruuteri sildil
-- Kasutage veebilehitsejat
+**Deauth Attack** - viskab teid WiFi-st välja
+- Häkker saadab "disconnect" käsu teie nimel
+- Kaitse: WPA3 (Protected Management Frames)
 
-**3. Seadistusviisardi käivitamine**
-- Valige ühenduse tüüp (tavaliselt DHCP)
-- Määrake admin parool (muutke vaikeparool!)
-- Seadistage WiFi nimi ja parool
-- Uuendage püsivara kui pakutakse
+**KRACK** (2017) - WPA2 nõrkus
+- Murdis WPA2 krüpteeringu
+- Paigatud, aga vanad seadmed ohus
+- Õppetund: Uuenda alati firmware!
 
-**4. Olulised turvaseaded**
-- Muutke vaikimisi admin kasutajanimi/parool
-- Keelake WPS (WiFi Protected Setup)
-- Lubage WPA2/WPA3
-- Keelake kaughaldus
-- Uuendage püsivara
+**Wardriving** - WiFi kaardistamine
+- Sõitmine ringi + WiFi skanner + GPS
+- Wigle.net: 1.1 miljardit WiFi võrku kaardistatud
+- Teie WiFi on seal tõenäoliselt ka!
 
-### 4.4.2 Disaini kaalutlused
+### Bluetooth ohud
 
-#### Võrgu planeerimine
+**BlueBorne** (2017) - kontrollis seadmeid üle
+**Bluesnarfing** - varastab andmeid
+**AirTag stalking** - jälgimine Apple tracker'itega
 
-**Seadmete inventuur:**
-- Loendage kõik ühendatavad seadmed
-- Märkige ribalaiuse vajadused
-- Tuvastage kaabel vs WiFi vajadused
+### 5G turvamured
 
-**Ruuteri asukoht:**
-- Keskne asukoht
-- Kõrgel positsioonil
-- Eemal häirete allikatest
-- Mitte suletud kappides
+**IMSI Catcher** (StingRay)
+- Teeskleb olevat mobiilimast
+- Püüab kõnede metaandmeid
+- Kaitse: 5G SA (Standalone) võrgud
 
-**Võrgu segmenteerimine:**
-```mermaid
-graph TD
-    ROUTER[Peamine ruuter] --> MAIN[Põhivõrk<br/>Usaldusväärsed seadmed]
-    ROUTER --> GUEST[Külalisvõrk<br/>Külalised]
-    ROUTER --> IOT[IoT võrk<br/>Nutiseadmed]
-```
+**Hiina seadmed:**
+- Huawei/ZTE keelatud USA/UK 5G võrkudes
+- Kartus: tagauksed Hiina valitsusele
+- Eesti: Ei kasuta 5G tuumvõrkudes
 
-### 4.4.3 Juhtmevaba ruuteri ja kliendi konfigureerimine
+## Praktilised nõuanded tudengitele
 
-#### Täpsemad ruuteri seaded
+### Hea WiFi seadistamine kodus
 
-**QoS (Quality of Service):**
-- Prioritiseeri seadmeid/rakendusi
-- Ribalaiuse jaotamine
-- Mängude/voogedastuse optimeerimine
+1. **Ruuteri paigutus:** Kõrgel ja keskel (mitte kapis!)
+2. **Kanali valik:** Kasutage WiFi analüsaatori äppi, valige tühi kanal
+3. **Turvalisus:** WPA3 võimalusel, WPA2 miinimum
+4. **Parool:** Pikk fraas parem kui keeruline: "MuKoerArmastab2SüüaPitsat!" 
+5. **Sageduse valik:** 5GHz striimimiseks, 2.4GHz IoT seadmetele
 
-**Pordi suunamine:**
-- Serverite/mängude jaoks
-- Turvarisk - kasutage ettevaatlikult
-- Kaaluge UPnP alternatiive
+### Tõrkeotsingu alused
 
-**DHCP seaded:**
-- IP vahemiku konfigureerimine
-- Staatilised IP määrangud
-- DNS serveri seaded
+**Aeglane WiFi?**
+- Kontrollige, mitu seadet on ühendatud
+- Testige ruuteri lähedal vs kaugel
+- Taaskäivitage ruuter (jah, tõesti)
+- Kontrollige, kas naabrid on samal kanalil
 
-### 4.4.4 Packet Traceri harjutus
+**Ei saa ühenduda?**
+- Unustage võrk ja ühenduge uuesti
+- Kontrollige, kas MAC-filtreerimine on sees
+- Kinnitage WPA2/WPA3 ühilduvus
 
-**Stsenaarium:**
-1. Lisa juhtmevaba ruuter
-2. Lisa 2 arvutit ja 2 sülearvutit
-3. Konfigureeri ruuter:
-   - SSID: KoduVork
-   - Parool: Turvaline123
-   - Turvalisus: WPA2-PSK
-   - Kanal: 6
+## Testime teie arusaamist
 
-**Kontrollimine:**
-- Testi `ping` käsuga
-- Kontrolli DHCP seadeid
-- Vaata ühendatud seadmeid
+### Kiirküsimused
+
+1. **Miks töötab teie WiFi aias, aga mitte ülakorrusel?**
+   (Vihje: Kuidas raadiolained liiguvad?)
+
+2. **Olete kohvikus. Kas peaksite kasutama nende avatud WiFi-t panganduseks?**
+   (Mõelge turvaprotokollide peale)
+
+3. **Teie Bluetooth kõrvaklapid katkevad, kui panete telefoni tagataskusse. Miks?**
+   (Mõelge, mis on telefoni ja kõrvaklappide vahel)
+
+4. **Miks tühjendab 5G telefoniaku kiiremini kui 4G?**
+   (Mõelge nende mitme antenni ja sageduse peale)
+
+[![2.4 GHz vs 5 GHz WiFi: What is the difference?](https://img.youtube.com/vi/J_bf_KE5llQ/maxresdefault.jpg)](https://www.youtube.com/watch?v=J_bf_KE5llQ&t=139s)
+
+### Praktiline harjutus
+
+**Kujundage WiFi võrk 3-korruselisele majale:**
+- Kuhu paigutaksite ruuterid?
+- Milliseid sagedusi millisele toale?
+- Kuidas lahendaksite nutika teleri, mängukonsooli ja 15 nutika pirni?
+
+## Peamised järeldused
+
+1. **WiFi** = Teie peamine internetiühendus, muutub iga põlvkonnaga kiiremaks
+2. **Mobiilvõrgud** = Kõikjal katvus, 5G on kiire, aga vajab rohkem maste
+3. **Bluetooth** = Seadmest seadmesse, ideaalne tarvikutele
+4. **NFC** = Superlühike ulatus turvalisuse huvides
+5. **LoRaWAN** = Pikamaaline anduritele, mis vajavad aastaid akutööd
+
+## Järgmiseks nädalaks
+
+Proovige kodus:
+1. Kasutage WiFi analüsaatori äppi oma telefonis
+2. Loendage, mitme juhtmevaba tehnoloogiaga päeva jooksul kokku puutute
+3. Kontrollige, millist WiFi turvalisust teie koduruuter kasutab
+
+Pidage meeles: Need tehnoloogiad ei konkureeri - nad täiendavad üksteist. Teie tulevased IoT projektid kasutavad tõenäoliselt mitut neist koos!
 
 ---
 
-### 4.5. Arutelu küsimused
-
-1. **Turvalisus vs mugavus**
-   - Kuidas tasakaalustada lihtsat ligipääsu turvalisusega?
-   - Millised riskid on kodukeskkonnas aktsepteeritavad?
-
-2. **Kaabel vs WiFi**
-   - Millal on kaabelühendus vajalik?
-   - Kui palju seadmeid vajab tegelikult maksimaalset kiirust?
-
-3. **Investeerimisotsused**
-   - Kas osta praeguste või tulevaste vajaduste jaoks?
-   - Millal on mesh võrk mõistlik?
-
----
-
-## Lisaressursid
-
-### Soovitatavad tööriistad
-
-**Võrgu testimine:**
-- Speedtest.net - Interneti kiirus
-- WiFi Analyzer (Android) - Kanalite analüüs
-- inSSIDer - WiFi skannimine
-- PingPlotter - Ühenduse kvaliteet
+**Küsimused?** Ärge kõhelge küsimast - kui teie olete segaduses, on tõenäoliselt pool klassist ka!
