@@ -1,4 +1,4 @@
-# Loeng 3: Juhtmevabad ja mobiilsed võrgud - algajatele
+# Loeng 3: Juhtmevabad ja mobiilsed võrgud
 
 *Tere hommikust! Täna sukeldume juhtmevabade võrkude maailma - tehnoloogiasse, mida kasutate iga päev ilma sellele mõtlemata.*
 
