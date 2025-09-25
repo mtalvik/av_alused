@@ -235,6 +235,7 @@ stateDiagram-v2
     DATA_TRANSFER --> FIN_WAIT: Close()
     FIN_WAIT --> CLOSED: FIN+ACK
 ```
+[![TCP/UDP jokes](https://cdn.obiikriationz.com/1.jpg)
 
 **TCP Three-Way Handshake:**
 
