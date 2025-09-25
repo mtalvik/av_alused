@@ -1,4 +1,4 @@
-# Loeng 3: Ruuteri seadistamine - Packet Tracer praktika
+# Loeng 4: Ruuteri seadistamine - Packet Tracer praktika
 
 *Tere! Täna õpime, kuidas kaks erinevat võrku omavahel rääkima panna. Kasutame Packet Tracerit!*
 
