@@ -483,7 +483,9 @@ Port | MAC Address           | Age
 2    | BB:BB:BB:BB:BB:02    | 5s
 ```
 
-<div style="background-color: #ffe6e6; padding: 10px; border-left: 4px solid #cc0000;">
+---
+
+## 🔴 Oluline mõista:
 
 **Küsimus 1:** Kuidas switch teab, millist MAC aadressi ta vajab?
 
@@ -506,116 +508,115 @@ Switch lihtsalt:
 
 **Vastus: ARP (Address Resolution Protocol)**
 
-PC1 teab ainult IP aadressi (192.168.1.20), aga ei tea MAC aadressi!
+ARP loodi 1982. aastal, et lahendada probleem: kuidas leida MAC aadress, kui tead ainult IP aadressi.
 
 **ARP protsess:**
 
-**1. PC1 saadab ARP Request (BROADCAST):**
-```
-Frame:
-Source MAC: AA:AA:AA:AA:AA:01 (PC1)
-Destination MAC: FF:FF:FF:FF:FF:FF (KÕIGILE!)
-ARP küsimus: "Kes on IP 192.168.1.20? Anna oma MAC!"
-```
+| Samm | Kes | Tegevus | MAC Aadressid |
+|------|-----|---------|---------------|
+| 1️⃣ | PC1 | "Kes on IP 192.168.1.20?" | Src: `AA:AA:01` → Dst: `FF:FF:FF` (BROADCAST) |
+| 2️⃣ | PC2 | "See olen mina!" | Src: `BB:BB:02` → Dst: `AA:AA:01` |
+| 3️⃣ | PC1 | Salvestab ARP cache'i | `192.168.1.20 = BB:BB:02` ✅ |
+| 4️⃣ | PC1 | Saadab andmed | Src: `AA:AA:01` → Dst: `BB:BB:02` |
 
-**2. PC2 vastab ARP Reply:**
-```
-Frame:
-Source MAC: BB:BB:BB:BB:BB:02 (PC2)
-Destination MAC: AA:AA:AA:AA:AA:01 (PC1-le)
-ARP vastus: "See olen mina! Minu MAC on BB:BB:BB:BB:BB:02"
-```
-
-**3. PC1 salvestab oma ARP cache'i:**
-```
-IP 192.168.1.20 = MAC BB:BB:BB:BB:BB:02 ✅
-```
-
-**4. Nüüd PC1 saab luua õige frame'i:**
-```
-Frame:
-Source MAC: AA:AA:AA:AA:AA:01
-Destination MAC: BB:BB:BB:BB:BB:02 ← TEAB NÜÜD!
-```
+**Tulemus:** PC1 teab nüüd, et IP `192.168.1.20` = MAC `BB:BB:BB:BB:BB:02`
 
 ---
 
-**Küsimus 3:** MAC aadressid töötavad ainult lokaalselt?
+## 🔴 Oluline mõista:
 
-**Vastus: JAH!** MAC aadressid töötavad AINULT samas võrgus (Layer 2).
 
-**Miks?**
-- ARP kasutab broadcast'i (`FF:FF:FF:FF:FF:FF`)
-- Broadcast ei lähe läbi ruuteri
-- Ruuter peatab broadcast'i
+### **Küsimus 1:** Kuidas switch teab, millist MAC aadressi ta vajab?
 
-**Samas võrgus:**
+**Vastus:** Switch EI otsi ega vali MAC aadressi! See on juba kaadris olemas.
 ```
-PC1 (192.168.1.10) → PC2 (192.168.1.20)
-✅ ARP töötab, saavad otse rääkida
+Destination MAC: BB:BB:BB:BB:BB:02  ← PC1 pani sisse
+Source MAC: AA:AA:AA:AA:AA:01      ← PC1 enda MAC
 ```
 
-**Erinevas võrgus:**
-```
-PC1 (192.168.1.10) → Google (8.8.8.8)
-❌ Ei saa otse - on teine võrk!
-```
+Switch: Vaatab Destination MAC → otsib tabelist → saadab õigesse porti.
+
+**Elu näide:** Postiljon ei otsi aadressi - ta vaatab ümbriku pealt ja viib sinna, mis kirjas on.
 
 ---
 
-**Küsimus 4:** Kuidas siis internet töötab, kui MAC on ainult lokaalne?
+### **Küsimus 2:** Aga kuidas ARVUTI teab õige MAC aadressi?
 
-**Vastus:** MAC aadressid **MUUTUVAD** iga võrgu piires! IP aadressid **JÄÄVAD SAMAKS!**
+**Vastus: ARP (Address Resolution Protocol)** - loodi 1982, et leida MAC kui tead IP.
 
-**Näide: Saadad paketti Google'ile (8.8.8.8)**
+| Samm | Tegevus | Võrgus |
+|------|---------|--------|
+| 1️⃣ | "Kes on IP 192.168.1.20?" | ARP Request (BROADCAST) |
+| 2️⃣ | "Mina! MAC: BB:BB:02" | ARP Reply |
+| 3️⃣ | Salvestab: IP → MAC | ARP Cache |
+| 4️⃣ | Saadab andmed | Frame õige MAC'iga ✅ |
 
-**1. Sinu koduvõrgus:**
-```
-Frame:
-Source MAC: Sinu MAC
-Destination MAC: RUUTERI MAC ← MITTE Google'i MAC!
-───────────────────────────
-IP Packet (sees):
-Source IP: 192.168.1.10
-Dest IP: 8.8.8.8 ← See jääb samaks!
-```
-
-**2. Ruuter võtab vana Layer 2 maha, paneb uue:**
-```
-Frame (uus):
-Source MAC: Ruuteri MAC (interneti pool)
-Destination MAC: Järgmise ruuteri MAC
-───────────────────────────
-IP Packet (SAMA):
-Source IP: 192.168.1.10 ← Sama!
-Dest IP: 8.8.8.8 ← Sama!
+**Elu näide:**
+```mermaid
+sequenceDiagram
+    participant M as 🧍‍♀️ Maria
+    participant T as 🏢 Trepikoda
+    participant R as 🧍‍♂️ Rain
+    
+    M->>T: "KES ELAB KORTERIS 20?"
+    T->>R: (kõik kuulevad)
+    R->>M: "Mina! Postkast B2!"
+    Note over M: Kirjutab üles ✅
+    M->>R: 🎁 Kink postkasti B2
 ```
 
-**3. Iga ruuter kordab:**
-- Eemaldab Layer 2 (MAC)
-- Paneb uue Layer 2 (järgmise hop'i MAC)
-- Layer 3 (IP) jääb ALATI SAMAKS!
+Maria teab korteri numbrit (IP), aga karjub trepikotta küsima postkasti numbrit (MAC). Rain vastab, Maria meelde jätab! 😎
+
+---
+
+### **Küsimus 3:** MAC töötab ainult lokaalselt?
+
+**Vastus: JAH!** ARP kasutab broadcast'i → ruuter peatab broadcast'i → ei lähe teise võrku.
+
+| Võrk | Tulemus |
+|------|---------|
+| Sama võrk (192.168.1.x) | ✅ ARP töötab |
+| Teine võrk (8.8.8.8) | ❌ ARP ei jõua |
+
+**Elu näide:** Trepikotta karjumine töötab ainult OMA majas. Teise linna inimestele pead HELISTAMA (see on Layer 3 - IP). 📞
+
+---
+
+### **Küsimus 4:** Kuidas siis internet töötab, kui MAC on ainult lokaalne?
+
+**Vastus:** MAC **MUUTUB** iga võrgu piires. IP **JÄÄB SAMAKS**.
+```
+Koduvõrk:
+[Sinu MAC] → [Ruuteri MAC]  |  IP: 192.168.1.10 → 8.8.8.8
+           ↓
+Ruuter:
+[Ruuteri MAC] → [Järgmine MAC]  |  IP: 192.168.1.10 → 8.8.8.8 (SAMA!)
+           ↓
+(kordub...)
+```
+
+**Elu näide:**
+
+Maria (Tallinn) tahab saata kingi Kullamale (Kullamaa). Kink läheb läbi mitme postkontori:
+
+| Koht | Ümbrikul aadress | Postiljon (käru) |
+|------|------------------|------------------|
+| Tallinna postkontor | "Rain, Kullamaa, Korter 20" | Postiljon Mario (käru #5) |
+| Haapsalu postkontor | "Rain, Kullamaa, Korter 20" (SAMA!) | Postiljon Valdo (käru #12) |
+| Kullamaa postkontor | "Rain, Kullamaa, Korter 20" (SAMA!) | Postiljon Anti (käru #23) |
+
+**Mis juhtub:**
+- **Ümbrikul aadress (IP)** = "Rain, Kullamaa, Korter 20" → jääb ALATI samaks! 📮
+- **Postiljon ja käru number (MAC)** = muutub igas postkontoris, aga kink jõuab kohale! 🎁
+
+Maria ei tea, kes kõik postiljonid on - see pole tema mure! Ta kirjutab ainult ümbriku peale "Rain, Kullamaa" ja postiljonid teevad oma töö. Muidugi Rain ka ei tea, sest ta teeb soolakurki kodus 🥒. Tal pole aega talle helistada ja külla kutsuda, aga noh see on juba teine lugu
 
 **Seega:**
 - **Layer 2 (MAC)** = lokaalne transport, muutub iga hop'iga
 - **Layer 3 (IP)** = globaalne aadress, jääb samaks kogu tee
 
-**Analoogia:** 
-- IP = sihtkoha aadress ümbriku peal (Google'i aadress)
-- MAC = postiljoni käru number (muutub iga jaama juures, aga ümbriku aadress jääb samaks)
+**See ongi Layer 2 vs Layer 3!** 😎
 
-*(ARP ja IP marsruutimist õpime detailselt Layer 3-s järgmisel nädalal!)*
-
-</div>
-
-## Järgmine Tund: Layer 3 - Võrgukiht
-
-**Õpime:**
-- IP aadressid ja alamvõrgud
-- Marsruutimine (routing)
-- Kuidas andmed liiguvad erinevate võrkude vahel
-
-**Mõtle:**
-> MAC aadress töötab ainult kohalikus võrgus. Kuidas saame siis internetti? 🤔
+*(Detailselt õpime Layer 3-s järgmisel nädalal!)*
 
 ---
