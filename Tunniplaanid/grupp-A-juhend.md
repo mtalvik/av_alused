@@ -1,11 +1,7 @@
 # GRUPP A - Lab 7 Juhend
-
 **Kuupäev:** 14. oktoober 2025
-
 ---
-
 ## ⏰ TEIE AJAKAVA
-
 ```
 09:20-10:00  ► TE LÄHETE SERVERISSE
              (Pool B jääb klassi PT-ga)
@@ -15,13 +11,9 @@
 10:15-11:00  ► TE DOKUMENTEERITE KLASSIS
              (Pool B läheb serverisse)
 ```
-
 ---
-
 ## ✅ MIS TE TEETE SERVERIS (09:20-10:00)
-
 ### KOHUSTUSLIK (40 min):
-
 1. **Leia oma port** (5 min)
    - Laud → seina port number
    - Serveris patch-paneel → sama number
@@ -47,13 +39,9 @@
 - Klassi port: ___
 - Patch port: ___
 - Switch mudel: ___
-
 ---
-
 ## ✅ MIS TE TEETE KLASSIS (10:15-11:00)
-
 ### DOKUMENTEERIMINE:
-
 1. **Kirjutage valmis:**
    - Füüsilised ühendused
    - Reset protseduur
@@ -64,15 +52,10 @@
    - Vaadake kuidas switch õpib
 
 3. **Aidake aeglasemaid**
-
 ---
-
 ## 📋 ESITADA
-
 - Vihik dokumentatsiooniga
 - Täidetud tabel
-- Kontrollküsimustele vastused
-
+- Kontrollküsimused
 ---
-
 **Vaadake Lab Manual detailsete sammude jaoks!**
