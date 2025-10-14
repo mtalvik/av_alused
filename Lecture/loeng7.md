@@ -135,7 +135,7 @@ Arvuti A:                    Kaabel:                    Arvuti B:
 ---
 #### 1.2.2 Fiiberoptilised Kaablid
 
-![Fiiberoptiline kaabel](/labs/images/fiber_optic.png)
+![Fiiberoptiline kaabel](/Labs/images/fiber_optic.png)
 
 | Vask | Fiber |
 |------|-------|
@@ -183,7 +183,7 @@ Nagu raadiojaamad - Raadio 2, Sky Plus, Elmar - kõik õhus korraga, aga erineva
 
 Need seadmed töötavad erinevatel kihtidel - mõned lihtsalt edastavad signaale, teised MÕTLEVAD, kuhu need saata.
 
-![Võrguseadmed](/labs/images/networkdevices.png)
+![Võrguseadmed](/Labs/images/networkdevices.png)
 
 ---
 
@@ -209,8 +209,8 @@ PC1 saadab → HUB edastab → **kõik** saavad (ka PC3, kes ei vajanud!)
 
 #### 1.3.2 Switch (Kommutaator) - Layer 2
 
-![Switch1](/labs/images/switch_ports_buttons1.png))
-![Switch2](/labs/images/switch_ports_buttons2.png))
+![Switch1](/Labs/images/switch_ports_buttons1.png))
+![Switch2](/Labs/images/switch_ports_buttons2.png))
 
 **Mis see teeb?** Saadab andmed AINULT õigesse kohta (õpib MAC aadresse).
 
@@ -236,7 +236,7 @@ PC1 → PC2: Switch saadab **ainult** porti 2. PC3 ei näe midagi! ✅
 #### 1.3.3 Router (Ruuter) - Layer 3
 
 
-![Router](/labs/images/router.png)
+![Router](/Labs/images/router.png)
 
 **Mis see teeb?** Ühendab ERINEVAID võrke (kasutab IP aadresse).
 
@@ -256,7 +256,7 @@ Koduvõrk (192.168.1.x)  ←→  [ROUTER]  ←→  Internet
 
 #### 1.3.4 Patch Panel (Liidespaneel)
 
-![Liidespaneel](/labs/images/patchpanel.png)
+![Liidespaneel](/Labs/images/patchpanel.png)
 
 **Mis see teeb?** Kaablite organiseerija - kõik kaablid lähevad siia kokku.
 
@@ -286,7 +286,7 @@ graph LR
 
 **Kuidas suhtlemine toimub?**
 
-![Data Transmission](/labs/images/duplex.png)
+![Data Transmission](/Labs/images/duplex.png)
 
 **Full-Duplex eelised:**
 - 2x kiirem (100 Mbps → efektiivselt 200 Mbps)
@@ -299,7 +299,7 @@ graph LR
 
 ## 2. KANALIKIHT (Layer 2)
 
-![OSI kanalikiht](/labs/images/datalink.png)
+![OSI kanalikiht](/Labs/images/datalink.png)
 
 ### 2.1 Mis on Layer 2?
 
@@ -332,7 +332,7 @@ AA:BB:CC:DD:EE:FF
 
 **Kokku:** 48 bitti = 6 baiti = 12 hex numbrit
 
-![MAC-aadressi struktuur](/labs/images/mac_address_structure.png)
+![MAC-aadressi struktuur](/Labs/images/mac_address_structure.png)
 
 ---
 
@@ -371,7 +371,7 @@ AA:BB:CC:DD:EE:FF
 
 Andmed pakitakse Etherneti kaadritesse (frame), mis sisaldavad MAC-aadresse ja kontrolli, et võrguseadmed teaksid, kuhu andmeid saata ja kas need jõudsid vigadeta kohale.
 
-![Etherneti raami struktuur](/labs/images/ethernet_frame_structure.png)
+![Etherneti raami struktuur](/Labs/images/ethernet_frame_structure.png)
 ```
 +----------+----------+----------+------+----------+-----+
 | Preamble | Dest MAC | Src MAC  | Type |   DATA   | FCS |
@@ -441,7 +441,7 @@ Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadm
 > 📝 **QUIZ:** **Hub** = saadab KÕIGILE, ei tea MAC aadresse (Layer 1)  
 > 📝 **QUIZ:** **Switch** = saadab AINULT õigesse kohta, õpib MAC aadresse (Layer 2)
 
-![Ethernet kommutaatori struktuur](/labs/images/ethernet_switch_structure.png)
+![Ethernet kommutaatori struktuur](/Labs/images/ethernet_switch_structure.png)
 
 | Aspekt | HUB (Layer 1) | SWITCH (Layer 2) |
 |--------|---------------|------------------|
@@ -459,7 +459,7 @@ Switch ei tea alguses midagi - tema MAC aadressi tabel on tühi. Aga iga kaadrig
 
 > 📝 **QUIZ:** Switch õpib MAC aadresse **SOURCE MAC aadressist** ja salvestab need **MAC aadressi tabelisse**
 
-![MAC-aadresside tabel](/labs/images/mac_address_table.png)
+![MAC-aadresside tabel](/Labs/images/mac_address_table.png)
 
 **Õppimise protsess:**
 ```
