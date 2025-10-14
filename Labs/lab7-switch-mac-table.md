@@ -7,7 +7,7 @@
 
 ---
 
-## KONTEKST: MIS ME TÄNA ÕPIME?
+## MIDA ME TÄNA ÕPIME?
 
 ### OSI Mudeli Perspektiiv
 
@@ -19,34 +19,36 @@
 
 ### Põhiküsimus
 
-**Probleem:** Klassis on 30 PC-d, kõik ühendatud switch-iga. PC1 tahab saata faili PC15-le.  
-**Küsimus:** Kuidas switch teab, millisest pordist PC15 on?  
-**Lahendus:** MAC Address Table - switch õpib iga frame'i pealt!
+**Probleem:** Klassis on 30 PC-d, kõik ühendatud switchiga. PC1 tahab saata faili PC15-le.  
+**Küsimus:** Kuidas switch teab, millises pordis PC15 on?  
+**Lahendus:** MAC Address Table - switch õpib iga kaadri (frame) pealt!
 
-### Täna Näete
+> 💡 **Fun fact:** Switch on nagu kooli sekretär - teab täpselt, kes millises klassis on. Aga kui sa tõmbad vale kaabli välja serveriruum, siis sekretär kaotab mälu ja kogu kool on kaoses! 📋➡️🔥
+
+### Täna saame
 
 1. Kuhu Lab 6 kaablid füüsiliselt lähevad (serveriruum)
 2. Kuidas switch õpib MAC aadresse automaatselt
 3. ARP protokolli töös
-4. Layer 2 forwarding decision'i päriselt
+4. Layer 2 edastamisotsuse päriselt
 
 ---
 
 ## EESMÄRGID
 
-Selle labi lõpuks oskate:
+Selle labori lõpuks oskate:
 
 **Praktiline:**
-- Navigeerida serveriruum keskonnas
-- Ühendada seadmeid rack-is
-- Konfigureerida Cisco switch-i
-- Lugeda MAC address table-it
+- Navigeerida serveriruumi keskkonnas
+- Ühendada seadmeid rackis
+- Konfigureerida Cisco switchi
+- Lugeda MAC address table'it
 
 **Teoreetiline:**
-- Selgitada switch õppimise protsessi
+- Selgitada switchi õppimise protsessi
 - Eristada Layer 1 ja Layer 2 funktsioone
 - Mõista ARP protokolli rolli
-- Analüüsida frame forwarding-u
+- Analüüsida kaadrite edastamist
 
 ---
 
@@ -67,6 +69,8 @@ Selle labi lõpuks oskate:
     ↓
 [Switch]
 ```
+
+> 🗺️ **Navigatsioon:** Kui sa pole serveriruumis varem käinud, võta kaasa kogenud sõber. Nagu dungeoniga - vaja party't! Ära lähe solo! 🛡️
 
 ### Komponendid
 
@@ -93,11 +97,13 @@ Selle labi lõpuks oskate:
 
 | Lubatud | Keelatud |
 |---------|----------|
-| Sinine patch-kaablid | Musta/kollased kaablid |
-| Oma switch toide | Teiste seadmete puudutamine |
+| Sinised patch-kaablid | Mustad/kollased kaablid |
+| Oma switchi toide | Teiste seadmete puudutamine |
 | Küsida kahtluse korral | "Proovin ise" mentaliteet |
 
-**Tagajärg:** Üks vale tõmme = kogu kool ilma internetita.
+**Tagajärg:** Üks vale tõmme = kogu kool ilma internetita ( tegelikult mitte, see ei ole kooli serveriruum)
+
+> 🎯 **Remember:** Serveriruum versioonis: "With great access comes great ability to f*** up everything" - Rain, 2024 🕷️
 
 ---
 
@@ -123,13 +129,13 @@ PC2 ──[Ethernet]──→ Switch Fa0/2
 
 ## DOKUMENTEERIMINE
 
-**Google Docs Template - Classroom-ist:**
+**Google Docs Template - Classroomist:**
 
 1. Ava Google Classroom → Lab 7
-2. Kopeeri template oma Drive-i
+2. Kopeeri template oma Drive'i
 3. Jaga grupi liikmega (edit õigused)
-4. Täida koos labori ajal
-5. Esita Classroom-is
+4. Täida laabori ajal (koos)
+5. Esita Classroomis
 
 **Template struktuur:**
 
@@ -163,13 +169,15 @@ KONTROLLKÜSIMUSED (6 küsimust)
 
 ### 1.1 Leia Klassi Pordid
 
-![Port numbrid](./media/21.1.png)
+![Pordinumbrid](./media/21.1.png)
 
-Töölaua all olevad pordid (näiteks 21.1, 21.2).
+Töölaua all või peal olevad pordid (näiteks 21.1, 21.2).
 
 **OLULINE:** Märgi see number - kasutame seda IP aadresside jaoks!
 
 **Hoiatus:** Ära puutu porti, kus juba kaabel sees - see on klassi internet!
+
+> 🎮 **Gaming reference:** Need pordinumbrid on nagu su spawn point. Kirjuta üles või respawnid vales kohas! 🗺️
 
 **Google Docs:**
 ```
@@ -187,22 +195,35 @@ PC2 port: 21.2
 
 ![Patch-paneeli pordid](./media/patch_ports.png)
 
-Leia samad numbrid patch-paneel-ist (Kapp K1).
+Leia samad numbrid patch-paneelis (Kapp K1).
 
 **Google Docs:**
 ```
 Patch-paneel: ____.____
 ```
 
+**Reaalsuse check:** Kui sa ei leia oma numbrit, ÄRA hakka juhuslikult kaableid tõmbama! Küsi abi! Rain on tavaliselt serveriruumi lähedal või klassis 310. Ta on näinud kõike ja ta ei hammusta. 😊
+
 ### 1.3 Vali Switch
 
-**Variant A:** Võta vaba switch rack-ist  
-**Variant B:** Õpetaja laual
+**Variant A:** Vali vaba switch rackist  
+**Variant B:** Otsi kuskil ja lisa ise
+
+**ENNE ÜHENDAMIST - kontrolli porti nimesid!**
+
+Vaata switchi ette - pordid on märgitud:
+- **FastEthernet (Fa0/1, Fa0/2...)** - 100 Mbps pordid (tavalisemad)
+- **GigabitEthernet (Gi0/1, Gi0/2...)** - 1000 Mbps pordid (uuemad switchid)
+
+> 🔍 **OLULINE:** Kirjuta üles, mis SINU switch kasutab! Hiljem kasutame neid nimesid käskudes!
 
 **Google Docs:**
 ```
 Switch mudel: Cisco ____
+Pordi tüüp: FastEthernet / GigabitEthernet (ring ümber õigele!)
 ```
+
+> 💰 **Fun fact:** uus switch maksab umbes nagu paar iPhone. Ära kukuta maha! 📱💸
 
 ### 1.4 Ühenda PC2 (Ethernet)
 
@@ -212,6 +233,8 @@ Switch Fa0/2 ←[sinine patch]→ Patch-paneel ____.2 → PC2
 
 ![Ühendamine](./media/connection.png)
 
+> 🎣 **ProTip:** Kaabel läheb peale nagu LEGO. Kui peab liiga palju jõudu kasutama, siis midagi on valesti! Gentle force, not brute force! 💪➡️👌
+
 ### 1.5 Ühenda PC1 (Konsool)
 
 ![Konsoolikaablid](./media/console.png)
@@ -220,12 +243,26 @@ Switch Fa0/2 ←[sinine patch]→ Patch-paneel ____.2 → PC2
 PC1 USB ←[konsoolikaabel]→ Switch Console port
 ```
 
+**Console porti leidmine:**
+
+Console port on **SININE** (RJ45 port, eraldi teistest!):
+- Võib olla switchi **EES** (koos teiste portidega)
+- Võib olla switchi **TAGANT** (eraldi panel)
+- Märgistus: "CONSOLE" või "CON"
+
 ![Konsooli port](./media/console_port.png)
+
+**Näpunäited:**
+- Sinine värv = console port ✅
+- Sama suurus nagu Ethernet port (RJ45)
+- ERINEVALT ethernet portidest - ainult üks!
 
 **Praegu:**
 ```
 PC1 ─[Console]→ Switch ←[Eth]─ PC2
 ```
+
+> 🎨 **Värvi kood:** Cisco armastab värve! Sinine = console, oranž/must = ethernet, kollane = gigabit. Nagu jõulukaunistused! 🎄
 
 ---
 
@@ -234,18 +271,29 @@ PC1 ─[Console]→ Switch ←[Eth]─ PC2
 ### 2.1 Leia COM Port
 
 **Device Manager:**
+
 1. Win + X → Device Manager
 2. Ports (COM & LPT)
-3. USB Serial Port (COM_)
+3. Otsi USB Serial Port (COM_)
+
+**OLULINE:** Nimi võib olla erinev sõltuvalt kaablist:
+- USB Serial Port (COM3)
+- Prolific USB-to-Serial Comm Port (COM4)
+- Silicon Labs CP210x USB to UART Bridge (COM5)
 
 **Näide:**
 ```
 Ports (COM & LPT)
-  ├─ USB Serial Port (COM3)
-  └─ Communications Port (COM1)
+  ├─ USB Serial Port (COM3) ← SEE VÕIB OLLA SINU!
+  ├─ Prolific USB-to-Serial (COM4) ← VÕI SEE!
+  └─ Communications Port (COM1) ← ignoreeri (see on PC enda)
 ```
 
 **Google Docs:** COM_____
+
+> 🎰 **Loterii:** Sul võib olla COM3, COM4, COM5... See on nagu parklat otsida - iga kord erinev number! Kirjuta see üles! 🅿️
+> 
+> 💡 **Kui sa näed MITU USB Serial porti:** Tõmba console kaabel välja ja vaata, kumb kaob Device Managerist. See oli sinu! 🔌
 
 ### 2.2 PuTTY Ühendus
 
@@ -266,6 +314,8 @@ Parity: None
 Flow control: None
 ```
 
+> 🕰️ **History lesson:** 9600 baud = 9600 bits per second. Netflix 4K vajab umbes 25,000,000 bits per second. Yeah, see on AEGLANE. Aga switchile piisab! 🐌
+
 ### 2.3 Kontrolli
 
 Peaks nägema:
@@ -279,11 +329,21 @@ Press RETURN to get started!
 
 Tühi ekraan → vajuta Enter.
 
+**Ikka tühi?** 
+1. Check: Kas console kaabel on kinni?
+2. Check: Kas COM port õige?
+3. Check: Kas switchi toide sees?
+4. Kui ikka ei tööta → Rain serveriruumi lähedal või Mario klassis 309! 🆘. Ok, ok ma saan ka aidata, ma olen siiski su õpetaja.
+
+> 🎬 **Movie moment:** Kui näed "Switch>" prompti, siis sa oled SEES! Nagu Matrix - welcome to the real world! 😎
+
 ---
 
 ## OSA 3: SWITCH RESET (10 min)
 
-**Miks?** Eelmine grupp võis seadistada paroole/config-e. Reset annab puhta aluse.
+**Miks?** Eelmine grupp võis seadistada paroole/confige. Reset annab puhta aluse.
+
+> 🎮 **Gaming analogy:** See on nagu New Game+ - tahad alustada puhtalt, ilma eelmise mängija salvest! 🔄
 
 ### 3.1 Mode Nupp Protseduur
 
@@ -299,6 +359,8 @@ Tühi ekraan → vajuta Enter.
 | 6 | Vabasta nupp |
 
 **LED-id vilguvad oranžiks = õnnestus.**
+
+> ⚡ **ProTip:** See on nagu Ctrl+Alt+Del Windowsis... aga füüsiline versioon! Mode nupp = nuclear option! ☢️
 
 ### 3.2 Kustuta Config
 
@@ -327,6 +389,8 @@ Tulemus:
 Switch>
 ```
 
+> 🧹 **Clean slate:** Sa just kustutasid KOGU eelmise konfiguratsiooni. Switch on nüüd nagu uus sünnitud beebi - ei tea mitte midagi! 👶
+
 ---
 
 ## OSA 4: BAASKONFIGURATSIOON (20 min)
@@ -339,7 +403,7 @@ Switch>
 
 | Probleem | Lahendus |
 |----------|----------|
-| 20 switch-i racks, kõik sarnased | Hostname identifitseerib |
+| 20 switchi rackis, kõik sarnased | Hostname identifitseerib |
 | Logides - mis seade seda tegi? | SW-Korruse3-Klass310 |
 | Dokumentatsioon - viited | Selge viide |
 
@@ -355,26 +419,24 @@ SW-Vikerkaar(config)#
 
 **Google Docs:** Hostname: _____
 
+> 💡 **Easter egg:** Pane midagi meeldejäävat! Järgmine grupp võib su nime näha ja naerda. Legacy! 🏆
+
 ### 4.2 Enable Secret
 
 **Miks?**
 
 Privileged mode (#) võib:
-- Kustutada kogu config
+- Kustutada kogu configi
 - Resetida seade
 - Muuta võrguseadeid
 - Blokeerida porte
 
-Ilma paroolita = turvaauk.
-
-**Real-world:**
-- LDAP/RADIUS integratsioon
-- Audit trail
-- Compliance (ISO 27001)
+Ilma paroolita = turvaauk. Tavalist Cisco laabides on see lihtsalt nimi "cisco".
+Sa võid ka seda kasutada.
 
 **Ülesanne:**
 ```
-SW-Vikerkaar(config)# enable secret [gruppinimi]2024
+SW-Vikerkaar(config)# enable secret [gruppinimi]2025
 ```
 
 **Test:**
@@ -388,16 +450,13 @@ SW-Vikerkaar#
 
 **Google Docs:** Enable secret: _____
 
-### 4.3 Console Password
+> ⚠️ **Aga päris elus tööl:** ÄRA pane parooli "password" või "12345". Cisco sõnastik attack võtab 0.5 sekundit sellise parooli lahti murda! 🔨
+
+### 4.3 Console Password - see ei ole sama, aga järgmine asi
 
 **Miks?**
 
 Füüsiline juurdepääs = kõige ohtlikum.
-
-**Real-world:**
-- Serveriruum lukustatud
-- Konsool password
-- Logid kõigist console login-test
 
 **Ülesanne:**
 ```
@@ -409,26 +468,26 @@ SW-Vikerkaar(config-line)# exit
 
 **Google Docs:** Console password: _____
 
+> 🕵️ **Fun fact:** 80% firmade häkkimisest algab füüsilisest ligipääsust. Keegi lihtsalt ühendab ennast konsooli kaabliga. Don't be that security hole! 🚪
+
 ### 4.4 Banner
 
 **Miks?**
 
 Juriidiline kaitse:
-- "Ei teadnud, et keelatud..."
-- Banner = hoiatus dokumenteeritud
+- "Ei teadnud, et keelatud..." ❌
+- Banner = hoiatus dokumenteeritud ✅
 
-**Ülesanne:**
+**Ülesanne:** sa võid enda oma ka panna, mulle lihtsalt Rain meeldib
 ```
 SW-Vikerkaar(config)# banner motd #
 Enter TEXT. End with #
-***********************************
-* SW-Vikerkaar                    *
-* Volitamata ligipääs keelatud!   *
-***********************************
-#
+*Rain jälgib serveriruum!*
 ```
 
 **Google Docs:** Kopeeri banner.
+
+> ⚖️ **Legal stuff:** USA-s kohus otsustas: kui pole bannerit, siis häkker võib öelda "ma ei teadnud, et see oli eraomand!" ja pääseda. Banner = PROOF! Eestis sama loogika! 🏛️
 
 ### 4.5 Salvesta Config
 
@@ -438,19 +497,17 @@ Enter TEXT. End with #
 SW-Vikerkaar# copy running-config startup-config
 Destination filename [startup-config]? [Enter]
 ```
-
-**Kontrolli:**
-```
-SW-Vikerkaar# show startup-config
-```
+Vajuta koguaeg enter, ta salvesta default asukohta.
 
 **Google Docs:** Config salvestatud ✓
+
+> 💾 **Save your game:** See on nagu video mängus - kui ei salvesta, kaotad kogu progressi! RAM vs ROM! Restart = RIP su töö! ⚰️
 
 ---
 
 ## OSA 5: MAC ADDRESS TABLE (25 min)
 
-**Kontekst:** See on switch'i "aju" - kuidas ta teeb forwarding otsuseid.
+**Kontekst:** See on switchi "aju" - kuidas ta teeb edastamisotsuseid.
 
 ### 5.1 Vaata Tabelit (Alguses)
 
@@ -460,9 +517,11 @@ SW-Vikerkaar# show mac address-table
 
 Tühi tabel = switch pole veel õppinud midagi.
 
-**Miks tühi?** Switch õpib ainult siis, kui saab frame'e (source MAC field).
+**Miks tühi?** Switch õpib ainult siis, kui saab kaadreid (source MAC field).
 
 **Google Docs:** Alguses tühi ✓
+
+> 🎓 **School analogy:** Switch = uus õpetaja esimesel päeval. Ei tea ühtegi õpilase nime. Pärast nädalat teab kõiki! Mingi teine õpetaja, mitte mina 📚
 
 ### 5.2 Leia PC MAC-id
 
@@ -482,15 +541,19 @@ PC1 MAC: ____
 PC2 MAC: ____
 ```
 
-### 5.3 Lülita PC1 Võrku
+> 🆔 **Identity crisis:** MAC aadress = su bioloogiline pass. Ei saa muuta (no well, tehniliselt saab, aga see on MAC spoofing ja see on... interesting grey area 😏). Iga device OMA unikaalne!
+
+### 5.3 Ühendame PC1 Meie Võrku
 
 **Protseduur:**
 
 1. Salvesta config (`copy run start`)
 2. Sule PuTTY
 3. Eemalda USB console kaabel
-4. Võta sinine patch-kaabel
+4. Võta tavalise patch-kaabel (lihtsalt varasta su PC oma, mis koolivõrgu pordis oli). Upsti, nüüd internet kadus ära, aga noh me ju ühendume sinu võrguga nüüd.
 5. Ühenda: Switch Fa0/1 → Patch ____.1 → PC1
+
+(Võibola sinul on GigabitEthernet Gi0/1, eks?, sina pead ise seda teadma 👶)
 
 **Nüüd:**
 ```
@@ -505,9 +568,9 @@ PC2 ─[Eth Fa0/2]→ ┘
 
 **Miks me seda teeme?**
 
-Me vajame IP aadresse, et tekitada **ARP liiklust**. ARP on Layer 3 protokoll, aga selle tulemusena näeme Layer 2 õppimist (MAC table täitub)!
+Me vajame IP aadresse, et tekitada **ARP liiklust**. ARP on Layer 3 protokoll, aga selle tulemusena näeme Layer 2 töötamist (MAC table täitub)!
 
-**OLULINE:** Iga grupp kasutab OMA IP aadresse (põhineb klassi port numbril).
+**OLULINE:** Iga grupp kasutab OMA IP aadresse (põhineb klassi pordinumbril).
 
 **IP aadresside valem:**
 
@@ -566,7 +629,7 @@ PC2 IP: 192.168.__.20
 
 ---
 
-### 5.5 ARP ja Switch Õppimine
+### 5.5 ARP ja Switchi Õppimine
 
 **PC1-lt pingida PC2:**
 
@@ -580,13 +643,13 @@ ping 192.168.21.20
 ping 192.168.[PORT_NR].20
 ```
 
-**Mis juhtub (frame-by-frame):**
+**Mis juhtub (kaader-kaadri haaval):**
 
 #### ARP Request (Broadcast)
 
 ```
 ┌─────────────────────────────────────────┐
-│ Frame 1: ARP Request                    │
+│ Kaader 1: ARP Request (frame)           │
 ├─────────────────────────────────────────┤
 │ Source MAC: AA:BB:CC:DD:EE:01 (PC1)    │
 │ Dest MAC:   FF:FF:FF:FF:FF:FF (bcast)  │
@@ -595,17 +658,19 @@ ping 192.168.[PORT_NR].20
 └─────────────────────────────────────────┘
 ```
 
-**Switch saab frame:**
+**Switch saab kaadri:**
 1. Loeb Source MAC: AA:BB:CC:DD:EE:01
 2. Loeb Source Port: Fa0/1
 3. **Õpib:** "AA:BB:CC:DD:EE:01 on Fa0/1 pordis" → lisab tabelisse
 4. Dest on broadcast → flooding (kõikidele portidele va Fa0/1)
 
+> 📢 **Broadcasting:** Nagu klassis karjuda "KES ON RAIN?!" - kõik kuulevad, üks vastab! 🗣️
+
 #### ARP Reply (Unicast)
 
 ```
 ┌─────────────────────────────────────────┐
-│ Frame 2: ARP Reply                      │
+│ Kaader 2: ARP Reply (frame)             │
 ├─────────────────────────────────────────┤
 │ Source MAC: BB:CC:DD:EE:FF:02 (PC2)    │
 │ Dest MAC:   AA:BB:CC:DD:EE:01 (PC1)    │
@@ -614,11 +679,13 @@ ping 192.168.[PORT_NR].20
 └─────────────────────────────────────────┘
 ```
 
-**Switch saab frame:**
+**Switch saab kaadri:**
 1. Loeb Source MAC: BB:CC:DD:EE:FF:02
 2. Loeb Source Port: Fa0/2
 3. **Õpib:** "BB:CC:DD:EE:FF:02 on Fa0/2 pordis" → lisab tabelisse
 4. Dest MAC: AA:BB:CC:DD:EE:01 → **Teab juba!** → saadab AINULT Fa0/1
+
+> 🎯 **Precision:** Teine kord switch ei karju enam - ta TEAB, kuhu saata! Efektiivsus! 💯
 
 #### ICMP Echo (Ping)
 
@@ -630,7 +697,7 @@ arp -a         # ARP cache (IP→MAC)
 ipconfig /all  # Oma MAC
 ```
 
-### 5.6 Kontrolli Switch Tabelit
+### 5.6 Kontrolli Switchi Tabelit
 
 ```
 SW-Vikerkaar# show mac address-table
@@ -654,6 +721,8 @@ Vlan    Mac Address       Type      Ports
 
 **Google Docs:** Screenshot või copy-paste output.
 
+> 🎓 **Achievement unlocked:** Switch on nüüd "tark"! Ta teab, kes kus on! Congratz, sa õpetasid masinat! 🤖📚
+
 ### 5.7 Täiendavad Käsud
 
 ```
@@ -675,7 +744,7 @@ Vaata, mis infot saad.
    Vihje: `show mac address-table aging-time`
 
 2. **Mis juhtub, kui PC ei saada 5 minutit midagi?**  
-   Vihje: Switch tegevus aging peale
+   Vihje: Switchi tegevus agingu peale
 
 3. **Mis on DYNAMIC vs STATIC MAC vahe?**
 
@@ -683,7 +752,7 @@ Vaata, mis infot saad.
    Vihje: `show mac ... interface ...`
 
 5. **Mis on broadcast MAC (FF:FF:FF:FF:FF:FF) ja kas näed seda tabelis?**  
-   Vihje: Kas switch salvestab broadcast?
+   Vihje: Kas switch salvestab broadcasti?
 
 6. **Mis vahe on ARP cache (PC) ja MAC table (switch)?**
 
@@ -706,10 +775,10 @@ Lab 7: Switch = aktiivne seade (õppimine, otsused)
 
 ### Õppimise Protsess
 
-**Ilma MAC table-ita:**  
+**Ilma MAC table'ita:**  
 Switch saadaks KÕIKIDELE portidele → ebaefektiivne, broadcast storm
 
-**MAC table-iga:**  
+**MAC table'iga:**  
 Switch teab, kuhu saata → efektiivne, kiire
 
 ### Real-World Paralleel
@@ -719,12 +788,14 @@ Switch = korterihoone postkastisüsteem:
 - Ei tea tänavaadressi (IP)
 - Edastab kirju efektiivselt
 
+> 📬 **Eesti paneelmajade reaalsus:** Postiljon õpib, millises korteris kes elab. Aga naabrid kolivad, uued tulevad... switch sama! Aging time = kui keegi 5 min ei räägi, unustad ära! 🏢
+
 ### Järgmine Samm
 
 **Probleem:** Kui PC1 tahab saata faili PC-le TEISES HOONES?
 - MAC aadress ei tööta (ainult local network)
 - Vaja IP aadresse
-- Vaja router-it
+- Vaja routerit
 
 **Lahendus:** Layer 3 (Lab 8 järgmisel nädalal)
 
@@ -742,8 +813,10 @@ Switch = korterihoone postkastisüsteem:
 |------|------|----------|
 | Layer 1 | `show interfaces status` | Fa0/1, Fa0/2 UP? LED roheline? |
 | Layer 2 | `show mac address-table` | Mõlemad MAC-id tabelis? |
-| PC | `ipconfig`, `arp -a` | IP õige? ARP cache-s teine PC? |
+| PC | `ipconfig`, `arp -a` | IP õige? ARP cache's teine PC? |
 | Test | `ping 192.168.[PORT].20` | Töötab? |
+
+> 🏥 **Doctor mode:** Alusta Layer 1-st (kas kaabel kinni?). Siis Layer 2. Siis Layer 3. Ei hüppa üle! Sama nagu arst - alusta lihtsast! 🩺
 
 ### Simulatsioon
 
@@ -757,7 +830,7 @@ Switch = korterihoone postkastisüsteem:
 ### Kontrolli Google Docs
 
 - Kõik väljad täidetud
-- Screenshot või copy-paste switch output
+- Screenshot või copy-paste switchi output
 - Kontrollküsimustele vastatud
 - Grupi liikmel edit õigused
 
@@ -771,44 +844,37 @@ Switch = korterihoone postkastisüsteem:
 
 1. Patch-kaablid (PC1, PC2)
 2. Toitekaabel
-3. Pane tagasi: Kaablid → kast, Switch → rack/laud
+3. Pane tagasi tagasi
+
+> 🧹 **Clean up crew:** Jäta klass puhtamaks kui leidsid! Rain will remember this! 🌟
 
 ---
 
-## HINDAMINE
+## 🎁 LISAÜLESANNE (**Peidetud ülesanne:**)
 
-| Kriteerium | Punktid |
-|------------|---------|
-| Google Doc täidetud | 1 |
-| Füüsilised ühendused | 2 |
-| Reset | 1 |
-| Hostname | 1 |
-| Paroolid (enable, console) | 1 |
-| Banner | 1 |
-| Config salvestamine | 1 |
-| PC1 konsool→Ethernet | 1 |
-| MAC table output | 1 |
-| ARP/ping analüüs | 1 |
-| Kontrollküsimused | 1 |
-| Esitamine õigeaegselt | 1 |
-| **KOKKU** | **13** |
+Kui jõudsid siia, siis oled tõeline kangelane! 🏆
+
+> 🐱 Küsi Mariolt: "Mis on sinu kasside nimed?"
+
+Kui saad vastuse, kirjuta see oma Google Docsisse päris lõppu (pärast hindamise tabelit).
+
+**Miks?**
+- Jõudsid laabori lõppu
+- Mariole meeldib, kui temaga räägitakse
+- Võibolla saad lisapunkte... või mitte... aga kassid on armsad! 😸
+- **Ja ära unusta Mariot kiita!** 🌟
+
+**Vihje:** Mario on tavaliselt klassis 309 või õpetajate toas.
 
 ---
 
-## JÄRGMINE NÄDAL: LAYER 3
+**Mario kasside nimed:**
+```
+1. ________________
+2. ________________
+3. ________________ (kui on kolmas)
+```
 
-**Õpime:**
-- IP aadressid ja subnetting
-- Routing erinevate võrkude vahel
-- Router vs Switch
-- Gateway kontseptsioon
+**Kas kiitsid Mariot?** ☐ JAH ☐ Unustasin 😅
 
-**Kodutöö:**  
-Leia oma kodu routeri MAC ja IP (`ipconfig /all` → Default Gateway)  
-Screenshot → lisa järgmise nädala Google Doc-i
-
----
-
-**Serveriruumi korraldus:**
-
-![Korraldus](https://hkhk.edu.ee/sites/hkhk.edu.ee/files/styles/detail_one_image/public/2021-02/koor.jpg?itok=K8nzLyaK)
+*(PS: Kui Mario pole kohal, küsi mõnelt teiselt õpetajalt - nemad teavad ka!)* 🐈
