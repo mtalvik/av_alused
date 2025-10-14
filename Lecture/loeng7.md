@@ -372,12 +372,6 @@ AA:BB:CC:DD:EE:FF
 Andmed pakitakse Etherneti kaadritesse (frame), mis sisaldavad MAC-aadresse ja kontrolli, et võrguseadmed teaksid, kuhu andmeid saata ja kas need jõudsid vigadeta kohale.
 
 ![Etherneti raami struktuur](/Labs/images/ethernet_frame_structure.png)
-```
-+----------+----------+----------+------+----------+-----+
-| Preamble | Dest MAC | Src MAC  | Type |   DATA   | FCS |
-|  (8B)    |  (6B)    |  (6B)    | (2B) |(46-1500B)| (4B)|
-+----------+----------+----------+------+----------+-----+
-```
 
 **Kaadri osad:**
 
@@ -489,32 +483,130 @@ Port | MAC Address           | Age
 2    | BB:BB:BB:BB:BB:02    | 5s
 ```
 
-**Olulised omadused:**
-- **Dünaamiline** - õpib automaatselt, ei vaja seadistamist
-- **Aegumine** - vanad kirjed kustutatakse (~300s / 5 min)
-- **Uuendamine** - kui seade liigub teise porti, kirje uuendatakse
-- **Täitumine** - kui tabel täis → switch käitub nagu hub (flooding)
+<div style="background-color: #ffe6e6; padding: 10px; border-left: 4px solid #cc0000;">
+
+**Küsimus 1:** Kuidas switch teab, millist MAC aadressi ta vajab?
+
+**Vastus:** Switch EI otsi ega vali MAC aadressi! Arvuti (PC1) paneb juba kaadri sisse:
+```
+Destination MAC: BB:BB:BB:BB:BB:02  ← PC1 teab, et tahab rääkida PC2-ga
+Source MAC: AA:AA:AA:AA:AA:01      ← PC1 enda MAC
+```
+
+Switch lihtsalt:
+1. Vaatab **DESTINATION MAC** kaadrist
+2. Otsib oma tabelist, millises pordis see MAC on
+3. Saadab ainult sellesse porti
+
+**Switch ei otsi ega vali - ta lihtsalt VAATAB, mis kaadris juba kirjas on!**
 
 ---
 
-## KOKKUVÕTE
+**Küsimus 2:** Aga kuidas ARVUTI (PC1) teab, et Destination MAC peab olema `BB:BB:BB:BB:BB:02`?
 
-**Layer 1 (Füüsiline kiht):**
-- Kaablid, signaalid, elekter - kõik, mida saad käega puudutada
-- Seadmed: Hub (aegunud), Repeater
-- Duplex: Half (üks korraga) vs Full (mõlemad korraga)
+**Vastus: ARP (Address Resolution Protocol)**
 
-**Layer 2 (Kanalikiht):**
-- MAC aadressid - füüsiline aadress (48 bitti, 6 baiti)
-- Ethernet kaader (frame) - andmete pakendamine
-- Switch - õpib MAC aadresse ja saadab ainult õigesse kohta
-- Side tüübid: Unicast (üks-ühele), Broadcast (kõigile), Multicast (grupile)
+PC1 teab ainult IP aadressi (192.168.1.20), aga ei tea MAC aadressi!
 
-**Peamine erinevus:**
-- Layer 1 = liigutab bitte, ei tea midagi
-- Layer 2 = teab MAC aadresse, otsustab kuhu saata
+**ARP protsess:**
+
+**1. PC1 saadab ARP Request (BROADCAST):**
+```
+Frame:
+Source MAC: AA:AA:AA:AA:AA:01 (PC1)
+Destination MAC: FF:FF:FF:FF:FF:FF (KÕIGILE!)
+ARP küsimus: "Kes on IP 192.168.1.20? Anna oma MAC!"
+```
+
+**2. PC2 vastab ARP Reply:**
+```
+Frame:
+Source MAC: BB:BB:BB:BB:BB:02 (PC2)
+Destination MAC: AA:AA:AA:AA:AA:01 (PC1-le)
+ARP vastus: "See olen mina! Minu MAC on BB:BB:BB:BB:BB:02"
+```
+
+**3. PC1 salvestab oma ARP cache'i:**
+```
+IP 192.168.1.20 = MAC BB:BB:BB:BB:BB:02 ✅
+```
+
+**4. Nüüd PC1 saab luua õige frame'i:**
+```
+Frame:
+Source MAC: AA:AA:AA:AA:AA:01
+Destination MAC: BB:BB:BB:BB:BB:02 ← TEAB NÜÜD!
+```
 
 ---
+
+**Küsimus 3:** MAC aadressid töötavad ainult lokaalselt?
+
+**Vastus: JAH!** MAC aadressid töötavad AINULT samas võrgus (Layer 2).
+
+**Miks?**
+- ARP kasutab broadcast'i (`FF:FF:FF:FF:FF:FF`)
+- Broadcast ei lähe läbi ruuteri
+- Ruuter peatab broadcast'i
+
+**Samas võrgus:**
+```
+PC1 (192.168.1.10) → PC2 (192.168.1.20)
+✅ ARP töötab, saavad otse rääkida
+```
+
+**Erinevas võrgus:**
+```
+PC1 (192.168.1.10) → Google (8.8.8.8)
+❌ Ei saa otse - on teine võrk!
+```
+
+---
+
+**Küsimus 4:** Kuidas siis internet töötab, kui MAC on ainult lokaalne?
+
+**Vastus:** MAC aadressid **MUUTUVAD** iga võrgu piires! IP aadressid **JÄÄVAD SAMAKS!**
+
+**Näide: Saadad paketti Google'ile (8.8.8.8)**
+
+**1. Sinu koduvõrgus:**
+```
+Frame:
+Source MAC: Sinu MAC
+Destination MAC: RUUTERI MAC ← MITTE Google'i MAC!
+───────────────────────────
+IP Packet (sees):
+Source IP: 192.168.1.10
+Dest IP: 8.8.8.8 ← See jääb samaks!
+```
+
+**2. Ruuter võtab vana Layer 2 maha, paneb uue:**
+```
+Frame (uus):
+Source MAC: Ruuteri MAC (interneti pool)
+Destination MAC: Järgmise ruuteri MAC
+───────────────────────────
+IP Packet (SAMA):
+Source IP: 192.168.1.10 ← Sama!
+Dest IP: 8.8.8.8 ← Sama!
+```
+
+**3. Iga ruuter kordab:**
+- Eemaldab Layer 2 (MAC)
+- Paneb uue Layer 2 (järgmise hop'i MAC)
+- Layer 3 (IP) jääb ALATI SAMAKS!
+
+**Seega:**
+- **Layer 2 (MAC)** = lokaalne transport, muutub iga hop'iga
+- **Layer 3 (IP)** = globaalne aadress, jääb samaks kogu tee
+
+**Analoogia:** 
+- IP = sihtkoha aadress ümbriku peal (Google'i aadress)
+- MAC = postiljoni käru number (muutub iga jaama juures, aga ümbriku aadress jääb samaks)
+
+*(ARP ja IP marsruutimist õpime detailselt Layer 3-s järgmisel nädalal!)*
+
+</div>
 
 ## Järgmine Tund: Layer 3 - Võrgukiht
 
