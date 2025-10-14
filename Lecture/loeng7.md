@@ -11,67 +11,51 @@
 
 ## 🎯 ÕPPEVÄLJUNDID
 
-**Selle tunni lõpuks sa:**
+**Selle tunni lõpuks sa tead:**
 
-### TEAD:
-- ✅ Mis on OSI mudeli Layer 1 (Füüsiline kiht) ja Layer 2 (Kanalikiht)
+- ✅ Mis on Layer 1 ja millised seadmed seal töötavad (Hub, Repeater)
+- ✅ Kuidas UTP kaabel töötab (8 juhet, Lab 6 põhjendus)
+- ✅ Half-duplex vs Full-duplex erinevus
 - ✅ Mis on MAC aadress ja kuidas see erineb IP aadressist
-- ✅ Kuidas Ethernet kaader (frame) on üles ehitatud
+- ✅ MAC aadressi struktuur (48 bitti, 6 baiti, broadcast = `FF:FF:FF:FF:FF:FF`)
+- ✅ Kuidas Ethernet kaader on üles ehitatud (FCS/CRC vigade kontrolliks)
 - ✅ Mis vahe on Hub-l ja Switch-l
+- ✅ Kuidas switch õpib MAC aadresse (õppimise protsess sammhaaval)
+- ✅ Unicast, broadcast ja multicast erinevused
 
-### MÕISTAD:
-- ✅ Kuidas sinu tehtud kaabel (Lab 6) tegelikult töötab
-- ✅ Miks arvutid vajavad kahte erinevat tüüpi aadresse (MAC ja IP)
-- ✅ Kuidas switch teab, kuhu andmeid saata
-- ✅ Miks MAC aadress töötab ainult kohalikus võrgus
-
-### OSKAD:
-- ✅ Lugeda ja analüüsida MAC aadresse
-- ✅ Selgitada, kuidas andmed liiguvad kaablis
-- ✅ Eristada unicast, broadcast ja multicast liiklust
-- ✅ Kirjeldada, kuidas switch õpib MAC aadresse
+> **💡 QUIZ MÄRKUS:** Pärast tundi on lühike test nende teemade kohta!
 
 ---
 
-## 📖 LUGU: Kust me tulime?
+## Mida me juba teame?
 
-### Mida me juba teame?
+**Nädal 1-3:** Võrgu alused ja seadmete suhtlus.
 
-**Nädal 1-3:** Me õppisime, mis on võrk ja kuidas seadmed suhtlevad.
+**Nädal 4-5:** OSI mudel (7 kihti) ja andmete liikumine kihtide vahel.
 
-**Nädal 4-5:** Me nägime OSI mudelit (7 kihti) ja õppisime, et andmed liiguvad kihtide kaudu.
+**Lab 6 (eelmine tund):** EHITASIME UTP kaabli (8 juhet, T-568B, RJ-45 pistikud).
 
-**Lab 6 (eelmine tund):** Me EHITASIME füüsilise kaabli:
-- Võtsime UTP kaabli
-- Koorisime välist kesta
-- Sätitsime 8 juhet õigesse järjekorda (T-568B)
-- Panime peale RJ-45 pistiku
-- Krimpasime kokku
-- Testisime testeriga
+**AGA... jäi küsimus:**
 
-**AGA... meil jäi üks suur küsimus:**
+> 🤔 **"Miks see kaabel töötab? Mis juhtmetes toimub? Kuidas arvuti leiab teise arvuti?"**
 
-> 🤔 **"Miks see kaabel töötab? Mis nendes juhtmetes toimub? Kuidas arvuti teab, et kaabli teisel pool on teine arvuti?"**
-
-**Täna me saame vastuse!**
+**Täna saame vastuse!**
 
 ---
 
 ## 🧩 OSI Mudeli Meeldetuletus
 
-OSI mudel on nagu tordiviilud - 7 kihti, mis koos moodustavad terve võrgu.
-
 ```
     ┌─────────────────────┐
     │ 7. Application      │ ← Brauserid, email
     ├─────────────────────┤
-    │ 6. Presentation     │ ← JPEG pildid, HTML
+    │ 6. Presentation     │ ← JPEG, HTML
     ├─────────────────────┤
     │ 5. Session          │ ← Ühenduse hoidmine
     ├─────────────────────┤
-    │ 4. Transport        │ ← TCP/UDP (kas andmed jõudsid?)
+    │ 4. Transport        │ ← TCP/UDP
     ├─────────────────────┤
-    │ 3. Network          │ ← IP aadressid (192.168.1.1)
+    │ 3. Network          │ ← IP aadressid
     ├─────────────────────┤
     │ 2. Data Link        │ ← MAC aadressid  ← TÄNA!
     ├─────────────────────┤
@@ -81,202 +65,245 @@ OSI mudel on nagu tordiviilud - 7 kihti, mis koos moodustavad terve võrgu.
 
 **Meeldetrikk:** "**A**ll **P**eople **S**eem **T**o **N**eed **D**ata **P**rocessing"
 
-**Täna me õpime kahte MADALAIMAT kihti** - need, mis tegelevad füüsilise suhtlusega.
-
 ---
 
-## Miks on Layer 1 ja 2 koos?
-
-**Lihtsustatud selgitus:**
-
-- **Layer 1** = "Kuidas ma saan heli teie korterisse?" (kaabel, signaali jõud)
-- **Layer 2** = "Kellele ma pean selle pakki andma?" (korteri number uksel)
-
-**Võrgu maailmas:**
-
-- **Layer 1** = Elektrilised signaalid kaablis (1-d ja 0-d)
-- **Layer 2** = Kes selle saadab, kes võtab vastu (MAC aadress)
+## Miks Layer 1 ja 2 koos?
 
 **Analoogia postkastidega:**
 
-1. **Postiljon** = Layer 1 (füüsiline liikumine)
-   - Ta läheb uksest uksele
-   - Ei kontrolli, mis kirjas sees on
-   - Lihtsalt kannab pakke
+- **Layer 1 (Postiljon)** = Füüsiline liikumine uksest uksele
+  - Ei tea, mis kirjas sees on
+  - Lihtsalt kannab
 
-2. **Aadress uksel** = Layer 2 (MAC aadress)
-   - "Korter 5B"
-   - Postiljon teab, KUHU anda
-   - Aga ei tea, KES seal elab (see on IP - Layer 3!)
+- **Layer 2 (Aadress uksel)** = "Korter 5B"
+  - Postiljon teab KUHU anda
+  - Ei tea KES seal elab (see on Layer 3 - IP!)
 
----
-
----
-
-## OSI Mudeli Meeldetuletus
-
-OSI mudel (Open Systems Interconnection) on 7-kihiline raamistik, mis selgitab, kuidas andmed liiguvad võrgus:
-
-```
-7. Application  ← Rakendused (brauser, email)
-6. Presentation ← Andmete vorming (JPEG, HTML)
-5. Session      ← Seansside haldamine
-4. Transport    ← TCP/UDP (usaldusväärsus)
-3. Network      ← IP aadressid, marsruutimine
-2. Data Link    ← MAC aadressid, switching  ← TÄNA!
-1. Physical     ← Kaablid, signaalid         ← TÄNA!
-```
-
-**Meeldetrikk:** "**A**ll **P**eople **S**eem **T**o **N**eed **D**ata **P**rocessing"
+**Võrgus:**
+- **Layer 1** = Elektrilised signaalid (1-d ja 0-d)
+- **Layer 2** = Kes saadab, kes võtab vastu (MAC)
 
 ---
 
 ## 1. FÜÜSILINE KIHT (Layer 1)
 
-![Füüsiline kiht](/lectures/images/physical_layer.png)
+![Füüsiline kiht](/Labs/images/physical_layer.png)
 
-### Mis on Layer 1?
+### 1.1 Mis on Layer 1?
 
-**Füüsiline kiht = kõik, mida saab KÄEGA PUUDUTADA:**
+> 📝 **QUIZ:** Layer 1 nimi on **FÜÜSILINE KIHT** (Physical Layer)
 
-| Komponent | Kirjeldus | Näide |
-|-----------|-----------|-------|
-| **Kaablid** | Füüsiline meedia | UTP Cat5e (mida te tegite!) |
-| **Pistikud** | Ühenduspunktid | RJ-45 (mida te krimpiste!) |
-| **Signaalid** | Elekter või valgus | 1-d ja 0-d → elektriline pinge |
-| **Portid** | Füüsilised pesad | Ethernet port arvutis |
-| **Hubid** | Signaali jagajad | Jagab signaali KÕIGILE |
+**Füüsiline kiht = kõik, mida saab KÄEGA PUUDUTADA**
 
-**Layer 1 ülesanne:** Muuta bittid (1 ja 0) füüsilisteks signaalideks ja saata need meedia kaudu.
+| Komponent | Näide |
+|-----------|-------|
+| Kaablid | UTP (Lab 6 ✅), Fiber |
+| Pistikud | RJ-45 |
+| Signaalid | Elekter, valgus, raadio |
+| Seadmed | Hub, Repeater |
+
+**Ülesanne:** Muuta bitid (1/0) füüsilisteks signaalideks ja transportida.
 
 ---
 
-### Kuidas Signaalid Töötavad?
+### 1.2 Kuidas Signaalid Liiguvad?
 
-#### Vaskkaablid (UTP)
+**Näiteks mis toimub sinu kaabliga, mis sa labis valmis tegid**
 
-**Mida te Lab 6-s tegite:**
-- 8 juhet (4 paari)
-- Keerdunud ümber (vähendab häireid)
-- RJ-45 pistik mõlemas otsas
+#### 1.2.1 Vaskkaablid (UTP)
 
-**Kuidas see töötab Layer 1-s:**
-
+> 📝 **QUIZ:** UTP kaablis on **8 juhet** (4 keerdunud paari)
 ```
-Arvuti võrgukaart:
-1 → 0 → 1 → 1 → 0 → 1  (digitaalsed bitid)
-         ↓
-Muundatakse elektrilisteks signaalideks:
-+5V → 0V → +5V → +5V → 0V → +5V
-         ↓
-Liiguvad vaskkaabli kaudu
-         ↓
-Teine arvuti loeb signaale tagasi bittideks
+Arvuti A:                    Kaabel:                    Arvuti B:
+[Bitid]                   [Elekter]                   [Bitid]
+1 0 1 1  ─────────────>  +5V 0V +5V +5V  ─────────────>  1 0 1 1
 ```
 
-**PIN-id, mida kasutati:**
-- PIN 1-2: TX (Transmit) - SAATMINE
-- PIN 3-6: RX (Receive) - VASTUVÕTT
-- *(100 Mbps kasutab ainult 4 juhet 8-st!)*
+**Straight-through kaabel (otsekaabel):**
+- PIN 1-2: TX (saatmine)
+- PIN 3-6: RX (vastuvõtt)
+- Keerdunud paarid → vähem häireid
+- 100 Mbps = 4 juhet, 1 Gbps = 8 juhet
+
+**Auto-MDIX (tänapäev):**
+- Vanal ajal: PC ↔ Switch → Straight-through, PC ↔ PC → Crossover
+- Nüüd: **IGA** kaabel töötab!
+- Auto-MDIX tähendab, et seade (switch või arvuti) tuvastab automaatselt, millist tüüpi kaabel on ühendatud, ja vahetab ise TX ja RX ümber kui vaja.
+  
+> Lab 6s õppisite KUIDAS need töötavad, praktikas pole crossover enam vaja
+
+---
+#### 1.2.2 Fiiberoptilised Kaablid
+
+![Fiiberoptiline kaabel](/labs/images/fiber_optic.png)
+
+| Vask | Fiber |
+|------|-------|
+| Elekter | Valgus (LED/laser) |
+| ~100m | Kilomeetrid |
+| EMI mõjutab | Immuunne |
+| Odav | Kallis |
+
+**Huvitav fakt: Üks kaabel, 12 "kanalit"**
+
+Fiberkaabel võib saata **12 erinevat valguse lainepikkust korraga** (WDM - Wavelength Division Multiplexing).
+
+**Analoogia:**
+- Vaskkaabel = 1 tee (ainult üks elektrisignaal)
+- Fiberkaabel = 12 teed (12 erinevat valguse lainepikkust)
+
+Nagu raadiojaamad - Raadio 2, Sky Plus, Elmar - kõik õhus korraga, aga erineval sagedusel. Sama siin, aga valgusega!
+
+**Tulemus:** Üks õhuke klaaskiud → 12x rohkem andmeid kui üks vaskkaabel.
 
 ---
 
-#### Fiiberoptilised Kaablid
-
-![Fiiberoptiline kaabel](/lectures/images/fiber_optic.png)
-
-**Erinevus vaskist:**
-
-| Aspekt | Vaskkaabel | Fiiberkaabel |
-|--------|------------|--------------|
-| **Signaal** | Elektriline pinge | Valgusimpulsid |
-| **Kiirus** | 1 Gbps | 100+ Gbps |
-| **Vahemaa** | ~100m | Kilomeetrid |
-| **Häired** | EMI mõjutab | Immuunne EMI vastu |
-| **Hind** | Odav | Kallis |
-
-**Kuidas töötab:**
-- LED või laser saadab valgust
-- Valgus peegeldub klaaskiu seest
-- Vastuvõtja muudab valguse tagasi bittideks
-
----
-
-#### Wireless (Juhtmevaba)
+#### 1.2.3 Wireless (Juhtmevaba)
 
 **Wi-Fi, Bluetooth:**
 - Raadiolained (elektromagnetilised)
-- Ei vaja füüsilist kaablit
-- Takistused (seinad) nõrgestavad signaali
+- Ei vaja kaablit
+- Seinad nõrgestavad
+
+| Tehnoloogia | Sagedus | Analoogia | Omadus |
+|-------------|---------|-----------|---------|
+| **Wi-Fi** | 2.4 GHz / 5 GHz | Raadio (kaugele, läbi seinte) | Multitasking |
+| **Bluetooth** | 2.4 GHz | Walkie-talkie (lähile) | Väike energia |
+| **5G** | 3.5 GHz | Telefonikõne | Lai katvus |
+
+**Miks Wi-Fi vahel aeglane?**
+- 2.4 GHz = läbib seinad, AGA ka mikrolaineahi kasutab 2.4 GHz! 🍕
+- 5 GHz = kiirem, AGA seinte puhul nõrgem
+
+**Reegel:** Madalam sagedus → kaugemale, läbi takistuste. Kõrgem → kiirem, aga ei läbi hästi.
 
 ---
 
-### Võrguseadmed Layer 1-s
+### 1.3 Võrguseadmed (Layer 1 ja 2)
 
-#### PASSIIVSED Seadmed (ei vaja elektrit)
+Need seadmed töötavad erinevatel kihtidel - mõned lihtsalt edastavad signaale, teised MÕTLEVAD, kuhu need saata.
 
-**Mida kasutasite Lab 6-s:**
-
-![Liidespaneel](/lectures/images/patchpanel.png)
-
-| Seade | Funktsioon | Kasutus |
-|-------|------------|---------|
-| **Patch Panel** | Kaablite korraldamine | Serveriruum |
-| **Coupler** | Kaablite pikendamine | 2 kaablit → 1 ühendus |
-| **Wall Jack** | Seinapistik | RJ-45 seinakarp |
-
-**Oluline:** Need lihtsalt juhivad signaali, EI muuda seda!
+![Võrguseadmed](/labs/images/networkdevices.png)
 
 ---
 
-#### AKTIIVSED Seadmed (vajavad elektrit)
+#### 1.3.1 Hub (Jaotur) - Layer 1
 
-![Jaotur](/lectures/images/hub.png)
+> 📝 **QUIZ:** Layer 1 seadmed on **Hub** ja **Repeater**
 
-| Seade | Layer | Funktsioon | Intelligentsus |
-|-------|-------|------------|----------------|
-| **Hub** | 1 | Jagab signaali KÕIGILE portidele | ❌ Ei tea, kellele andmed mõeldud |
-| **Repeater** | 1 | Võimendab nõrka signaali | ❌ Ei töötle andmeid |
-| **Media Converter** | 1 | UTP ↔ Fiber muundamine | ❌ Ainult füüsiline muundamine |
+**Mis see teeb?** Kopeerib sissetuleva signaali KÕIGILE portidele.
 
-**HUB Probleem:**
+**Analoogia:** Megafon - kõik kuulevad kõike.
 
 ```
      [HUB]
     /  |  \
   PC1 PC2 PC3
-
-PC1 saadab → PC2
-Aga HUB saadab signaali:
-- PC2 ✅
-- PC3 ❌ (mitte temale mõeldud!)
 ```
 
-**Miks see halb?**
-- Kõik näevad kõike (turvaoht!)
-- Rohkem kokkupõrkeid (collisions)
-- Aeglane
+PC1 saadab → HUB edastab → **kõik** saavad (ka PC3, kes ei vajanud!)
 
-**Lahendus:** Kasuta SWITCH-i (Layer 2)!
+**Kasutus:** Aegunud. Asendatud switchidega.
 
 ---
 
-### Füüsilise Kihi Probleemid ja Lahendused
+#### 1.3.2 Switch (Kommutaator) - Layer 2
 
-| Probleem | Põhjus | Lahendus |
-|----------|--------|----------|
-| **Signaal nõrgeneb** | Kaabel liiga pikk (>100m) | Lisa repeater või switch |
-| **Häired (EMI)** | Elektromagnetiline mõju | Kasuta FTP/STP kaablit või fiber |
-| **Kaabel katki** | Füüsiline kahjustus | Testi kaablitesteriga (Lab 6!) |
-| **Vale pistik** | Valesti krimpitud | T-568B standard järgmine |
+![Switch1](/labs/images/switch_ports_buttons1.png))
+![Switch2](/labs/images/switch_ports_buttons2.png))
+
+**Mis see teeb?** Saadab andmed AINULT õigesse kohta (õpib MAC aadresse).
+
+**Analoogia:** Tark postiljon - teab, kes millises korteris elab.
+
+```mermaid
+graph TD
+    S[SWITCH]
+    S --- PC1
+    S --- PC2
+    S --- PC3
+    
+    style S fill:#4CAF50,stroke:#333,stroke-width:3px,color:#fff
+    style PC2 fill:#FFD700,stroke:#333,stroke-width:2px
+```
+
+PC1 → PC2: Switch saadab **ainult** porti 2. PC3 ei näe midagi! ✅
+
+**Detailne töö:** Vaata jaotist 2.3 "SWITCHING"
+
+---
+
+#### 1.3.3 Router (Ruuter) - Layer 3
+
+
+![Router](/labs/images/router.png)
+
+**Mis see teeb?** Ühendab ERINEVAID võrke (kasutab IP aadresse).
+
+**Analoogia:** Lennujaama kontroll - otsustab, millise lennuki peab kuhu suunata.
+
+```
+Koduvõrk (192.168.1.x)  ←→  [ROUTER]  ←→  Internet
+```
+
+**Vahe Switch'ist:**
+- Switch = sama võrgu sees (MAC aadressid, Layer 2)
+- Router = erinevate võrkude vahel (IP aadressid, Layer 3)
+
+**Õpime detailselt:** Nädal 7 - Layer 3!
+
+---
+
+#### 1.3.4 Patch Panel (Liidespaneel)
+
+![Liidespaneel](/labs/images/patchpanel.png)
+
+**Mis see teeb?** Kaablite organiseerija - kõik kaablid lähevad siia kokku.
+
+**Analoogia:** Nagu telefonijaama vana lülitustahvel - kõik ühendused ühes kohas.
+
+**Miks vaja?**
+- ✅ Korras kaablid (ei ole spagetti)
+- ✅ Kiire hooldus (ei pea seinast lahti võtma)
+- ✅ Lihtne testimine (näed kohe, mis kaabel kuhu läheb)
+- ✅ Professionaalne (serveriruum näeb korralik välja)
+
+**Kuidas töötab?**
+```mermaid
+graph LR
+    A[Seinapistik Klass 301] -.-> P[PATCH PANEL]
+    B[Seinapistik Klass 302] -.-> P
+    C[Seinapistik Klass 303] -.-> P
+    P --> S[ Klass 310 SWITCH]
+    
+    style P fill:#2196F3,stroke:#333,stroke-width:3px,color:#fff
+    style S fill:#4CAF50,stroke:#333,stroke-width:2px,color:#fff
+```
+
+---
+
+### 1.4 Half-Duplex vs Full-Duplex
+
+**Kuidas suhtlemine toimub?**
+
+![Data Transmission](/labs/images/duplex.png)
+
+**Full-Duplex eelised:**
+- 2x kiirem (100 Mbps → efektiivselt 200 Mbps)
+- Ei ole kollisioone
+- Ei vaja CSMA/CD-d
+
+**Tänapäeval:** Kõik switchid kasutavad full-duplex režiimi.
 
 ---
 
 ## 2. KANALIKIHT (Layer 2)
 
-![OSI kanalikiht](/lectures/images/datalink.png)
+![OSI kanalikiht](/labs/images/datalink.png)
 
-### Mis on Layer 2?
+### 2.1 Mis on Layer 2?
+
+> 📝 **QUIZ:** Layer 2 nimi on **KANALIKIHT**
 
 **Kanalikiht = "Kuidas saata andmeid KOHALIKUS võrgus"**
 
@@ -286,35 +313,15 @@ Layer 1 saadab bitte → Layer 2 organiseerib need **kaadriteks** (frames) ja li
 1. 📦 **Framing** - Pakkimine kaadriteks
 2. 🏷️ **Addressing** - MAC aadressid
 3. ✅ **Error Detection** - Vigade tuvastamine (CRC)
-4. 🚦 **Access Control** - Kes saab kaablit kasutada (CSMA/CD)
+4. 🚦 **Access Control** - Kes saab kaablit kasutada
 
 ---
 
-### Layer 2 Kaks Alamkihti
-
-#### 1. LLC (Logical Link Control)
-
-**Ülesanne:** Ühendab kõrgemad kihid (Layer 3 - IP) madalatega (Layer 1 - füüsiline)
-
-- Protokollide tugi (IP, IPX, AppleTalk...)
-- Voogude juhtimine
-- Vigade parandamine
-
-#### 2. MAC (Media Access Control)
-
-**Ülesanne:** Kontrollib juurdepääsu füüsilisele meediumile
-
-- MAC aadressid
-- Switching (kommutaator)
-- CSMA/CD (Collision Detection)
-
-![Võrgukaart](/lectures/images/access_media.png)
-
----
-
-### MAC Aadress
+### 2.2 MAC Aadress
 
 **Mis on MAC aadress?**
+
+> 📝 **QUIZ:** MAC aadress on **48 bitti** pikk (= 6 baiti = 12 hex numbrit)
 
 ```
 AA:BB:CC:DD:EE:FF
@@ -325,11 +332,13 @@ AA:BB:CC:DD:EE:FF
 
 **Kokku:** 48 bitti = 6 baiti = 12 hex numbrit
 
-![MAC-aadressi struktuur](/lectures/images/mac_address_structure.png)
+![MAC-aadressi struktuur](/labs/images/mac_address_structure.png)
 
 ---
 
-#### MAC Aadressi Näited
+#### 2.2.1 MAC Aadressi Näited
+
+> 📝 **QUIZ:** MAC aadressi näide: `00:1A:2B:3C:4D:5E` või `AA:BB:CC:DD:EE:FF`
 
 | MAC Aadress | Tootja | Seade |
 |-------------|--------|-------|
@@ -340,7 +349,7 @@ AA:BB:CC:DD:EE:FF
 
 ---
 
-#### MAC vs IP Aadress
+#### 2.2.2 MAC vs IP Aadress
 
 | Omadus | MAC Aadress | IP Aadress |
 |--------|-------------|------------|
@@ -356,12 +365,13 @@ AA:BB:CC:DD:EE:FF
 
 ---
 
-### Ethernet Kaader (Frame)
+### 2.3 Ethernet Kaader (Frame)
 
 **Kuidas andmed liiguvad Layer 2-s?**
 
-![Etherneti raami struktuur](/lectures/images/ethernet_frame_structure.png)
+Andmed pakitakse Etherneti kaadritesse (frame), mis sisaldavad MAC-aadresse ja kontrolli, et võrguseadmed teaksid, kuhu andmeid saata ja kas need jõudsid vigadeta kohale.
 
+![Etherneti raami struktuur](/labs/images/ethernet_frame_structure.png)
 ```
 +----------+----------+----------+------+----------+-----+
 | Preamble | Dest MAC | Src MAC  | Type |   DATA   | FCS |
@@ -376,10 +386,10 @@ AA:BB:CC:DD:EE:FF
    - 1 bait SFD: `10101011` ("Start Frame Delimiter" - kaader algab!)
 
 2. **Destination MAC (6 baiti)**
-   - Kellele andmed lähevad?
+   - Sihtkoha aadress (kuhu andmed lähevad)
 
 3. **Source MAC (6 baiti)**
-   - Kes andmed saadab?
+   - Allika aadress (kust andmed tulevad)
 
 4. **Type/Length (2 baiti)**
    - Mis protokoll? (0x0800 = IPv4, 0x0806 = ARP, 0x86DD = IPv6)
@@ -391,100 +401,67 @@ AA:BB:CC:DD:EE:FF
 6. **FCS - Frame Check Sequence (4 baiti)**
    - **CRC** (Cyclic Redundancy Check)
    - Vigade tuvastamine
-   - Kui viga, kaader VISATAKSE ÄRA!
+   - **Oluline:** CRC ainult TUVASTAB vigu, ei PARANDA neid!
+   - Kui viga leitud → kaader VISATAKSE ÄRA
+
+> 📝 **QUIZ:** Ethernet frame'is vigade kontrolliks on **FCS** (Frame Check Sequence), mis kasutab **CRC** (Cyclic Redundancy Check) algoritmi
 
 ---
 
-### Side Tüübid Layer 2-s
+### 2.4 Side Tüübid Layer 2-s
 
-![Side tüübid Ethernetis](/lectures/images/ethernet_communication_types.png)
+![Side tüübid Ethernetis](https://assets.bytebytego.com/diagrams/0125-unicast-vs-broadcast-vs-multicast-vs-anycast.png)
 
-#### 1. Unicast
+Layer 2-s on kolm viisi, kuidas seadmed omavahel suhtlevad - erinevus on selles, mitu seadet paketti vastu võtab.
 
-**Üks-ühele suhtlus:**
+| **Side Tüüp** | **Dest MAC** | **Tähendus** | **Kasutus** | **Märkused** |
+|---------------|--------------|--------------|-------------|--------------|
+| **Unicast** | Konkreetne MAC (nt `BB:BB:BB:BB:BB:BB`) | Üks-ühele suhtlus - ainult üks seade võtab vastu | • Veebisirvimine<br>• Failide saatmine<br>• ~90% liiklusest | Kõige levinum |
+| **Broadcast** | `FF:FF:FF:FF:FF:FF` | Üks-kõigile suhtlus - KÕIK võrgus võtavad vastu | • ARP ("Kes on IP X?")<br>• DHCP (IP aadressi küsimine) | Liiga palju aeglustab võrku |
+| **Multicast** | `01:00:5E:XX:XX:XX` | Üks-grupile suhtlus - ainult grupi liikmed võtavad vastu | • IPTV streaming<br>• Video konverentsid | Efektiivsem kui broadcast |
 
+> 📝 **QUIZ:** Broadcast MAC aadress on **`FF:FF:FF:FF:FF:FF`** (kõik bitid 1)
+
+**Näited:**
 ```
-Src: AA:AA:AA:AA:AA:AA → Dest: BB:BB:BB:BB:BB:BB
-
-Ainult üks seade võtab vastu!
+Unicast:    AA:AA:AA → BB:BB:BB (ainult BB võtab vastu)
+Broadcast:  AA:AA:AA → FF:FF:FF (KÕIK võtavad vastu)
+Multicast:  AA:AA:AA → 01:00:5E (ainult grupp võtab vastu)
 ```
-
-**Kasutus:** Tavaline veebisirvimine, failide saatmine
-
 ---
 
-#### 2. Broadcast
+## 3. SWITCHING (Kommutaatori Töö)
 
-**Üks-kõigile suhtlus:**
+Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadmed asuvad, ja kuidas ta otsustab, kuhu andmeid saata. See on Layer 2 intelligentsus, mis eristab switch'i hub'ist.
 
-```
-Src: AA:AA:AA:AA:AA:AA → Dest: FF:FF:FF:FF:FF:FF
-
-KÕIK võrgus võtavad vastu!
-```
-
-**Kasutus:**
-- ARP (Address Resolution Protocol) - "Kes on IP 192.168.1.5?"
-- DHCP - "Vajame IP aadressi!"
-
----
-
-#### 3. Multicast
-
-**Üks-grupile suhtlus:**
-
-```
-Src: AA:AA:AA:AA:AA:AA → Dest: 01:00:5E:XX:XX:XX
-
-Ainult grupi liikmed võtavad vastu
-```
-
-**Kasutus:**
-- IPTV streaming
-- Video konverentsid
-- Routing protokollid
-
----
-
-## 3. SWITCHING (Kommutaator)
-
-### Hub vs Switch
+### 3.1 Hub vs Switch
 
 **Miks Switch on parem kui Hub?**
 
-![Ethernet kommutaatori struktuur](/lectures/images/ethernet_switch_structure.png)
+> 📝 **QUIZ:** **Hub** = saadab KÕIGILE, ei tea MAC aadresse (Layer 1)  
+> 📝 **QUIZ:** **Switch** = saadab AINULT õigesse kohta, õpib MAC aadresse (Layer 2)
+
+![Ethernet kommutaatori struktuur](/labs/images/ethernet_switch_structure.png)
 
 | Aspekt | HUB (Layer 1) | SWITCH (Layer 2) |
 |--------|---------------|------------------|
 | **Intelligentsus** | ❌ Ei tea MAC aadresse | ✅ Õpib MAC aadresse |
 | **Liiklus** | Saadab KÕIGILE | Saadab ainult SIHTKOHTA |
-| **Kollisioonid** | Palju | Vähe (või mitte üldse) |
+| **Kollisioonid** | Palju | Ei ole (full-duplex) |
 | **Turvalisus** | Madal (kõik näevad kõike) | Kõrge (isoleeritud liiklus) |
-| **Kiirus** | Aeglane | Kiire |
-| **Hind** | Odav | Kallim |
+| **Kiirus** | Aeglane (jagatud ribalaius) | Kiire (dedicated ribalaius) |
 
 ---
 
-### MAC Aadressi Tabel
+### 3.2 Kuidas Switch Õpib MAC Aadresse?
 
-**Kuidas switch ÕPIB, kus seadmed on?**
+Switch ei tea alguses midagi - tema MAC aadressi tabel on tühi. Aga iga kaadriga, mis läbi läheb, ta õpib ja saab targemaks.
 
-![MAC-aadresside tabel](/lectures/images/mac_address_table.png)
+> 📝 **QUIZ:** Switch õpib MAC aadresse **SOURCE MAC aadressist** ja salvestab need **MAC aadressi tabelisse**
 
-#### Õppimise Protsess
+![MAC-aadresside tabel](/labs/images/mac_address_table.png)
 
-**Alguses tabel TÜHI:**
-
-```
-Port | MAC Address | Age
------|-------------|----
-(empty table)
-```
-
----
-
-**Samm 1: PC1 saadab kaadri PC2-le**
-
+**Õppimise protsess:**
 ```
      [Switch]
     /   |   \
@@ -492,158 +469,61 @@ Port | MAC Address | Age
   .01  .02  .03
 ```
 
-Kaader:
-```
-Src MAC: AA:AA:AA:AA:AA:01 (PC1)
-Dst MAC: BB:BB:BB:BB:BB:02 (PC2)
-```
+**1. PC1 saadab → PC2:**
+- Switch loeb SOURCE MAC: `AA:AA:AA:AA:AA:01` → salvestab "PC1 on port 1"
+- Switch ei tea, kus PC2 → **FLOODING** (saadab kõigile portidele)
 
-Switch õpib:
-```
-Port | MAC Address           | Age
------|----------------------|----
-1    | AA:AA:AA:AA:AA:01    | 0s
-```
+**2. PC2 vastab → PC1:**
+- Switch loeb SOURCE MAC: `BB:BB:BB:BB:BB:02` → salvestab "PC2 on port 2"
+- Switch TEAB nüüd mõlemat!
 
-Switch ei tea, kus on `.02` → **FLOODING** (saadab kõigile portidele va port 1)
+**3. PC1 → PC2 (uuesti):**
+- Switch vaatab tabelisse → teab, et PC2 on port 2
+- Saadab **AINULT** porti 2! PC3 ei näe midagi ✅
 
----
-
-**Samm 2: PC2 vastab PC1-le**
-
-Kaader:
-```
-Src MAC: BB:BB:BB:BB:BB:02 (PC2)
-Dst MAC: AA:AA:AA:AA:AA:01 (PC1)
-```
-
-Switch õpib:
+**MAC aadressi tabel:**
 ```
 Port | MAC Address           | Age
 -----|----------------------|----
 1    | AA:AA:AA:AA:AA:01    | 5s
-2    | BB:BB:BB:BB:BB:02    | 0s  ← UUS!
+2    | BB:BB:BB:BB:BB:02    | 5s
 ```
 
-Switch TEAB nüüd mõlemat! Järgmine kord saadab ainult port 1-le.
-
----
-
-**Samm 3: PC1 → PC2 (uuesti)**
-
-Switch vaatab tabelisse:
-- Src: `.01` → port 1 ✅ (teab juba)
-- Dst: `.02` → port 2 ✅ (TEAB!)
-
-**Switch saadab AINULT porti 2!** PC3 ei näe midagi. ✅
-
----
-
-#### MAC Aadressi Tabeli Omadused
-
-- **Dünaamiline:** Õpib automaatselt
-- **Aegumine:** Vanad kirjed kustutatakse (tavaliselt 300s = 5 min)
-- **Ülekirjutamine:** Kui MAC liigub teise porti, uuendatakse
-- **Suurus:** Sõltub switch mudelist (väikesed: 2K, suured: 128K+ aadresse)
-
----
-
-### Half-Duplex vs Full-Duplex
-
-**Kuidas suhtlemine toimub?**
-
-| Režiim | Kuidas töötab | Kiirus | Kollisioonid | Kasutus |
-|--------|---------------|--------|--------------|---------|
-| **Half-Duplex** | Üks korraga: SAADA *või* VÕTA VASTU | 1x | Jah (CSMA/CD) | Vanad hubid |
-| **Full-Duplex** | Mõlemad korraga: SAADA *ja* VÕTA VASTU | 2x | Ei | Kaasaegsed switchid |
-
-**Analoogia:**
-- **Half-Duplex** = Raadiosaatja (üks räägib, teised kuulavad)
-- **Full-Duplex** = Telefon (mõlemad saavad korraga rääkida)
-
-**Full-Duplex eelised:**
-- 2x kiirem (100 Mbps → efektiivselt 200 Mbps)
-- Ei ole kollisioone
-- Ei vaja CSMA/CD-d
-
----
-
-### Auto-MDIX
-
-![Auto-MDIX funktsioon](/lectures/images/auto_mdix_feature.png)
-
-**Mida see tähendab?**
-
-**Vanas maailmas (ilma Auto-MDIX-ta):**
-- PC ↔ Switch → Straight-through kaabel
-- PC ↔ PC → Crossover kaabel ❌
-
-**Tänapäeval (Auto-MDIX-ga):**
-- **IGA** kaabel töötab! ✅
-- Seade tuvastab automaatselt ja vahetab TX/RX
-
-**Lab 6 põhjus:** Te õppisite KUIDAS need töötavad, aga praktikas pole crossover enam vaja!
+**Olulised omadused:**
+- **Dünaamiline** - õpib automaatselt, ei vaja seadistamist
+- **Aegumine** - vanad kirjed kustutatakse (~300s / 5 min)
+- **Uuendamine** - kui seade liigub teise porti, kirje uuendatakse
+- **Täitumine** - kui tabel täis → switch käitub nagu hub (flooding)
 
 ---
 
 ## KOKKUVÕTE
 
-### OSI Layer 1 - Füüsiline Kiht
+**Layer 1 (Füüsiline kiht):**
+- Kaablid, signaalid, elekter - kõik, mida saad käega puudutada
+- Seadmed: Hub (aegunud), Repeater
+- Duplex: Half (üks korraga) vs Full (mõlemad korraga)
 
-| Komponent | Funktsioon | Näide |
-|-----------|------------|-------|
-| **Meedia** | Füüsiline tee | UTP kaabel (Lab 6!) |
-| **Signaalid** | Bittide kandmine | Elekter, valgus, raadio |
-| **Seadmed** | Signaali jagamine/võimendamine | Hub, Repeater |
-| **Topoloogia** | Füüsiline paigutus | Star, Bus, Ring |
+**Layer 2 (Kanalikiht):**
+- MAC aadressid - füüsiline aadress (48 bitti, 6 baiti)
+- Ethernet kaader (frame) - andmete pakendamine
+- Switch - õpib MAC aadresse ja saadab ainult õigesse kohta
+- Side tüübid: Unicast (üks-ühele), Broadcast (kõigile), Multicast (grupile)
 
-**Mälu:** "Kõik, mida saab KÄEGA PUUDUTADA"
-
----
-
-### OSI Layer 2 - Kanalikiht
-
-| Komponent | Funktsioon | Näide |
-|-----------|------------|-------|
-| **MAC aadress** | Füüsiline aadress | `AA:BB:CC:DD:EE:FF` |
-| **Frame** | Andmete pakkimine | Preamble + MAC + DATA + FCS |
-| **Switch** | Intelligentne suunamine | MAC aadressi tabel |
-| **CRC** | Vigade tuvastamine | FCS (4 baiti) |
-
-**Mälu:** "KELLELE andmed lähevad kohalikus võrgus"
+**Peamine erinevus:**
+- Layer 1 = liigutab bitte, ei tea midagi
+- Layer 2 = teab MAC aadresse, otsustab kuhu saata
 
 ---
 
-### Layer 1 vs Layer 2
+## Järgmine Tund: Layer 3 - Võrgukiht
 
-| Aspekt | Layer 1 | Layer 2 |
-|--------|---------|---------|
-| **Töötleb** | Bitte (1 ja 0) | Kaadrid (frames) |
-| **Aadressid** | Ei ole | MAC aadressid |
-| **Vead** | Ei tuvasta | Tuvastab (CRC) |
-| **Seadmed** | Hub, Repeater | Switch, Bridge |
-| **Intelligentsus** | Ei tea midagi | Teab MAC aadresse |
-
----
-
-## Järgmine Tund
-
-**Nädal 7: OSI Layer 3 - Võrgukiht**
-
-Õpime:
-- IP aadressid (192.168.1.1)
+**Õpime:**
+- IP aadressid ja alamvõrgud
 - Marsruutimine (routing)
-- Kuidas andmed liiguvad ERINEVATE võrkude vahel
-- Router vs Switch
+- Kuidas andmed liiguvad erinevate võrkude vahel
 
-**Küsimus mõtlemiseks:**
-> MAC aadress töötab ainult kohalikus võrgus. Kuidas saame internetti? 🤔
+**Mõtle:**
+> MAC aadress töötab ainult kohalikus võrgus. Kuidas saame siis internetti? 🤔
 
 ---
-
-## Viited
-
-- [OSI mudel ja TCP/IP komplekt](/lectures/contents/osi_model_and_tcp_ip_suite/README.md)
-- [Ethernet LAN-i kommutatsioon](/lectures/contents/ethernet_lan_switching/README.md)
-- [Võrgu seadmed](/lectures/contents/network_devices/README.md)
-- [Lab 6: Ethernet kaablid](https://github.com/mtalvik/av_alused/blob/main/Labs/lab6_eth_cable.md)
