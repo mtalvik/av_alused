@@ -487,44 +487,6 @@ Port | MAC Address           | Age
 
 ## 🔴 Oluline mõista:
 
-**Küsimus 1:** Kuidas switch teab, millist MAC aadressi ta vajab?
-
-**Vastus:** Switch EI otsi ega vali MAC aadressi! Arvuti (PC1) paneb juba kaadri sisse:
-```
-Destination MAC: BB:BB:BB:BB:BB:02  ← PC1 teab, et tahab rääkida PC2-ga
-Source MAC: AA:AA:AA:AA:AA:01      ← PC1 enda MAC
-```
-
-Switch lihtsalt:
-1. Vaatab **DESTINATION MAC** kaadrist
-2. Otsib oma tabelist, millises pordis see MAC on
-3. Saadab ainult sellesse porti
-
-**Switch ei otsi ega vali - ta lihtsalt VAATAB, mis kaadris juba kirjas on!**
-
----
-
-**Küsimus 2:** Aga kuidas ARVUTI (PC1) teab, et Destination MAC peab olema `BB:BB:BB:BB:BB:02`?
-
-**Vastus: ARP (Address Resolution Protocol)**
-
-ARP loodi 1982. aastal, et lahendada probleem: kuidas leida MAC aadress, kui tead ainult IP aadressi.
-
-**ARP protsess:**
-
-| Samm | Kes | Tegevus | MAC Aadressid |
-|------|-----|---------|---------------|
-| 1️⃣ | PC1 | "Kes on IP 192.168.1.20?" | Src: `AA:AA:01` → Dst: `FF:FF:FF` (BROADCAST) |
-| 2️⃣ | PC2 | "See olen mina!" | Src: `BB:BB:02` → Dst: `AA:AA:01` |
-| 3️⃣ | PC1 | Salvestab ARP cache'i | `192.168.1.20 = BB:BB:02` ✅ |
-| 4️⃣ | PC1 | Saadab andmed | Src: `AA:AA:01` → Dst: `BB:BB:02` |
-
-**Tulemus:** PC1 teab nüüd, et IP `192.168.1.20` = MAC `BB:BB:BB:BB:BB:02`
-
----
-
-## 🔴 Oluline mõista:
-
 
 ### **Küsimus 1:** Kuidas switch teab, millist MAC aadressi ta vajab?
 
