@@ -426,7 +426,7 @@ Multicast:  AA:AA:AA → 01:00:5E (ainult grupp võtab vastu)
 
 ## 3. SWITCHING (Kommutaatori Töö)
 
-Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadmed asuvad, ja kuidas ta otsustab, kuhu andmeid saata. See on Layer 2 intelligentsus, mis eristab switch'i hub'ist.
+Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadmed asuvad, ja kuidas ta otsustab, kuhu andmeid saata. See on Layer 2 tarkus, mis eristab switch'i hub'ist.
 
 ### 3.1 Hub vs Switch
 
@@ -439,7 +439,7 @@ Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadm
 
 | Aspekt | HUB (Layer 1) | SWITCH (Layer 2) |
 |--------|---------------|------------------|
-| **Intelligentsus** | ❌ Ei tea MAC aadresse | ✅ Õpib MAC aadresse |
+| **Tarkus** | ❌ Ei tea MAC aadresse | ✅ Õpib MAC aadresse |
 | **Liiklus** | Saadab KÕIGILE | Saadab ainult SIHTKOHTA |
 | **Kollisioonid** | Palju | Ei ole (full-duplex) |
 | **Turvalisus** | Madal (kõik näevad kõike) | Kõrge (isoleeritud liiklus) |
@@ -482,44 +482,6 @@ Port | MAC Address           | Age
 1    | AA:AA:AA:AA:AA:01    | 5s
 2    | BB:BB:BB:BB:BB:02    | 5s
 ```
-
----
-
-## 🔴 Oluline mõista:
-
-**Küsimus 1:** Kuidas switch teab, millist MAC aadressi ta vajab?
-
-**Vastus:** Switch EI otsi ega vali MAC aadressi! Arvuti (PC1) paneb juba kaadri sisse:
-```
-Destination MAC: BB:BB:BB:BB:BB:02  ← PC1 teab, et tahab rääkida PC2-ga
-Source MAC: AA:AA:AA:AA:AA:01      ← PC1 enda MAC
-```
-
-Switch lihtsalt:
-1. Vaatab **DESTINATION MAC** kaadrist
-2. Otsib oma tabelist, millises pordis see MAC on
-3. Saadab ainult sellesse porti
-
-**Switch ei otsi ega vali - ta lihtsalt VAATAB, mis kaadris juba kirjas on!**
-
----
-
-**Küsimus 2:** Aga kuidas ARVUTI (PC1) teab, et Destination MAC peab olema `BB:BB:BB:BB:BB:02`?
-
-**Vastus: ARP (Address Resolution Protocol)**
-
-ARP loodi 1982. aastal, et lahendada probleem: kuidas leida MAC aadress, kui tead ainult IP aadressi.
-
-**ARP protsess:**
-
-| Samm | Kes | Tegevus | MAC Aadressid |
-|------|-----|---------|---------------|
-| 1️⃣ | PC1 | "Kes on IP 192.168.1.20?" | Src: `AA:AA:01` → Dst: `FF:FF:FF` (BROADCAST) |
-| 2️⃣ | PC2 | "See olen mina!" | Src: `BB:BB:02` → Dst: `AA:AA:01` |
-| 3️⃣ | PC1 | Salvestab ARP cache'i | `192.168.1.20 = BB:BB:02` ✅ |
-| 4️⃣ | PC1 | Saadab andmed | Src: `AA:AA:01` → Dst: `BB:BB:02` |
-
-**Tulemus:** PC1 teab nüüd, et IP `192.168.1.20` = MAC `BB:BB:BB:BB:BB:02`
 
 ---
 
@@ -597,7 +559,7 @@ Ruuter:
 
 **Elu näide:**
 
-Maria (Tallinn) tahab saata kingi Kullamale (Kullamaa). Kink läheb läbi mitme postkontori:
+Maria (Tallinn) tahab saata kingi Rainile (Kullamaa). Kink läheb läbi mitme postkontori:
 
 | Koht | Ümbrikul aadress | Postiljon (käru) |
 |------|------------------|------------------|
