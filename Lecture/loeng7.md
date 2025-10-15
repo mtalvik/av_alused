@@ -426,7 +426,7 @@ Multicast:  AA:AA:AA → 01:00:5E (ainult grupp võtab vastu)
 
 ## 3. SWITCHING (Kommutaatori Töö)
 
-Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadmed asuvad, ja kuidas ta otsustab, kuhu andmeid saata. See on Layer 2 intelligentsus, mis eristab switch'i hub'ist.
+Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadmed asuvad, ja kuidas ta otsustab, kuhu andmeid saata. See on Layer 2 tarkus, mis eristab switch'i hub'ist.
 
 ### 3.1 Hub vs Switch
 
@@ -439,7 +439,7 @@ Nüüd saame aru, kuidas switch tegelikult töötab - kuidas ta õpib, kus seadm
 
 | Aspekt | HUB (Layer 1) | SWITCH (Layer 2) |
 |--------|---------------|------------------|
-| **Intelligentsus** | ❌ Ei tea MAC aadresse | ✅ Õpib MAC aadresse |
+| **Tarkus** | ❌ Ei tea MAC aadresse | ✅ Õpib MAC aadresse |
 | **Liiklus** | Saadab KÕIGILE | Saadab ainult SIHTKOHTA |
 | **Kollisioonid** | Palju | Ei ole (full-duplex) |
 | **Turvalisus** | Madal (kõik näevad kõike) | Kõrge (isoleeritud liiklus) |
@@ -559,7 +559,7 @@ Ruuter:
 
 **Elu näide:**
 
-Maria (Tallinn) tahab saata kingi Kullamale (Kullamaa). Kink läheb läbi mitme postkontori:
+Maria (Tallinn) tahab saata kingi Rainile (Kullamaa). Kink läheb läbi mitme postkontori:
 
 | Koht | Ümbrikul aadress | Postiljon (käru) |
 |------|------------------|------------------|
