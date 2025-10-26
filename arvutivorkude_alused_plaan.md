@@ -1,367 +1,55 @@
-# Arvutivõrkude Alused - 16-nädalane Realistlik Õppekava
+# Arvutivõrkude Alused - 38h Praktiline Kursus
 
 **Kursus:** Arvutivõrkude Alused  
-**Maht:** 2 EKAP, 90 min/nädal (45+45)  
+**Maht:** 38h (19 nädalat × 2h)  
 **Eeldused:** Põhilised arvutioskused  
 **Eesmärk:** Mõista võrke praktiliselt, valmistuda CCNA-ks  
-**Põhimõte:** PRAKTILINE > teooria, aeglasem tempo = parem õppimine
+**Põhimõte:** PRAKTILINE > teooria, max 15-20min loengut, ülejäänud SERVER LAB
 
 ---
 
-## HINDAMINE
+## KURSUSE SISU
 
-| Komponent | Osakaal | Millal |
-|-----------|---------|--------|
-| **NetAcad moodulid** | 15% | Pidevalt |
-| **Quizid (5x)** | 15% | Iga 2-3 nädala järel |
-| **Kontrolltöö #1** | 10% | Nädal 8 |
-| **Vahetest** | 15% | Nädal 12 |
-| **Laboritööd** | 20% | Lab 6, 7, 8... |
-| **Lõpp-Lab** | 25% | Nädal 15-16 |
+| Nädal | Kuupäev | Tunnid | Teema | Teooria | Praktika | Homework | Test/Kontroll | Hindamine |
+|-------|---------|--------|-------|---------|----------|----------|---------------|-----------|
+| 1 | 04.09.2025 | 2h | Sissejuhatus võrkudesse | 15min: LAN/WAN, komponendid | **105min SERVER LAB**: Füüsiline setup - 2 Switch + 1 Router | NetAcad M1 | | Lab osalemine |
+| 2 | 11.09.2025 | 2h | CLI ja seadmete konfig | 20min: Cisco IOS, CLI režiimid | **100min SERVER LAB**: Hostname, passwords, banner | NetAcad M2 | | Lab osalemine |
+| 3 | 25.09.2025 | 2h | OSI ja TCP/IP | 15min: OSI 7 kihti, TCP/IP | **105min SERVER LAB**: Show käsud, dokumenteerimine | NetAcad M3 | **QUIZ #1**: CLI, OSI (10min) | 5% |
+| 4 | 02.10.2025 | 2h | Füüsiline kiht (L1) | 15min: Kaablid, standardid | **105min SERVER LAB**: Kaablite kontrollimine | NetAcad M4 | | Lab osalemine |
+| 5 | 09.10.2025 | 2h | Kahendaritmeetika | 15min: Binary basics | **105min PAPER**: Binary ↔ Decimal teisendamine | Binary harjutused | | Lab osalemine |
+| 6 | 16.10.2025 | 4h | Data Link Layer (L2) | 30min: MAC, Ethernet frame, Switch | **210min SERVER LAB**: MAC table, show käsud | NetAcad M6-7 | **QUIZ #2**: L1-2, MAC, Binary (15min) | 5% |
+| 7 | 30.10.2025 | 2h | Võrgukiht intro (L3) | 15min: Layer 3, IP vs MAC, Router | **105min SERVER LAB**: Router interfaces | NetAcad M8 | | Lab osalemine |
+| 8 | 06.11.2025 | 4h | IPv4 adresseerimine | 30min: IPv4 struktuur, klassid, masks | **90min PAPER**: IP lugemine + **120min SERVER LAB**: IP planning | NetAcad M11 | | Lab osalemine |
+| 9 | 13.11.2025 | 2h | Subnetting basics | 15min: Subnetting, 2^n | **105min PAPER**: /24 subnetting, network ID, broadcast | Subnetting harjutused | **CHECK #1**: Server setup, basic config | 10% |
+| 10 | 20.11.2025 | 2h | Subnetting practice 1 | 10min: Kordamine | **110min PAPER**: Subnetting drillid | Subnetting harjutused | | Lab osalemine |
+| 11 | 27.11.2025 | 2h | Subnetting practice 2 | 15min: Troubleshooting IP | **105min PAPER**: Keerulisemad ülesanded | VLSM reading | | Lab osalemine |
+| 12 | 04.12.2025 | 2h | VLSM | 15min: Variable masks | **45min PAPER**: VLSM + **60min SERVER LAB**: IP lisamine | VLSM harjutused | **SUBNETTING TEST** (30min) | 15% |
+| 13 | 11.12.2025 | 2h | Router + Routing | 15min: Routing table, static routes | **105min SERVER LAB**: Static routes, show ip route | NetAcad M9-10 | | Lab osalemine |
+| 14 | 18.12.2025 | 2h | ARP ja Routing jätk | 15min: ARP protokoll | **105min SERVER LAB**: ARP table, troubleshooting | ARP reading | | Lab osalemine |
+| 15 | 08.01.2026 | 2h | DHCP | 15min: DHCP DORA | **105min SERVER LAB**: DHCP pool config | NetAcad M15 | **CHECK #2**: IP config, routing | 10% |
+| 16 | 15.01.2026 | 2h | DNS | 15min: DNS hierarchy | **105min SERVER LAB**: DNS config, nslookup | NetAcad M15 | | Lab osalemine |
+| 17 | 22.01.2026 | 2h | Transport Layer | 15min: TCP vs UDP, ports | **105min SERVER LAB**: Port testing | NetAcad M14 | **QUIZ #3**: DHCP, DNS, Routing (15min) | 5% |
+| 18 | 29.01.2026 | 2h | Troubleshooting + Final | 15min: Troubleshooting metoodika | **105min SERVER LAB**: Break and fix, esitlus | Final doc | **FINAL PRESENTATION** | 30% |
+
+**Kokku: 38h**
+
+---
+
+## HINDAMINE (Kokku 100%)
+
+| Komponent | Osakaal | Millal | Kirjeldus |
+|-----------|---------|--------|-----------|
+| **Quizid** | 15% | Nädalad 3, 6, 17 | Quiz #1 (5%), Quiz #2 (5%), Quiz #3 (5%) |
+| **Subnetting Test** | 15% | Nädal 12 | Paper test, 30min |
+| **Server Lab Check #1** | 10% | Nädal 9 | Füüsiline setup, basic config |
+| **Server Lab Check #2** | 10% | Nädal 15 | IP config, routing |
+| **Final Presentation** | 30% | Nädal 18 | Terviklik võrk, dokumentatsioon, esitlus |
+| **Lab Osalemine** | 20% | Pidev | Aktiivsus, grupitöö, dokumenteerimine |
 
 **Läbimiseks:** 50%  
 **Heaks hindeks:** 70%+
 
----
-
-## BLOKK I: VÕRGU ALUSED (Nädalad 1-6)
-
-### ✅ Nädal 1: Sissejuhatus võrkudesse
-**Cisco:** Moodul 1 - Networking Today  
-**Aeg:** 45 min teooria + 45 min praktika
-
-**Teooria:**
-- Mis on arvutivõrk?
-- LAN, WAN, Internet
-- Klient-server mudel
-- Võrgu komponendid
-
-**Praktika:**
-- Packet Tracer installimine
-- Esimene võrk: 2 PC + Switch
-- Esimene ping test
-
-**Kodutöö:** NetAcad Moodul 1
-
----
-
-### ✅ Nädal 2: Seadmete põhikonfiguratsioon
-**Cisco:** Moodul 2 - Basic Device Configuration  
-**Aeg:** 45 min teooria + 45 min praktika
-
-**Teooria:**
-- Cisco IOS
-- CLI režiimid (User > Privileged > Config)
-- Põhikäsud: show, enable, configure terminal
-
-**Praktika (PT):**
-- Router/Switch CLI
-- Hostname
-- Enable secret
-- Banner motd
-
-**Kodutöö:** CLI harjutused PT-s
-
----
-
-### ✅ Nädal 3: Protokollid ja mudelid
-**Cisco:** Moodul 3 - Protocols and Models  
-**Aeg:** 45 min teooria + 45 min praktika
-
-**Teooria:**
-- OSI mudel (7 kihti) - ÜLEVAADE
-- TCP/IP mudel (4 kihti)
-- Kapseldamine
-- PDU-d (segment, packet, frame, bits)
-
-**Praktika (PT):**
-- Simulation mode
-- Vaatame, kuidas andmed liiguvad
-- Protocol inspection
-
-**Kodutöö:** OSI vs TCP/IP võrdlus  
-**📝 Quiz #1:** Nädalad 1-3 (10 min, online)
-
----
-
-### ✅ Nädal 4: Füüsiline kiht
-**Cisco:** Moodul 4-5 - Physical Layer  
-**Aeg:** 45 min teooria + 45 min praktika
-
-**Teooria:**
-- Layer 1 funktsioonid
-- Meediatüübid: UTP, fiber, wireless
-- Kaablite standardid (T-568A, T-568B)
-- Signaalid ja bitid
-
-**Praktika (PT):**
-- Kaabli tüüpide tutvustus
-- Physical mode exploration
-- Straight vs crossover
-
-**Kodutöö:** Kaablite võrdlus
-
----
-
-### ✅ Nädal 5: Kahendaritmeetika
-**Cisco:** Moodul 5 - Number Systems  
-**Aeg:** 45 min teooria + 45 min harjutused
-
-**Teooria:**
-- Binary vs Decimal
-- Binary → Decimal teisendamine
-- Decimal → Binary teisendamine
-- Hexadecimal (põgusalt)
-
-**Praktika:**
-- Harjutused: teisendamised
-- Kiired tehted (praktiline)
-- MAC/IP aadresside lugemine
-
-**Kodutöö:** Binary harjutused  
-**📝 Quiz #2:** Layer 1 + Binary (10 min)
-
----
-
-### ✅ Nädal 6: OSI Layer 1-2 (PÕHJALIK)
-**Cisco:** Moodul 6-7 - Data Link + Ethernet  
-**Aeg:** 45 min loeng + 45 min labor
-
-**Loeng:**
-- OSI Layer 1 detailselt
-- OSI Layer 2 detailselt
-- MAC aadressid (struktuur, OUI)
-- Ethernet frame
-- Switch vs Hub
-- MAC address table
-
-**Lab 6:** Ethernet kaablite tegemine
-- RJ-45 crimping
-- T-568B standard
-- Testimine
-
-**Lab 7:** Switch serveris
-- ESIMENE KORD SERVERIS!
-- Füüsilised ühendused
-- Switch reset
-- Hostname + paroolid
-- MAC address table vaatamine
-
-**Kodutöö:** MAC vs IP erinevused  
-**📝 Quiz #3:** Layer 1-2, MAC (15 min, kirjalik)
-
----
-
-## 📅 BLOKK II: VÕRGUKIHT JA IP (Nädalad 7-10)
-
-### Nädal 7: Võrgukiht (Layer 3) - INTRO
-**Cisco:** Moodul 8 - Network Layer  
-**Aeg:** 45 min teooria + 45 min praktika
-
-**Teooria:**
-- Layer 3 funktsioonid
-- IP aadress vs MAC aadress
-- Routing põhimõte
-- Router vs Switch
-
-**Praktika (PT):**
-- Router põhikonfiguratsioon
-- IP aadresside lisamine liidestele
-- `no shutdown`
-- Ping testid
-
-**Kodutöö:** Layer 2 vs Layer 3 võrdlus
-
----
-
-### Nädal 8: IPv4 Adresseerimine
-**Cisco:** Moodul 11 - IPv4 Addressing  
-**Aeg:** 45 min teooria + 45 min harjutused
-
-**Teooria:**
-- IPv4 struktuuri (32 bitti, 4 oktetti)
-- Klassid A, B, C (põgusalt)
-- Privaatsed vs avalikud
-- Subnet mask põhialused
-
-**Praktika:**
-- IP aadresside lugemine
-- Network vs host osa
-- /8, /16, /24 mask'id
-- Harjutused
-
-**Kodutöö:** IP harjutused  
-**📋 KONTROLLTÖÖ #1:** Layer 1-3 (45 min, kirjalik)
-
----
-
-### Nädal 9: Subnetting - BASICS
-**Cisco:** Moodul 11 jätk  
-**Aeg:** 45 min teooria + 45 min harjutused
-
-**Teooria:**
-- Mis on subnetting?
-- Miks vaja?
-- Lihtne matemaatika: 2^n
-- Subnet mask calculation
-
-**Praktika:**
-- Ainult LIHTSAD: /8, /16, /24
-- Network ID leidmine
-- Broadcast address
-- Usable IP range
-
-**Kodutöö:** Subnetting harjutused (lihtsad)
-
----
-
-### Nädal 10: Subnetting - PRACTICE
-**Cisco:** Moodul 11 jätk + harjutused  
-**Aeg:** 90 min harjutused
-
-**Praktika:**
-- Subnetting drillid
-- Kiired ülesanded
-- Troubleshooting IP problems
-- PT: IP planning
-
-**Lab 8 (PT):** IP aadresside planeerimine
-- Väike võrk
-- 3 subnetti
-- Router + 2 Switchi
-
-**Kodutöö:** Rohkem subnetting ülesandeid  
-**📝 Quiz #4:** Subnetting (20 min, praktiline)
-
----
-
-## 📅 BLOKK III: MARSRUUTIMINE JA PROTOKOLLID (Nädalad 11-14)
-
-### Nädal 11: VLSM (Variable Length Subnet Mask)
-**Cisco:** Moodul 11 advanced  
-**Aeg:** 45 min teooria + 45 min harjutused
-
-**Teooria:**
-- Mis on VLSM?
-- Miks parem kui fixed subnetting?
-- Aadresside säästmine
-- VLSM strateegia
-
-**Praktika:**
-- VLSM harjutused
-- Efektiivne IP planeerimine
-- Real-world näited
-
-**Kodutöö:** VLSM planning
-
----
-
-### Nädal 12: Routing ja ARP
-**Cisco:** Moodul 9-10 - ARP + Routing Basics  
-**Aeg:** 45 min teooria + 45 min praktika
-
-**Teooria:**
-- ARP protokoll (Layer 2 ↔ Layer 3)
-- ARP table
-- Static routing
-- Default gateway
-- Routing table
-
-**Praktika (PT):**
-- Static route'ide lisamine
-- Default route
-- ARP table vaatamine
-- Troubleshooting
-
-**📋 VAHETEST:** Kõik kuni siia (90 min)
-- 45 min teooria (OSI, IP, Subnetting, Routing)
-- 45 min praktiline (PT ülesanne)
-
----
-
-### Nädal 13: DHCP
-**Cisco:** Moodul 15 osa - DHCP  
-**Aeg:** 45 min teooria + 45 min labor
-
-**Teooria:**
-- DHCP toimimine
-- DORA protsess (Discover, Offer, Request, Ack)
-- DHCP server vs relay
-- IP lease time
-
-**Lab 9 (PT):**
-- DHCP serveri konfigureerimine
-- DHCP pool
-- Excluded addresses
-- Testimine
-
-**Kodutöö:** DHCP troubleshooting
-
----
-
-### Nädal 14: DNS
-**Cisco:** Moodul 15 osa - DNS  
-**Aeg:** 45 min teooria + 45 min labor
-
-**Teooria:**
-- DNS toimimine
-- DNS hierarchy
-- A record, CNAME, MX
-- nslookup / dig
-
-**Lab 10 (PT):**
-- DNS serveri seadistamine
-- Testimine ping hostname
-- Troubleshooting DNS issues
-
-**Kodutöö:** DNS + DHCP koostöö  
-**📝 Quiz #5:** DHCP + DNS (15 min)
-
----
-
-## 📅 BLOKK IV: VLANS JA LÕPP-LAB (Nädalad 15-16)
-
-### Nädal 15: VLANs (kui jõuame) + Lõpp-Lab ALGUS
-**Cisco:** Moodul 17 osa - VLANs  
-**Aeg:** 45 min VLANs + 45 min lõpp-lab planeerimine
-
-**Teooria (kui aega):**
-- Mis on VLAN?
-- Trunk vs Access port
-- Inter-VLAN routing (põgusalt)
-
-**LÕPP-LAB ALGUS:**
-- Ülesande tutvustus
-- Grupid (2 inimest)
-- IP planeerimine
-- Topoloogia joonistamine
-
-**Ülesanne:** Ehitada väikeettevõtte võrk serveris
-- 2+ subnet
-- DHCP (1 pool)
-- Static IP (serverid)
-- Kõik PC-d peavad pingima
-- Router + Switch + 4 PC
-
----
-
-### Nädal 16: LÕPP-LAB SERVERIS
-**Aeg:** 90 min praktiline eksam
-
-**Tegevused:**
-- Füüsilised ühendused serveris
-- IP konfigureerimine
-- DHCP seadistamine
-- Testimine
-- Troubleshooting
-- Dokumenteerimine
-
-**Hindamine:**
-- Kas võrk töötab? (60%)
-- IP plaan korrektne? (20%)
-- Dokumentatsioon? (20%)
-
-**See ON lõpueksam!**
+**Homework:** NetAcad moodulid, paper exercises - ei ole kohustuslik, aga lisapunktid (Google Classroom)
 
 ---
 
@@ -373,8 +61,8 @@
 - Vihik dokumenteerimiseks
 
 **Soovituslik:**
-- "Introduction to Networks" booklet
 - Subnetting calculator (alguses)
+- NetAcad "Introduction to Networks" booklet
 
 ---
 
@@ -383,42 +71,24 @@
 Kursuse lõpus õpilane:
 
 ✅ **Teab:**
-- OSI mudeli kõik 7 kihti
+- OSI mudeli 7 kihti ja nende praktilist tähtsust
 - MAC vs IP aadresside erinevust
-- Subnetting matemaatikat
-- VLSM põhimõtteid
+- Subnetting matemaatikat ja VLSM põhimõtteid
 - DHCP ja DNS toimimist
-- Routing põhialused
+- Routing põhialused (static routes)
 
 ✅ **Oskab:**
-- Seadistada Cisco switch-i ja routerit
-- Planeerida IP aadresside skeemi
-- Teha subnetting'ut (sh VLSM)
+- Seadistada Cisco switch-i ja routerit CLI kaudu
+- Planeerida IP aadresside skeemi (subnetting, VLSM)
 - Konfigureerida DHCP ja DNS
 - Luua static route'e
-- Troubleshootida võrguprobleeme
-- Töötada päris seadmetega serveris
+- Troubleshootida võrguprobleeme süstemaatiliselt
+- Töötada päris seadmetega serveris (real equipment)
 
 ✅ **On valmis:**
 - CCNA 200-301 eksami ettevalmistuseks
 - Praktiliseks võrguadministraatoriks
-- Edasi õppima (routing protocols, security)
+- Edasi õppima (routing protocols, VLANs, security)
 
----
-
-## ⏱️ AJAKAVA PAINDLIKKUS
-
-**Kui jääme maha:**
-- VLANs → valikuline
-- VLSM → lihtsustatud
-- PRIORITEET: OSI, IP, Subnetting, DHCP, DNS
-
-**Kui jõuame ette:**
-- Transport Layer (TCP/UDP)
-- Security basics (SSH, ACL)
-- Packet Tracer Skills Assessment
-
----
-
-*Uuendatud: 2025-10-13*  
-*Põhineb tegelikul kursuse käigul, mitte ideaalsel Cisco tempol*
+*Uuendatud: 2025-10-26*  
+*Põhineb Cisco NetAcad CCNA ITN struktuuri ja tegelikul kursuse käigul*

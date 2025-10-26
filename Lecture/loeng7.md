@@ -1,4 +1,4 @@
-# Nädal 6: OSI Mudel - 1. OSA (Füüsiline ja Kanalikiht)
+# Nädal 7: OSI Mudel - 1. OSA (Füüsiline ja Kanalikiht)
 
 > [!TIP]
 > **Video lingid (vaata kodus):**
