@@ -473,24 +473,6 @@ IPv4 aadressid said 2011. aastal otsa. Lahendused on NAT, private IP-d ja tulevi
 
 Igas võrgus on kolm erilist aadressi: network address (võrgu nimi, kõik host bittid 0), broadcast address (saadab kõigile, kõik host bittid 1), ja host aadressid (nende vahel, määratavad seadmetele). Formula 2^n - 2 annab hostide arvu.
 
-### Edasi 90min PAPER tunnis
-
-Järgmine tund on praktika aeg! Me harjutame:
-- Binary ↔ Decimal teisendamist
-- IP klassi äratundmist
-- Network aadressi leidmist
-- Subnet mask-i binary analüüsi
-
-See 30min andis sulle teoreetilise aluse. Järgmine tund paneb selle praktikasse.
-
-### Edasi 120min SERVER LABis
-
-Serveri tunnis me kasutame seda teooriat päriselt:
-- Planeerime IP aadresse oma võrgule
-- Seadistame routeritele ja arvutitele IP-sid
-- Kontrollime, kas sama võrgu seadmed näevad teineteist
-- Vaatame, kuidas router ühendab erinevaid võrke
-
 ---
 
 **Valmis järgmiseks tunniks!** 🎯
