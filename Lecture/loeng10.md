@@ -1,4 +1,4 @@
-# Peatükk 9.2: Network, Broadcast ja Host Aadressid ning Subnetting Põhitõed
+# Võrgu-, leviedastus- ja hosti-aadressid ning alamvõrkude jaotamise põhitõed
 
 ## Sissejuhatus
 
