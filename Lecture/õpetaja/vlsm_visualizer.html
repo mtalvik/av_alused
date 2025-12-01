@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VLSM Visualiseerija</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #2c3e50;
+        }
+        
+        input, select {
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.3s;
+        }
+        
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        button {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+        
+        .visualization {
+            margin-top: 30px;
+        }
+        
+        .subnet-block {
+            margin: 15px 0;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+        
+        .subnet-block:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .subnet-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .subnet-name {
+            font-size: 1.3em;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        
+        .subnet-size {
+            font-size: 1.1em;
+            font-weight: 600;
+            padding: 5px 15px;
+            background: #ecf0f1;
+            border-radius: 20px;
+        }
+        
+        .subnet-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .detail-label {
+            font-size: 0.85em;
+            color: #7f8c8d;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .detail-value {
+            font-family: 'Courier New', monospace;
+            font-size: 1em;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .stat-card {
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .add-subnet {
+            margin: 20px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border: 2px dashed #bdc3c7;
+        }
+        
+        .add-subnet-form {
+            display: grid;
+            grid-template-columns: 2fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+        }
+        
+        .error {
+            background: #fee;
+            color: #c00;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #c00;
+            margin: 15px 0;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .success {
+            background: #efe;
+            color: #070;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 5px solid #070;
+            margin: 15px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 VLSM Visualiseerija</h1>
+        
+        <div class="controls">
+            <div class="input-group">
+                <label for="baseNetwork">Baas Võrk:</label>
+                <input type="text" id="baseNetwork" value="192.168.1.0" placeholder="192.168.1.0">
+            </div>
+            <div class="input-group">
+                <label for="baseMask">Mask:</label>
+                <select id="baseMask">
+                    <option value="24" selected>/24 (256 aadressid)</option>
+                    <option value="23">/23 (512 aadressid)</option>
+                    <option value="22">/22 (1024 aadressid)</option>
+                    <option value="21">/21 (2048 aadressid)</option>
+                    <option value="20">/20 (4096 aadressid)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <button onclick="initNetwork()">🚀 Alusta</button>
+            </div>
+        </div>
+        
+        <div id="message"></div>
+        
+        <div class="add-subnet">
+            <h3 style="margin-bottom: 15px;">➕ Lisa Alamvõrk</h3>
+            <div class="add-subnet-form">
+                <div class="input-group">
+                    <label for="subnetName">Nimi (nt. "HQ Kontor"):</label>
+                    <input type="text" id="subnetName" placeholder="Alamvõrgu nimi">
+                </div>
+                <div class="input-group">
+                    <label for="hostsNeeded">Hoste vaja:</label>
+                    <input type="number" id="hostsNeeded" min="2" placeholder="100">
+                </div>
+                <div class="input-group">
+                    <label>&nbsp;</label>
+                    <button onclick="addSubnet()">Lisa</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="visualization" id="visualization"></div>
+        
+        <div class="stats" id="stats"></div>
+    </div>
+
+    <script>
+        let baseIP = [192, 168, 1, 0];
+        let baseMask = 24;
+        let subnets = [];
+        let nextAvailable = 0;
+        
+        const colors = [
+            '#3498db', '#e74c3c', '#2ecc71', '#f39c12', 
+            '#9b59b6', '#1abc9c', '#34495e', '#e67e22'
+        ];
+        
+        function ipToInt(ip) {
+            return (ip[0] << 24) + (ip[1] << 16) + (ip[2] << 8) + ip[3];
+        }
+        
+        function intToIP(int) {
+            return [
+                (int >>> 24) & 255,
+                (int >>> 16) & 255,
+                (int >>> 8) & 255,
+                int & 255
+            ];
+        }
+        
+        function ipToString(ip) {
+            return ip.join('.');
+        }
+        
+        function calculateMask(hostsNeeded) {
+            let hostBits = Math.ceil(Math.log2(hostsNeeded + 2));
+            return 32 - hostBits;
+        }
+        
+        function calculateHosts(mask) {
+            return Math.pow(2, 32 - mask) - 2;
+        }
+        
+        function initNetwork() {
+            const networkInput = document.getElementById('baseNetwork').value;
+            baseMask = parseInt(document.getElementById('baseMask').value);
+            
+            const parts = networkInput.split('.');
+            if (parts.length !== 4) {
+                showMessage('❌ Vale IP formaat!', 'error');
+                return;
+            }
+            
+            baseIP = parts.map(p => parseInt(p));
+            nextAvailable = ipToInt(baseIP);
+            subnets = [];
+            
+            showMessage('✅ Võrk initsialiseeritud: ' + ipToString(baseIP) + '/' + baseMask, 'success');
+            render();
+        }
+        
+        function addSubnet() {
+            const name = document.getElementById('subnetName').value;
+            const hosts = parseInt(document.getElementById('hostsNeeded').value);
+            
+            if (!name || !hosts) {
+                showMessage('❌ Täida kõik väljad!', 'error');
+                return;
+            }
+            
+            const mask = calculateMask(hosts);
+            const size = Math.pow(2, 32 - mask);
+            const maxIP = ipToInt(baseIP) + Math.pow(2, 32 - baseMask);
+            
+            if (nextAvailable + size > maxIP) {
+                showMessage('❌ Ei mahu! Address space on täis.', 'error');
+                return;
+            }
+            
+            const networkIP = intToIP(nextAvailable);
+            const broadcastIP = intToIP(nextAvailable + size - 1);
+            const firstUsable = intToIP(nextAvailable + 1);
+            const lastUsable = intToIP(nextAvailable + size - 2);
+            
+            subnets.push({
+                name: name,
+                network: networkIP,
+                mask: mask,
+                broadcast: broadcastIP,
+                firstUsable: firstUsable,
+                lastUsable: lastUsable,
+                hostsNeeded: hosts,
+                hostsAvailable: calculateHosts(mask),
+                color: colors[subnets.length % colors.length]
+            });
+            
+            nextAvailable += size;
+            
+            document.getElementById('subnetName').value = '';
+            document.getElementById('hostsNeeded').value = '';
+            
+            showMessage('✅ Lisatud: ' + name, 'success');
+            render();
+        }
+        
+        function showMessage(text, type) {
+            const msgDiv = document.getElementById('message');
+            msgDiv.className = type;
+            msgDiv.textContent = text;
+            setTimeout(() => msgDiv.textContent = '', 3000);
+        }
+        
+        function render() {
+            const viz = document.getElementById('visualization');
+            viz.innerHTML = '';
+            
+            subnets.forEach((subnet, index) => {
+                const block = document.createElement('div');
+                block.className = 'subnet-block';
+                block.style.borderLeftColor = subnet.color;
+                
+                block.innerHTML = `
+                    <div class="subnet-header">
+                        <div class="subnet-name">${index + 1}. ${subnet.name}</div>
+                        <div class="subnet-size">/${subnet.mask} (${subnet.hostsAvailable} hosti)</div>
+                    </div>
+                    <div class="subnet-details">
+                        <div class="detail-item">
+                            <div class="detail-label">Network</div>
+                            <div class="detail-value">${ipToString(subnet.network)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Mask</div>
+                            <div class="detail-value">/${subnet.mask}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">First Usable</div>
+                            <div class="detail-value">${ipToString(subnet.firstUsable)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Last Usable</div>
+                            <div class="detail-value">${ipToString(subnet.lastUsable)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Broadcast</div>
+                            <div class="detail-value">${ipToString(subnet.broadcast)}</div>
+                        </div>
+                        <div class="detail-item">
+                            <div class="detail-label">Vajadus / Saadav</div>
+                            <div class="detail-value">${subnet.hostsNeeded} / ${subnet.hostsAvailable}</div>
+                        </div>
+                    </div>
+                `;
+                
+                viz.appendChild(block);
+            });
+            
+            renderStats();
+        }
+        
+        function renderStats() {
+            const statsDiv = document.getElementById('stats');
+            const totalSize = Math.pow(2, 32 - baseMask);
+            const usedSize = nextAvailable - ipToInt(baseIP);
+            const freeSize = totalSize - usedSize;
+            const utilization = ((usedSize / totalSize) * 100).toFixed(1);
+            
+            statsDiv.innerHTML = `
+                <div class="stat-card">
+                    <div class="stat-value">${subnets.length}</div>
+                    <div class="stat-label">Alamvõrku</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${usedSize}</div>
+                    <div class="stat-label">Kasutatud Aadresse</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${freeSize}</div>
+                    <div class="stat-label">Vaba Aadresse</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">${utilization}%</div>
+                    <div class="stat-label">Kasutus</div>
+                </div>
+            `;
+        }
+        
+        // Initialize on load
+        initNetwork();
+    </script>
+</body>
+</html>
