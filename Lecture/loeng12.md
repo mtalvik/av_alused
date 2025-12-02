@@ -1,5 +1,66 @@
 # VLSM - Variable Length Subnet Mask
 
+## Mis on VLAN? 🏢
+
+Enne kui räägime VLSM-ist, peame mõistma **VLAN-e** (Virtual Local Area Network).
+
+### Probleem Ilma VLAN-ideta
+
+**Traditsiooniline switch:**
+```
+┌────────────────────────────────────┐
+│         Switch (üks võrk)         │
+│                                    │
+│  Port 1: Raamatupidamine          │
+│  Port 2: IT osakond               │  } Kõik näevad
+│  Port 3: Müük                     │  } üksteist!
+│  Port 4: Külalised                │  } Broadcasting
+└────────────────────────────────────┘
+
+Probleem:
+- Külalised näevad firma dokumente ❌
+- Broadcast liiklus jõuab kõikidesse portidesse ❌
+- Turvalisus madal ❌
+```
+
+### Lahendus: VLAN-id
+
+**VLAN = Virtuaalne võrk switch-is**
+
+```
+┌────────────────────────────────────┐
+│         Switch (4 VLAN-i)         │
+│                                    │
+│  VLAN 10: Raamatupidamine         │ ← Eraldatud
+│  VLAN 20: IT osakond              │ ← Eraldatud
+│  VLAN 30: Müük                    │ ← Eraldatud
+│  VLAN 40: Külalised               │ ← Eraldatud
+└────────────────────────────────────┘
+
+Tulemus:
+✅ Iga VLAN = eraldi võrk
+✅ VLAN 40 ei näe VLAN 10 liiklust
+✅ Broadcast ainult oma VLAN-is
+✅ Turvalisus parem
+```
+
+### VLAN-id ja IP Aadressid
+
+**Oluline:** Iga VLAN vajab oma IP alamvõrku!
+
+```
+VLAN 10: 192.168.10.0/24
+VLAN 20: 192.168.20.0/24
+VLAN 30: 192.168.30.0/24
+VLAN 40: 192.168.40.0/24
+```
+
+**Aga** klassikalise subnetting-iga kõik alamvõrgud sama suurusega! → **Raiskamine!**
+
+Siin tuleb **VLSM** appi! 🎯
+
+---
+
 ## Miks VLSM on vajalik? 🤔
 
 Klassikaline subnetting kasutab sama maskid kõigile alamvõrkudele. See tähendab:
@@ -40,18 +101,18 @@ VLSM = "subnetting a subnet" ehk **alamvõrgu alamvõrk**.
 **Näide:**
 
 ```
-Algne võrk: 172.16.0.0/16 (65,534 hosti)
+Algne võrk: 192.168.0.0/16 (65,534 hosti)
      ↓
 Esimene jaotus (/18): 4 suurt alamvõrku
      ↓
-Võtame ühe alamvõrgu: 172.16.64.0/18
+Võtame ühe alamvõrgu: 192.168.64.0/18
      ↓
 Teine jaotus (/20): Jagame veel 4 osaks
      ↓
-172.16.64.0/20  (4,094 hosti)
-172.16.80.0/20  (4,094 hosti)
-172.16.96.0/20  (4,094 hosti)
-172.16.112.0/20 (4,094 hosti)
+192.168.64.0/20  (4,094 hosti)
+192.168.80.0/20  (4,094 hosti)
+192.168.96.0/20  (4,094 hosti)
+192.168.112.0/20 (4,094 hosti)
 ```
 
 Iga alamvõrku võib **uuesti jagada** vastavalt vajadusele.
@@ -125,38 +186,38 @@ Kirjuta üles kõik vajadused:
 
 **Oluline:** Alamvõrgud peavad olema **contiguous** (järjestikused, ilma aukudeta!)
 
-**Näide:** `10.1.0.0/22` baasil
+### Antud: `192.168.10.0/22` baasil
 
 ```
-1. HQ (500): 10.1.0.0/23
-   - Network: 10.1.0.0
-   - Broadcast: 10.1.1.255
-   - Next available: 10.1.2.0
+1. HQ (500): 192.168.10.0/23
+   - Network: 192.168.10.0
+   - Broadcast: 192.168.11.255
+   - Next available: 192.168.12.0
 
-2. Branch A (120): 10.1.2.0/25
-   - Network: 10.1.2.0
-   - Broadcast: 10.1.2.127
-   - Next available: 10.1.2.128
+2. Branch A (120): 192.168.12.0/25
+   - Network: 192.168.12.0
+   - Broadcast: 192.168.12.127
+   - Next available: 192.168.12.128
 
-3. Branch B (60): 10.1.2.128/26
-   - Network: 10.1.2.128
-   - Broadcast: 10.1.2.191
-   - Next available: 10.1.2.192
+3. Branch B (60): 192.168.12.128/26
+   - Network: 192.168.12.128
+   - Broadcast: 192.168.12.191
+   - Next available: 192.168.12.192
 
-4. DMZ (10): 10.1.2.192/28
-   - Network: 10.1.2.192
-   - Broadcast: 10.1.2.207
-   - Next available: 10.1.2.208
+4. DMZ (10): 192.168.12.192/28
+   - Network: 192.168.12.192
+   - Broadcast: 192.168.12.207
+   - Next available: 192.168.12.208
 
-5. Link 1 (2): 10.1.2.208/30
-   - Network: 10.1.2.208
-   - Broadcast: 10.1.2.211
-   - Next available: 10.1.2.212
+5. Link 1 (2): 192.168.12.208/30
+   - Network: 192.168.12.208
+   - Broadcast: 192.168.12.211
+   - Next available: 192.168.12.212
 
-6. Link 2 (2): 10.1.2.212/30
-   - Network: 10.1.2.212
-   - Broadcast: 10.1.2.215
-   - Next available: 10.1.2.216
+6. Link 2 (2): 192.168.12.212/30
+   - Network: 192.168.12.212
+   - Broadcast: 192.168.12.215
+   - Next available: 192.168.12.216
 ```
 
 ---
@@ -215,8 +276,8 @@ Kasutatavad: 2
 
 Classful protokollid ei saada subnet mask infot:
 ```
-RIPv1: "Mul on võrk 10.1.0.0" (ilma maskita!)
-RIPv2: "Mul on võrk 10.1.2.0/25" (koos maskiga!) ✓
+RIPv1: "Mul on võrk 192.168.1.0" (ilma maskita!)
+RIPv2: "Mul on võrk 192.168.1.0/25" (koos maskiga!) ✓
 ```
 
 ---
@@ -231,34 +292,34 @@ VLSM ja summarization käivad käsikäes.
 
 Teil on alamvõrgud:
 ```
-172.16.0.0/24
-172.16.1.0/24
-172.16.2.0/24
-172.16.3.0/24
+192.168.32.0/24
+192.168.33.0/24
+192.168.34.0/24
+192.168.35.0/24
 ```
 
 **Ilma summarization-ita:** 4 route routing table'is
 
 **Summarization-iga:** 1 route:
 ```
-172.16.0.0/22 (hõlmab kõik 4 alamvõrku)
+192.168.32.0/22 (hõlmab kõik 4 alamvõrku)
 ```
 
 **Kuidas arvutada?**
 
 1. Kirjuta aadressid binaarses:
 ```
-172.16.00000000.0 = 172.16.0.0
-172.16.00000001.0 = 172.16.1.0
-172.16.00000010.0 = 172.16.2.0
-172.16.00000011.0 = 172.16.3.0
+192.168.00100000.0 = 192.168.32.0
+192.168.00100001.0 = 192.168.33.0
+192.168.00100010.0 = 192.168.34.0
+192.168.00100011.0 = 192.168.35.0
         ^^^^^^
        2 bitti muutub
 ```
 
 2. Mask = 24 - 2 = `/22`
 
-3. Summary route = `172.16.0.0/22`
+3. Summary route = `192.168.32.0/22`
 
 ---
 
@@ -286,8 +347,8 @@ VLSM nõuab head dokumentatsiooni:
 
 | Subnet | Network | Mask | First | Last | Broadcast | Purpose |
 |--------|---------|------|-------|------|-----------|---------|
-| HQ | 10.1.0.0 | /23 | .0.1 | .1.254 | .1.255 | Main office |
-| DMZ | 10.1.2.0 | /28 | .2.1 | .2.14 | .2.15 | Servers |
+| HQ | 192.168.1.0 | /23 | .1.1 | .2.254 | .2.255 | Main office |
+| DMZ | 192.168.3.0 | /28 | .3.1 | .3.14 | .3.15 | Servers |
 
 ### 3. IP Address Management (IPAM)
 
@@ -318,7 +379,7 @@ Subnet B: 192.168.1.128/26 (128-191) ✓
 ## Näide: Ettevõtte Võrk
 
 **Olukord:**
-- Antud: `172.20.0.0/20`
+- Antud: `192.168.0.0/20`
 - Vajadused:
   - HQ: 2000 hosti
   - Tootmine: 500 hosti
@@ -331,37 +392,37 @@ Subnet B: 192.168.1.128/26 (128-191) ✓
 **Lahendus:**
 
 ```
-1. HQ (2000): 172.20.0.0/21 (2046 hosti)
-   Network: 172.20.0.0
-   Broadcast: 172.20.7.255
+1. HQ (2000): 192.168.0.0/21 (2046 hosti)
+   Network: 192.168.0.0
+   Broadcast: 192.168.7.255
 
-2. Tootmine (500): 172.20.8.0/23 (510 hosti)
-   Network: 172.20.8.0
-   Broadcast: 172.20.9.255
+2. Tootmine (500): 192.168.8.0/23 (510 hosti)
+   Network: 192.168.8.0
+   Broadcast: 192.168.9.255
 
-3. Arendus (250): 172.20.10.0/24 (254 hosti)
-   Network: 172.20.10.0
-   Broadcast: 172.20.10.255
+3. Arendus (250): 192.168.10.0/24 (254 hosti)
+   Network: 192.168.10.0
+   Broadcast: 192.168.10.255
 
-4. Müük (100): 172.20.11.0/25 (126 hosti)
-   Network: 172.20.11.0
-   Broadcast: 172.20.11.127
+4. Müük (100): 192.168.11.0/25 (126 hosti)
+   Network: 192.168.11.0
+   Broadcast: 192.168.11.127
 
-5. Admin (50): 172.20.11.128/26 (62 hosti)
-   Network: 172.20.11.128
-   Broadcast: 172.20.11.191
+5. Admin (50): 192.168.11.128/26 (62 hosti)
+   Network: 192.168.11.128
+   Broadcast: 192.168.11.191
 
-6. DMZ (20): 172.20.11.192/27 (30 hosti)
-   Network: 172.20.11.192
-   Broadcast: 172.20.11.223
+6. DMZ (20): 192.168.11.192/27 (30 hosti)
+   Network: 192.168.11.192
+   Broadcast: 192.168.11.223
 
-7. Link 1: 172.20.11.224/30
-8. Link 2: 172.20.11.228/30
-9. Link 3: 172.20.11.232/30
-10. Link 4: 172.20.11.236/30
+7. Link 1: 192.168.11.224/30
+8. Link 2: 192.168.11.228/30
+9. Link 3: 192.168.11.232/30
+10. Link 4: 192.168.11.236/30
 ```
 
-**Vaba ruum tulevikuks:** `172.20.11.240/28` ja üles kuni `172.20.15.255`
+**Vaba ruum tulevikuks:** `192.168.11.240/28` ja üles kuni `192.168.15.255`
 
 ---
 
