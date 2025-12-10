@@ -424,7 +424,7 @@ Samm 3: R0 vaatab marsruutimistabelit: "Kuhu läheb [PC2 IP]?"
 Samm 4: R0 leiab: "S [LAN2 võrk] via [R1 G0/0 IP]" → saadab R1-le
 Samm 5: R1 vaatab: "Kas [PC2 IP] on minu võrgus?" → JAH (G0/1)
 Samm 6: R1 saadab paketi otse PC2-le
-
+```
 **Vastus tuleb tagasi sama loogikaga**, aga vastupidises suunas!
 
 ---
