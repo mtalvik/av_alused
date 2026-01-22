@@ -1,128 +1,155 @@
-# Loeng 17 - DHCP ja DNS
+# Loeng 17 — DHCP ja DNS
+
+*Automaatika, mis hoiab interneti töös*
 
 ---
 
-## SISUKORD
+## Sisukord
 
 1. [Sissejuhatus](#1-sissejuhatus)
-2. [DHCP - Dynamic Host Configuration Protocol](#2-dhcp---dynamic-host-configuration-protocol)
+2. [DHCP — Dynamic Host Configuration Protocol](#2-dhcp--dynamic-host-configuration-protocol)
 3. [DORA protsess](#3-dora-protsess)
-4. [DHCP konfigureerimine ruuteril](#4-dhcp-konfigureerimine-ruuteril)
-5. [DNS - Domain Name System](#5-dns---domain-name-system)
+4. [DHCP serveri seadistamine](#4-dhcp-serveri-seadistamine)
+5. [DNS — Domain Name System](#5-dns--domain-name-system)
 6. [DNS hierarhia ja päringud](#6-dns-hierarhia-ja-päringud)
 7. [DHCP ja DNS koostöö](#7-dhcp-ja-dns-koostöö)
 8. [Kokkuvõte](#8-kokkuvõte)
 
 ---
 
-## 1. SISSEJUHATUS
+## 1. Sissejuhatus
+
+> **Miks see oluline on?**  
+> Ilma DHCP ja DNS-ita peaks iga inimene teadma peast kümneid IP-aadresse ja iga IT-mees käima käsitsi läbi sadu arvuteid. Internet, nagu me seda tunneme, lihtsalt ei toimiks.
 
 ### Mida me juba teame?
 
-Eelmistes tundides oleme käsitsi seadistanud igale seadmele IP aadressi, alamvõrgumaski ja default gateway. See toimib hästi väikestes laborivõrkudes, kus on 3-4 arvutit. Aga mis juhtub päris maailmas?
+Eelmistes tundides oleme käsitsi seadistanud igale seadmele IP aadressi, alamvõrgumaski ja default gateway. See toimib hästi väikestes laborivõrkudes, kus on 3-4 arvutit.
 
-### Mida me täna õpime?
+Aga päris maailmas? Seal on asjad natuke teisiti.
 
-Selles tunnis õpime kahte protokolli, mis teevad võrguadministraatori elu palju lihtsamaks:
+### Kaks protokolli, mis muutsid kõike
 
-**DHCP** - automaatne IP aadresside jagamine. Arvuti küsib "anna mulle IP" ja saab selle automaatselt.
+1990ndatel oli internet kasvav kaos. Iga uus arvuti tähendas kellegi jaoks tundi käsitsi seadistamist. Iga uus töötaja tähendas IT-mehele peavalu.
 
-**DNS** - nimede tõlkimine IP aadressideks. Inimene kirjutab "google.com" ja arvuti teab, et see tähendab 142.250.74.142.
+Siis tulid kaks protokolli, mis muutsid kõike:
 
-Need kaks protokolli töötavad koos: DHCP annab arvutile mitte ainult IP aadressi, vaid ka DNS serveri aadressi, et arvuti teaks, kellelt nimesid küsida.
+**DHCP** — arvuti küsib "anna mulle IP" ja saab selle automaatselt. Mitte keegi ei pea midagi käsitsi tegema.
+
+**DNS** — inimene kirjutab "google.com" ja arvuti teab, et see tähendab 142.250.74.142. Mitte keegi ei pea numbreid meeles pidama.
+
+Täna õpime mõlemat. Ja ma luban — pärast seda tundi vaatad sa oma koduruuterit teise pilguga.
 
 ---
 
-## 2. DHCP - DYNAMIC HOST CONFIGURATION PROTOCOL
+## 2. DHCP — Dynamic Host Configuration Protocol
 
-### Probleem: käsitsi seadistamine ei skaleeru
+> **Miks see oluline on?**  
+> DHCP on põhjus, miks sa saad kohvikusse minna, WiFi-ga ühenduda ja kohe internetti pääseda. Mitte keegi ei küsi sinult "mis IP sa tahad?" — see lihtsalt töötab.
 
-Kujuta ette, et töötad IT-osakonna juhina suures ettevõttes. Sul on 500 töötajat, igaühel arvuti. Igale arvutile on vaja seadistada:
+### Probleem, millest kõik algas
 
-- IP aadress (unikaalne!)
+Kujuta ette, et oled IT-juht suures ettevõttes. Sul on 500 töötajat, igaühel arvuti. Igale arvutile on vaja seadistada:
+
+- IP aadress (ja see PEAB olema unikaalne!)
 - Alamvõrgumask
 - Default gateway
 - DNS serveri aadress
 
-See tähendab 500 × 4 = **2000 seadistust**. Kui üks number läheb valesti, siis see arvuti ei tööta võrgus.
+See tähendab 500 × 4 = **2000 seadistust**. Üks number valesti — ja see arvuti ei tööta võrgus.
 
-Aga see pole veel kõik. Mis juhtub, kui:
-- Uus töötaja tuleb tööle? Pead talle IP leidma ja seadistama.
+Aga oota, see pole veel kõik! Mis juhtub, kui:
+
+- Uus töötaja tuleb tööle? Pead talle vaba IP leidma ja seadistama.
 - Töötaja vahetab arvutit? Pead vana IP vabastama ja uuele seadistama.
 - DNS server vahetub? Pead KÕIK 500 arvutit üle käima!
-- Keegi sisestab kogemata sama IP mis kolleegil? Mõlemad arvutid lakkavad töötamast.
+- Keegi paneb kogemata sama IP mis kolleegil? Mõlemad arvutid lakkavad töötamast.
 
-See on haldamise õudusunenägu.
+Ma olen näinud kontorit, kus kaks inimest said kogemata sama IP. Tulemus? Mõlema arvuti võrguühendus hakkas "vilkuma" — töötas 10 sekundit, siis kadus, siis tuli tagasi. Selle debugimine võttis 2 tundi. Kaks tundi kahe töötaja tööaega, pluss IT-mehe aeg.
 
-### Lahendus: DHCP
+See oli haldamise õudusunenägu. Ja just sellepärast leiutati DHCP.
 
-**DHCP** (Dynamic Host Configuration Protocol) lahendab kõik need probleemid. Idee on lihtne:
+### Kuidas DHCP sind päästab
+
+**DHCP** (Dynamic Host Configuration Protocol) idee on nii lihtne, et imestad, miks seda varem polnud:
 
 1. Võrgus on üks DHCP **server** (võib olla ruuter, eraldiseisev server või isegi koduruuter)
 2. Server teab, milliseid IP aadresse võib välja jagada
 3. Kui arvuti lülitub sisse, **küsib** ta serverilt IP aadressi
 4. Server **annab** arvutile IP + kõik muud vajalikud seaded
 
-Arvuti kasutaja ei pea midagi tegema - kõik toimub automaatselt.
+Kasutaja ei pea midagi tegema. IT-mees ei pea midagi tegema. See lihtsalt töötab.
 
-### Elunäide: hotelli võtmekaart
+**Huvitav fakt:** Sinu koduruuter on DHCP server! Sellepärast saavad su telefon, laptop ja nutiteleka kõik automaatselt internetti — ruuter jagab neile IP aadresse.
 
-Mõtle hotelli peale. Kui tuled hotelli:
+### Analoogia: hotelli vastuvõtt
 
-**Ilma DHCP-ta** (staatiline IP) oleks nagu:
-- Sa valid ise toa numbri
+Mõtle hotelli peale:
+
+**Ilma DHCP-ta** oleks nagu:
+- Tuled hotelli
+- Valid ise toanumbri: "Ma tahan tuba 247"
 - Loodad, et keegi teine pole seda valinud
-- Kui valid vale numbri, ei saa sisse
+- Kui valid vale numbri, ei saa ust lahti
 
 **DHCP-ga** on nagu:
+- Tuled hotelli
 - Lähed vastuvõttu
-- Administraator annab sulle võtmekaardi
-- Kaardil on toa number, WiFi parool, hommikusöögi aeg
-- Administraator teab, millised toad on vabad
+- Administraator: "Teie tuba on 247, WiFi parool on 'hotell123', hommikusöök on kell 8"
+- Administraator teab täpselt, millised toad on vabad
 
-DHCP server on nagu hotelli administraator - ta teab, millised "toad" (IP aadressid) on vabad ja jagab neid külalistele.
+DHCP server ON see hotelli administraator — ta teab, millised "toad" (IP aadressid) on vabad ja jagab neid külalistele.
 
 ### DHCP põhimõisted
 
-**DHCP Server** - seade, mis jagab IP aadresse. Võib olla:
-- Cisco ruuter (konfigureerime täna)
-- Windows Server
-- Linux server
-- Koduruuter (juba sisseehitatud)
-
-**DHCP Client** - seade, mis küsib IP aadressi. Praktiliselt iga tänapäevane seade:
-- Arvutid
-- Telefonid
-- Tahvelarvutid
-- Printerid
-- Nutikellad
-- IoT seadmed
-
-**DHCP Pool** - vahemik IP aadresse, mida server saab välja jagada. Näiteks "jaga aadresse vahemikus 192.168.1.50 kuni 192.168.1.200".
-
-**Lease** - "rent" ehk kui kaua klient saab IP-d kasutada. Tüüpiliselt 8 tundi kuni 7 päeva. Kui lease lõpeb, peab klient uuendama või saab uue IP.
-
-**Excluded Addresses** - IP aadressid, mida server EI JAga. Need on reserveeritud serveritele, ruuteritele ja teistele seadmetele, mis vajavad püsivat IP-d.
+| Mõiste | Selgitus |
+|--------|----------|
+| **DHCP Server** | Seade, mis jagab IP aadresse. Võib olla Cisco ruuter, Windows Server, Linux server või koduruuter. |
+| **DHCP Client** | Seade, mis küsib IP aadressi. Praktiliselt KÕIK tänapäevased seadmed: arvutid, telefonid, printerid, nutikellad, isegi mõned lambid ja külmkapid! |
+| **DHCP Pool** | Vahemik IP aadresse, mida server saab välja jagada. Näiteks "jaga aadresse vahemikus 192.168.1.50 kuni 192.168.1.200". |
+| **Lease** | "Rent" ehk kui kaua klient saab IP-d kasutada. Tüüpiliselt 8 tundi kuni 7 päeva. Miks mitte igavesti? Sest siis saaksid vabad aadressid otsa! |
+| **Excluded Addresses** | IP aadressid, mida server EI JAGA. Need on reserveeritud serveritele ja ruuteritele — nemad vajavad püsivat aadressi. |
 
 ---
 
-## 3. DORA PROTSESS
+### ✅ Kontrolli ennast
 
-Kui arvuti lülitub sisse ja vajab IP aadressi, toimub neljasammuline "vestlus" arvuti ja DHCP serveri vahel. Seda nimetatakse **DORA** protsessiks.
+1. Miks on DHCP parem kui käsitsi IP seadistamine?
+2. Mis juhtub, kui kaks arvutit saavad sama IP aadressi?
+3. Mis on DHCP "lease" ja miks see eksisteerib?
 
-### D - Discover (Avastamine)
+---
 
-Arvuti lülitub sisse. Tal pole veel IP aadressi - ta ei tea isegi, kas võrgus ON DHCP serverit.
+## 3. DORA protsess
+
+> **Miks see oluline on?**  
+> DORA on see "tants", mida su arvuti ja ruuter teevad iga kord, kui sa võrku ühendud. Kui sa tead DORA-t, siis sa MÕISTAD, kuidas võrk töötab — mitte ei õpi lihtsalt pähe.
+
+### Neli sammu internetini
+
+Kui arvuti lülitub sisse ja vajab IP aadressi, toimub neljasammuline "vestlus" arvuti ja DHCP serveri vahel. 
+
+Seda nimetatakse **DORA** protsessiks — nime järgi sammude esitähtedest.
+
+![DORA protsess](images/dora_process.png)
+
+### D — Discover (Avastamine)
+
+Arvuti lülitub sisse. Tal pole veel IP aadressi — ta ei tea isegi, kas võrgus ON DHCP serverit.
+
+Mida ta teeb? Karjub!
 
 Arvuti saadab **broadcast** sõnumi kogu võrku:
-- Sihtaadress: 255.255.255.255 (kõigile!)
+- Sihtaadress: 255.255.255.255 (see tähendab "KÕIGILE!")
 - Sisu: "Hei! Kas keegi jagab siin IP aadresse? Palun vastake!"
+
+See on nagu tulla pimedasse ruumi ja hüüda "Kas siin on keegi?"
 
 Kuna see on broadcast, kuulevad seda KÕIK võrgus olevad seadmed. Aga ainult DHCP server vastab.
 
-### O - Offer (Pakkumine)
+### O — Offer (Pakkumine)
 
-DHCP server kuuleb Discover sõnumit ja kontrollib oma pooli:
+DHCP server kuuleb karjet ja mõtleb:
 - "Hmm, mul on vabad aadressid 192.168.1.50 kuni 192.168.1.200..."
 - "Annan sellele arvutile 192.168.1.50"
 
@@ -132,163 +159,148 @@ Server saadab **Offer** sõnumi:
 - "DNS server on 192.168.1.10"
 - "Saad seda kasutada 8 tundi"
 
-### R - Request (Päring)
+See on nagu "Jah, ma olen siin! Sul võib olla tuba 247."
 
-Arvuti saab pakkumise. Teoreetiliselt võiks võrgus olla MITU DHCP serverit ja arvuti võiks saada mitu pakkumist.
+### R — Request (Päring)
+
+Nüüd tuleb huvitav osa. Teoreetiliselt võiks võrgus olla MITU DHCP serverit ja arvuti võiks saada mitu pakkumist.
 
 Arvuti valib ühe (tavaliselt esimese) ja saadab **broadcast** kinnituse:
 - "Jah, ma tahan seda IP-d, mida server 192.168.1.1 mulle pakkus!"
 
-Miks broadcast? Et TEISED DHCP serverid teaksid - "aa, see klient võttis teise serveri pakkumise, ma ei pea talle IP-d reserveerima".
+Miks jälle broadcast? Sest arvuti tahab, et KÕIK DHCP serverid kuuleksid. Need teised serverid mõtlevad: "Aa, see klient võttis teise serveri pakkumise — ma ei pea talle IP-d reserveerima."
 
-### A - Acknowledgment (Kinnitus)
+Viisakas, eks?
+
+### A — Acknowledgment (Kinnitus)
 
 Server saadab lõpliku kinnituse:
 - "Selge, 192.168.1.50 on nüüd SINU!"
 - "Lease algab nüüd, kestab 8 tundi"
 
-Arvuti seadistab oma võrgukaardi saadud seadetega ja on valmis võrku kasutama.
+Arvuti seadistab oma võrgukaardi ja... kõik. Valmis. Internet töötab.
 
-### DORA visuaalselt
+**👉 Kui DORA on läbi, siis arvuti saab internetti minna. Kogu see protsess võtab vähem kui sekundi!**
 
-```
-Arvuti (klient)                              DHCP Server
-      |                                           |
-      |                                           |
-   [Lülitub sisse, IP puudub]                     |
-      |                                           |
-      |------- DISCOVER (broadcast) ------------->|
-      |        "Kas keegi jagab IP-sid?"          |
-      |                                           |
-      |                              [Kontrollib pooli]
-      |                                           |
-      |<-------------- OFFER ---------------------|
-      |        "Pakun sulle 192.168.1.50"         |
-      |        "Gateway: 192.168.1.1"             |
-      |        "DNS: 192.168.1.10"                |
-      |        "Lease: 8 tundi"                   |
-      |                                           |
-      |------- REQUEST (broadcast) -------------->|
-      |        "Jah, tahan 192.168.1.50!"         |
-      |                                           |
-      |<-------------- ACK -----------------------|
-      |        "Kinnitatud! See on sinu."         |
-      |                                           |
-   [Seadistab võrgukaardi]                        |
-      |                                           |
-   [Valmis võrku kasutama!]                       |
-```
+### DORA kokkuvõte
 
-### Lease uuendamine
+| Samm | Nimi | Suund | Tüüp | Mida ütleb |
+|------|------|-------|------|------------|
+| **D** | Discover | Klient → Võrk | Broadcast | "Kas keegi jagab IP-sid?" |
+| **O** | Offer | Server → Klient | Unicast | "Pakun sulle 192.168.1.50" |
+| **R** | Request | Klient → Võrk | Broadcast | "Tahan seda IP-d!" |
+| **A** | Ack | Server → Klient | Unicast | "Kinnitatud, see on sinu!" |
 
-Mis juhtub, kui 8 tundi saab täis? Kas arvuti kaotab ühenduse?
+**Broadcast** = saadetakse kõigile võrgus  
+**Unicast** = saadetakse ainult ühele seadmele
 
-Ei! Arvuti alustab lease uuendamist ENNE tähtaega:
-- 50% lease ajast: arvuti proovib uuendada sama serveriga
-- 87.5% lease ajast: kui eelmine ei õnnestunud, proovib mis tahes serveriga
-- 100%: alles nüüd kaotab IP ja alustab uuesti DORA-ga
+### Mis juhtub, kui lease lõpeb?
 
-Praktikas, kui arvuti on pidevalt võrgus, kasutab ta sama IP-d aastaid.
+Hea küsimus! Kas arvuti kaotab ühenduse täpselt 8 tunni pärast?
+
+Ei! Arvuti pole rumal. Ta alustab lease uuendamist ENNE tähtaega:
+
+| Millal | Mida arvuti teeb |
+|--------|------------------|
+| 50% lease ajast (4h) | Proovib vaikselt uuendada sama serveriga |
+| 87.5% lease ajast (7h) | Kui eelmine ei õnnestunud, proovib mis tahes serveriga |
+| 100% (8h) | Alles NÜÜD kaotab IP ja alustab uuesti DORA-ga |
+
+Praktikas, kui arvuti on pidevalt võrgus, kasutab ta sama IP-d aastaid. Server lihtsalt pikendab "renti" iga paari tunni tagant.
 
 ---
 
-## 4. DHCP KONFIGUREERIMINE RUUTERIL
+### ✅ Kontrolli ennast
 
-Cisco ruuterit saab kasutada DHCP serverina. See on mugav väikestes võrkudes, kus pole eraldi serverit.
+1. Mida tähendab DORA lühend?
+2. Miks on Discover ja Request broadcast-sõnumid, aga Offer ja Ack unicast?
+3. Kui sul on 8-tunnine lease, siis millal arvuti esimest korda proovib seda uuendada?
 
-### Pool loomine
+---
 
-```
-Router(config)# ip dhcp pool KONTOR
-Router(dhcp-config)# network 192.168.1.0 255.255.255.0
-Router(dhcp-config)# default-router 192.168.1.1
-Router(dhcp-config)# dns-server 192.168.1.10
-Router(dhcp-config)# exit
-```
+## 4. DHCP serveri seadistamine
 
-**Mida need käsud teevad:**
+> **Miks see oluline on?**  
+> See osa näitab, kuidas DHCP "telgitagustes" välja näeb — mida administraator peab otsustama, enne kui DHCP tööle hakkab. Käske harjutame laboris!
 
-| Käsk | Selgitus |
-|------|----------|
-| `ip dhcp pool KONTOR` | Loo uus pool nimega "KONTOR" |
-| `network 192.168.1.0 255.255.255.0` | Jaga IP-sid sellest võrgust |
-| `default-router 192.168.1.1` | Ütle klientidele, et gateway on see |
-| `dns-server 192.168.1.10` | Ütle klientidele DNS serveri aadress |
+### Mida DHCP server peab teadma?
 
-### Excluded Addresses
+Enne kui DHCP server saab IP-sid jagama hakata, peab keegi talle ütlema:
 
-Mõned IP aadressid EI TOHI kunagi DHCP-ga välja jagada:
-- Ruuteri aadress (gateway) - kui keegi saab selle, võrk lakkab töötamast
-- Serverite aadressid - serverid vajavad püsivat IP-d
-- Printerite aadressid - et kasutajad teaksid, kuhu printida
+1. **Millisest võrgust jagada?** — näiteks 192.168.1.0/24
+2. **Mis on gateway?** — et kliendid teaksid, kuhu pakette saata
+3. **Mis on DNS server?** — et kliendid saaksid nimesid lahendada
 
-```
-Router(config)# ip dhcp excluded-address 192.168.1.1 192.168.1.49
-```
+### Excluded Addresses — ära jaga neid!
 
-See käsk ütleb: "Ära kunagi jaga aadresse vahemikus .1 kuni .49". Need jäävad serveritele ja infrastruktuurile.
+Mõned IP aadressid EI TOHI kunagi DHCP-ga välja jagada. Miks?
+
+- **Ruuteri aadress** — kui keegi saab selle, kukub kogu võrk kokku
+- **Serverite aadressid** — serverid vajavad PÜSIVAT IP-d, mis ei muutu
+- **Printerite aadressid** — et inimesed teaksid, kuhu printida
+
+Seega öeldakse DHCP serverile: "Ära kunagi jaga aadresse .1 kuni .49" — need on reserveeritud.
+
+![DHCP pool jaotus](images/dhcp_pool.png)
 
 **Hea praktika:**
-- .1 - .10: Ruuterid ja võrguseadmed
-- .11 - .30: Serverid
-- .31 - .49: Printerid, reserv
-- .50 - .200: DHCP pool (tavalised arvutid)
-- .201 - .254: Reserv tulevikuks
 
-### DHCP seisundi kontrollimine
+| Vahemik | Kellele |
+|---------|---------|
+| .1 — .10 | Ruuterid ja switchid |
+| .11 — .30 | Serverid |
+| .31 — .49 | Printerid, IP-kaamerad |
+| .50 — .200 | **DHCP pool** — tavalised arvutid |
+| .201 — .254 | Reserv tulevikuks |
 
-```
-Router# show ip dhcp binding
-```
+### Kuidas näha, kes mida sai?
 
-See näitab kõiki välja jagatud IP aadresse:
-
-```
-IP address       Client-ID/              Lease expiration
-                 Hardware address
-192.168.1.50     0100.1234.5678.90       Mar 15 2024 08:30 AM
-192.168.1.51     0100.ABCD.EF01.23       Mar 15 2024 09:15 AM
-```
-
-```
-Router# show ip dhcp pool
-```
-
-See näitab pooli statistikat - mitu aadressi on jagatud, mitu vaba.
+Administraator saab alati vaadata, millised IP-d on välja jagatud — see on nagu hotelli registratuuriraamat. Näed, kes millises "toas" on ja millal "rent" lõpeb.
 
 ---
 
-## 5. DNS - DOMAIN NAME SYSTEM
+### ✅ Kontrolli ennast
 
-### Probleem: inimesed ei mäleta numbreid
+1. Miks on vaja excluded addresses?
+2. Mis juhtuks, kui ruuteri IP (gateway) antaks kogemata DHCP-ga kellelegi teisele?
+3. Miks serverid ja printerid ei kasuta tavaliselt DHCP-d?
 
-Proovi meelde jätta:
+---
+
+## 5. DNS — Domain Name System
+
+> **Miks see oluline on?**  
+> DNS on põhjus, miks sa kirjutad "google.com", mitte "142.250.74.142". Ilma DNS-ita oleks internet nagu telefoniraamat, kus on ainult numbrid — nimesid pole.
+
+### Proovi seda
+
+Proovi meelde jätta need numbrid:
+
 - 142.250.74.142
-- 31.13.76.36
+- 31.13.76.36  
 - 151.101.1.140
 
 Raske, eks? Aga mis siis, kui ütlen:
+
 - google.com
 - facebook.com
 - reddit.com
 
-Palju lihtsam! Inimesed mõtlevad nimedes, arvutid numbritena. Keegi peab nende vahel tõlkima.
+Palju lihtsam!
 
-### Lahendus: DNS
+**Inimesed mõtlevad nimedes. Arvutid mõtlevad numbrites. DNS on tõlk nende vahel.**
 
-**DNS** (Domain Name System) on nagu interneti telefoniraamat. Kui sa tahad helistada sõbrale, otsid telefoniraamatust tema nime ja leiad numbri. DNS teeb sama:
+### Natuke ajalugu
 
-```
-Sina: "Tahan minna google.com"
-DNS:  "google.com = 142.250.74.142"
-Sina: "Aitäh!" → arvuti ühendub 142.250.74.142
-```
+1983. aastal, kui internet oli veel noor, oli olemas fail nimega `HOSTS.TXT`. See oli ÜKSAINUS fail, mis sisaldas KÕIKI interneti nimesid ja IP-sid. Seda hoiti Stanford Research Institute arvutis ja KÕIK pidid selle regulaarselt alla laadima.
 
-Ilma DNS-ita peaksid iga veebilehe aadressi numbrina meeles pidama. Internet oleks praktiliselt kasutamatu.
+Probleem? Internet kasvas. 1988. aastaks oli see fail nii suur ja muutus nii tihti, et süsteem lihtsalt ei töötanud enam.
 
-### Elunäide: telefoniraamat
+Lahendus oli DNS — hajutatud süsteem, kus mitte keegi ei pea KÕIKE teadma. Igaüks teab ainult oma osa.
 
-Mõtle vanale paberkandjal telefoniraamatule:
+### Analoogia: infotelefon
+
+Mõtle vanale paberkandjal telefoniraamatule ja infotelefonile:
 
 **DNS** on nagu telefoniraamat:
 - Otsid nime (google.com)
@@ -296,310 +308,243 @@ Mõtle vanale paberkandjal telefoniraamatule:
 - Helistad numbrile
 
 **DNS server** on nagu infotelefon:
-- Helistad ja küsid "Mis on Mardi number?"
+- Helistad: "Mis on Google'i number?"
 - Operaator vaatab registrist
 - Ütleb sulle numbri
 
+Vahe on selles, et DNS on PALJU kiirem ja automatiseeritud.
+
 ### DNS põhimõisted
 
-**Domain** - domeeninimi, inimloetav aadress. Näiteks:
-- google.com
-- hkhk.ee
-- mail.google.com
+| Mõiste | Selgitus |
+|--------|----------|
+| **Domain** | Domeeninimi, inimloetav aadress. Näiteks: google.com, hkhk.ee |
+| **DNS Server** | Server, mis teab nimede ja IP-de seoseid |
+| **DNS Record** | Üks kirje DNS andmebaasis — ühe nime ja IP seos |
+| **TTL** | Time To Live — kui kaua vastust "meeles hoida". Näiteks 1 tund. |
 
-**DNS Server** - server, mis teab nimede ja IP-de seoseid
+### DNS kirje tüübid
 
-**DNS Record** - üks kirje DNS andmebaasis. Erinevad tüübid:
+| Tüüp | Mida teeb | Näide |
+|------|-----------|-------|
+| **A** | Nimi → IPv4 aadress | google.com → 142.250.74.142 |
+| **AAAA** | Nimi → IPv6 aadress | google.com → 2607:f8b0:... |
+| **CNAME** | Alias, teine nimi | www.google.com → google.com |
+| **MX** | E-posti server | google.com → mail.google.com |
 
-| Tüüp | Nimi | Otstarve | Näide |
-|------|------|----------|-------|
-| **A** | Address | Seob nime IPv4 aadressiga | google.com → 142.250.74.142 |
-| **AAAA** | Address (IPv6) | Seob nime IPv6 aadressiga | google.com → 2607:f8b0:4004:800::200e |
-| **CNAME** | Canonical Name | Alias, teine nimi samale serverile | www.google.com → google.com |
-| **MX** | Mail Exchange | E-posti server | google.com mail → mail.google.com |
-| **NS** | Name Server | Kes vastutab selle domeeni eest | google.com → ns1.google.com |
-
-**TTL** (Time To Live) - kui kaua vastust "meeles hoida" (cache-da). Näiteks 3600 sekundit = 1 tund.
-
----
-
-## 6. DNS HIERARHIA JA PÄRINGUD
-
-### DNS hierarhia
-
-DNS on organiseeritud puustruktuurina. Tipus on "juur" (root), sealt hargnevad tippdomeenid (TLD), sealt alamdomeenid.
-
-```
-                         [.]  (root - juur)
-                          |
-         +----------------+----------------+
-         |                |                |
-       [com]            [ee]             [org]
-         |                |
-    +----+----+      +----+----+
-    |    |    |      |    |    |
- google fb amazon  hkhk   ut  delfi
-    |
-+---+---+
-|       |
-www   mail
-```
-
-Täielik domeeninimi loetakse **paremalt vasakule**:
-- `www.google.com.` (punkt lõpus tähistab juurt)
-- Juur → com → google → www
-
-### Kuidas DNS päring töötab?
-
-Kui sisestad brauserisse `www.hkhk.ee`, toimub järgmine:
-
-**1. Arvuti küsib oma DNS serverilt**
-- "Mis on www.hkhk.ee IP?"
-- Sinu DNS server (selle said DHCP-st!) on tavaliselt ISP server või firma sisemine server
-
-**2. DNS server ei tea, küsib juur-serverilt**
-- "Kes teab .ee domeene?"
-- Juur-server: ".ee eest vastutavad need serverid: 193.0.0.236"
-
-**3. DNS server küsib .ee serverilt**
-- "Kes teab hkhk.ee?"
-- .ee server: "hkhk.ee eest vastutab see server: X.X.X.X"
-
-**4. DNS server küsib hkhk.ee serverilt**
-- "Mis on www.hkhk.ee IP?"
-- hkhk.ee server: "www.hkhk.ee = 194.X.X.X"
-
-**5. DNS server vastab sulle**
-- "www.hkhk.ee = 194.X.X.X"
-- Ja salvestab vastuse cache-i, et järgmine kord kiiremini vastata
-
-### DNS cache
-
-Et mitte iga kord sama asja küsida, hoiavad DNS serverid ja ka sinu arvuti vastuseid **cache-s** (vahemälus).
-
-Kui küsid teist korda `www.google.com`:
-- Sinu arvuti: "Mul on see juba meeles! 142.250.74.142"
-- Pole vaja DNS serverit üldse tülitada
-
-**TTL** määrab, kui kaua cache kehtib:
-- TTL = 3600 → 1 tund
-- TTL = 86400 → 24 tundi
-- TTL = 300 → 5 minutit (kiiresti muutuvate kirjete jaoks)
-
-### DNS testimine käsurealt
-
-**nslookup** - kõige levinum DNS testimise käsk:
-
-```
-C:\> nslookup google.com
-
-Server:  dns.elion.ee
-Address:  194.126.115.18
-
-Non-authoritative answer:
-Name:    google.com
-Address: 142.250.74.142
-```
-
-**Mida see tähendab:**
-- `Server: dns.elion.ee` - sinu DNS server
-- `Non-authoritative answer` - vastus tuli cache-st, mitte otse google.com serverist
-- `Address: 142.250.74.142` - google.com IP aadress
-
-**Interaktiivne režiim:**
-```
-C:\> nslookup
-> set type=MX
-> google.com
-   google.com    MX preference = 10, mail exchanger = smtp.google.com
-> exit
-```
-
-### DNS troubleshooting
-
-Kui veebileht ei avane, on hea kontrollida, kas probleem on DNS-is:
-
-```
-C:\> nslookup probleem.ee
-*** Can't find probleem.ee: Non-existent domain
-```
-→ DNS probleem! Nimi ei lahendu.
-
-```
-C:\> nslookup probleem.ee
-Name: probleem.ee
-Address: 1.2.3.4
-
-C:\> ping 1.2.3.4
-Request timed out.
-```
-→ DNS töötab, aga server ise ei vasta. Probleem on serveris, mitte DNS-is.
-
-**DNS cache tühjendamine** (kui kahtlustad vananenud cache-i):
-```
-C:\> ipconfig /flushdns
-Successfully flushed the DNS Resolver Cache.
-```
+**CNAME** on eriti kasulik. Näiteks `www.google.com` on tegelikult lihtsalt alias `google.com` jaoks. Mõlemad viivad samasse kohta.
 
 ---
 
-## 7. DHCP JA DNS KOOSTÖÖ
+### ✅ Kontrolli ennast
 
-### Kuidas nad koos töötavad?
+1. Miks DNS leiutati? Mis oli probleem enne?
+2. Mis vahe on A ja CNAME kirjel?
+3. Kui kirjutad brauserisse "facebook.com", siis mis tegelikult toimub enne, kui leht avaneb?
 
-DHCP ja DNS on erinevad protokollid, aga nad täiendavad teineteist:
+---
 
-1. **DHCP annab arvutile:**
-   - IP aadressi
-   - Alamvõrgumaski
-   - Default gateway
-   - **DNS serveri aadressi** ← see on oluline!
+## 6. DNS hierarhia ja päringud
 
-2. **Arvuti kasutab saadud DNS serverit** nimede lahendamiseks
+> **Miks see oluline on?**  
+> DNS ei ole üks suur server — see on terve maailma peale laiali jagatud süsteem. Kui mõistad hierarhiat, saad aru, miks mõnikord "DNS ei tööta" ja kuidas seda parandada.
 
-3. **DNS server** tõlgib nimed IP aadressideks
+**👉 Lihtne kokkuvõte enne detaile:** DNS päring liigub läbi mitme serveri: root → .ee → hkhk.ee → www. Igaüks teab ainult järgmist sammu, mitte kogu vastust.
 
-```
-[Arvuti]                                          
-    |                                             
-    |--DHCP Discover-->  [DHCP Server/Ruuter]    
-    |                                             
-    |<--DHCP Offer------                          
-    |   IP: 192.168.1.50                          
-    |   Gateway: 192.168.1.1                      
-    |   DNS: 192.168.1.10  ←─────────────────────┐
-    |                                             │
-    |                                             │
-    | Kasutaja: "www.firma.lan"                   │
-    |                                             │
-    |--DNS query: www.firma.lan? -->  [DNS Server]
-    |                                  192.168.1.10
-    |<--DNS response: 192.168.1.10 --            
-    |                                             
-    |--HTTP request -->  [Veebiserver 192.168.1.10]
-    |<--Veebileht ------                          
-```
+### DNS puu
+
+DNS on organiseeritud nagu puu — tipus juur, sealt hargnevad oksad.
+
+![DNS hierarhia](images/dns_hierarchy.png)
+
+**Tipus:** Juur (root) — seda tähistatakse punktiga `.`
+
+**Teine tase:** TLD-d (Top Level Domains) — `.com`, `.ee`, `.org`, `.net`
+
+**Kolmas tase:** Domeenid — `google`, `hkhk`, `facebook`
+
+**Neljas tase:** Alamdomeenid — `www`, `mail`, `api`
+
+**Huvitav fakt:** Tegelik täielik domeeninimi lõpeb punktiga! `www.google.com.` — see viimane punkt on juur. Brauserid lihtsalt ei näita seda.
+
+### Kuidas DNS päring tegelikult töötab
+
+Kui sisestad brauserisse `www.hkhk.ee`, siis su arvuti EI TEA selle IP-d. Ta peab küsima.
+
+![DNS päringu protsess](images/dns_query.png)
+
+Aga kellelt küsida? Su arvuti ei saa ju kogu maailma DNS servereid tunda!
+
+Siin tuleb mängu **rekursiivne päring**:
+
+| Samm | Mis toimub |
+|------|------------|
+| 1 | Su arvuti küsib OMA DNS serverilt (selle sai ta DHCP-st!) |
+| 2 | DNS server ei tea vastust → küsib juur-serverilt: "Kes teab `.ee` domeene?" |
+| 3 | Juur-server: "`.ee` eest vastutavad need serverid: [aadressid]" |
+| 4 | DNS server küsib `.ee` serverilt: "Kes teab `hkhk.ee`?" |
+| 5 | `.ee` server: "`hkhk.ee` eest vastutab see server: [aadress]" |
+| 6 | DNS server küsib `hkhk.ee` serverilt: "Mis on `www.hkhk.ee` IP?" |
+| 7 | `hkhk.ee` server: "www.hkhk.ee = 194.x.x.x" |
+| 8 | DNS server saadab vastuse su arvutile |
+
+See tundub keeruline, aga toimub vähem kui sekundi jooksul!
+
+### DNS cache — et mitte iga kord küsida
+
+Kujuta ette, kui iga kord `google.com` avades peaks kogu see protsess toimuma. See oleks aeglane!
+
+Sellepärast on olemas **cache** (vahemälu). Kui DNS server on juba korra küsinud `google.com` IP-d, siis ta MÄLETAB seda mõnda aega.
+
+**TTL** (Time To Live) määrab, kui kaua meeles pidada:
+
+| TTL | Aeg | Millal kasutatakse |
+|-----|-----|---------------------|
+| 300 | 5 minutit | Kiiresti muutuvad asjad |
+| 3600 | 1 tund | Tavaline |
+| 86400 | 24 tundi | Harva muutuvad asjad |
+
+**Huvitav fakt:** Kui muudad oma veebilehe serverit, siis võib minna kuni 24 tundi, enne kui KÕIK näevad uut versiooni — sest vanad DNS vastused on veel cache-s!
+
+### DNS testimine — nslookup
+
+Windowsis ja Linuxis on olemas käsk `nslookup`, mis küsib DNS serverilt nime IP aadressi. See on kasulik, kui tahad teada:
+
+- Kas DNS üldse töötab?
+- Mis IP on mingil nimel?
+- Kas probleem on DNS-is või mujal?
+
+Näiteks kui küsid `nslookup google.com`, saad vastuseks:
+- Sinu DNS serveri nime (kelle käest küsisid)
+- Google.com IP aadressi
+
+Kui näed "Non-authoritative answer", tähendab see, et vastus tuli cache-st — keegi on seda juba varem küsinud.
+
+**Kui miski ei tööta** ja näed "Non-existent domain", siis kas:
+- Sellist nime pole olemas, VÕI
+- DNS server ei tööta
+
+---
+
+### ✅ Kontrolli ennast
+
+1. Miks DNS on hierarhiline (puustruktuur), mitte üks suur server?
+2. Mis on cache ja miks see eksisteerib?
+3. Kui `nslookup google.com` näitab "Non-authoritative answer", siis mida see tähendab?
+
+---
+
+## 7. DHCP ja DNS koostöö
+
+> **Miks see oluline on?**  
+> See on "aha-moment" — koht, kus kõik klõpsab kokku. DHCP ja DNS pole kaks eraldi asja, nad töötavad KOOS, et sa saaksid lihtsalt WiFi-ga ühenduda ja minna google.com peale.
+
+### Kaks protokolli, üks eesmärk
+
+DHCP ja DNS on erinevad protokollid, aga nad on nagu paar, kes täiendavad teineteist:
+
+![DHCP ja DNS koostöö](images/dhcp_dns_together.png)
+
+**DHCP annab sulle:**
+- IP aadressi (et sa saaksid võrgus rääkida)
+- Alamvõrgumaski (et sa teaksid, kes on "naabrid")
+- Default gateway (et sa pääseksid välja oma võrgust)
+- **DNS serveri aadressi** ← see on võtmekoht!
+
+**DNS server** (mille aadressi sa just said) tõlgib siis sulle nimesid IP-deks.
+
+Ilma DHCP-ta ei tea sa DNS serveri aadressi.  
+Ilma DNS-ita pead kasutama IP aadresse.  
+**Koos** — kõik lihtsalt töötab.
+
+### Päris elu näide: Mati hommik
+
+Mati tuleb hommikul kontorisse:
+
+| Aeg | Mis toimub |
+|-----|------------|
+| 8:00 | Mati lülitab arvuti sisse |
+| 8:00:01 | Arvuti saadab DHCP Discover |
+| 8:00:02 | Ruuter vastab: IP=192.168.1.57, Gateway=192.168.1.1, DNS=192.168.1.10 |
+| 8:00:03 | Arvuti seadistab end — võrk töötab |
+| 8:05 | Mati avab brauseri, kirjutab "mail.firma.lan" |
+| 8:05:01 | Arvuti küsib DNS-ilt (192.168.1.10): "Mis on mail.firma.lan IP?" |
+| 8:05:02 | DNS vastab: "192.168.1.10" |
+| 8:05:03 | Brauser avab meiliserveri |
+
+Mati ei teadnud ühtegi IP aadressi. Ta ei seadistanud midagi. Ta lihtsalt lülitas arvuti sisse ja läks tööle.
+
+**See on DHCP + DNS võlu.**
 
 ### Praktiline näide: kontori võrk
 
-Kujuta ette väikest kontorit:
+Väike kontor, 192.168.1.0/24 võrk:
 
-**Võrk:** 192.168.1.0/24
+| Seade | IP aadress | Kust saab? |
+|-------|------------|------------|
+| Ruuter (DHCP server) | 192.168.1.1 | Staatiline (ei muutu) |
+| DNS server | 192.168.1.10 | Staatiline |
+| Printer | 192.168.1.20 | Staatiline |
+| Mati arvuti | 192.168.1.57 | DHCP |
+| Kati arvuti | 192.168.1.58 | DHCP |
+| Priidu laptop | 192.168.1.59 | DHCP |
 
-**Seadmed:**
-- Ruuter (gateway + DHCP server): 192.168.1.1
-- DNS/Veebiserver: 192.168.1.10
-- Printer: 192.168.1.20
-- Töötajate arvutid: DHCP (saavad .50 - .200)
-
-**Ruuteri DHCP konfiguratsioon:**
-```
-ip dhcp excluded-address 192.168.1.1 192.168.1.49
-ip dhcp pool KONTOR
- network 192.168.1.0 255.255.255.0
- default-router 192.168.1.1
- dns-server 192.168.1.10
-```
-
-**DNS serveri kirjed:**
-```
-www.firma.lan      A    192.168.1.10
-mail.firma.lan     A    192.168.1.10
-printer.firma.lan  A    192.168.1.20
-gateway.firma.lan  A    192.168.1.1
-```
-
-**Mis juhtub, kui Mati tuleb hommikul tööle:**
-
-1. Mati lülitab arvuti sisse
-2. Arvuti saadab DHCP Discover
-3. Ruuter vastab: IP=192.168.1.57, DNS=192.168.1.10
-4. Mati avab brauseri, kirjutab "mail.firma.lan"
-5. Arvuti küsib DNS serverilt (192.168.1.10): "Mis on mail.firma.lan?"
-6. DNS vastab: "192.168.1.10"
-7. Brauser avab meiliserveri
-
-Mati ei pea teadma ühtegi IP aadressi - kõik toimib nimede põhjal.
+Serverid ja printer = staatilised, sest nende aadress peab olema teada.  
+Töötajate arvutid = DHCP, sest pole vahet, mis IP nad saavad.
 
 ---
 
-## 8. KOKKUVÕTE
+### ✅ Kontrolli ennast
 
-### DHCP kokkuvõte
+1. DHCP annab sulle 4 asja. Millised need on?
+2. Kuidas arvuti teab, milliselt DNS serverilt küsida?
+3. Miks serverid kasutavad staatilisi IP-sid, aga töötajate arvutid DHCP-d?
+
+---
+
+## 8. Kokkuvõte
+
+> **Miks see oluline on?**  
+> See on kiire ülevaade kõigest — ideaalne kordamiseks enne testi või laborit.
+
+### DHCP — ühe pilguga
 
 | Mõiste | Selgitus |
 |--------|----------|
-| **DHCP** | Protokoll IP aadresside automaatseks jagamiseks |
+| **DHCP** | Protokoll, mis jagab automaatselt IP aadresse |
 | **DORA** | Discover → Offer → Request → Ack |
-| **Pool** | IP aadresside vahemik, mida DHCP jagab |
-| **Lease** | Kui kaua klient saab IP-d kasutada |
-| **Excluded** | Aadressid, mida DHCP ei jaga (serverid, ruuterid) |
+| **Pool** | IP-de vahemik, mida server jagab |
+| **Lease** | "Rent" — kui kaua IP-d kasutada saab |
+| **Excluded** | Aadressid, mida EI jagata |
 
-**DHCP käsud:**
-```
-ip dhcp pool [NIMI]
- network [VÕRK] [MASK]
- default-router [GATEWAY]
- dns-server [DNS]
-ip dhcp excluded-address [ALGUS] [LÕPP]
-show ip dhcp binding
-show ip dhcp pool
-```
-
-### DNS kokkuvõte
+### DNS — ühe pilguga
 
 | Mõiste | Selgitus |
 |--------|----------|
-| **DNS** | Protokoll nimede tõlkimiseks IP aadressideks |
-| **A record** | Seob nime IPv4 aadressiga |
-| **CNAME** | Alias (teine nimi samale serverile) |
-| **MX** | E-posti serveri kirje |
+| **DNS** | Protokoll, mis tõlgib nimed IP-deks |
+| **A record** | Nimi → IPv4 aadress |
+| **CNAME** | Alias (teine nimi samale asjale) |
 | **TTL** | Kui kaua vastust cache-s hoida |
-| **Cache** | Vahemälu, hoiab varasemaid vastuseid |
+| **Cache** | Vahemälu — et mitte iga kord küsida |
 
-**DNS käsud:**
-```
-nslookup [NIMI]
-nslookup -type=MX [NIMI]
-ipconfig /all          (näita DNS serverit)
-ipconfig /flushdns     (tühjenda DNS cache)
-ipconfig /displaydns   (näita DNS cache sisu)
-```
+### Miks mõlemad koos?
 
-### Miks mõlemad on olulised?
-
-**DHCP ilma DNS-ita:**
-- Arvutid saavad IP automaatselt ✓
-- Aga kasutajad peavad teadma numbreid ✗
-- "Mine aadressile 192.168.1.10" - kes seda mäletab?
-
-**DNS ilma DHCP-ta:**
-- Nimed töötavad ✓
-- Aga iga arvuti tuleb käsitsi seadistada ✗
-- Ja käsitsi tuleb DNS serveri aadress sisestada
-
-**DHCP + DNS koos:**
-- Arvuti saab IP automaatselt ✓
-- Arvuti saab DNS serveri aadressi automaatselt ✓
-- Kasutaja kasutab nimesid ✓
-- Kõik töötab ilma käsitsi seadistamata ✓
+| Variant | Mis juhtub |
+|---------|------------|
+| Ainult DHCP | IP tuleb automaatselt, aga pead numbreid teadma |
+| Ainult DNS | Nimed töötavad, aga pead käsitsi IP seadistama |
+| **DHCP + DNS** | Lülitad arvuti sisse → kõik töötab |
 
 ---
 
-## KONTROLLKÜSIMUSED
+### 🎯 Lõplik kontroll
 
-Vasta neile küsimustele enne laborit:
-
-1. Mida tähendab DORA ja mis järjekorras need sammud toimuvad?
-
-2. Miks on vaja excluded addresses? Too näide, mis võiks juhtuda kui ruuteri IP jagatakse DHCP-ga välja.
-
-3. Mis vahe on A record ja CNAME vahel? Millal kumbagi kasutada?
-
-4. Kui klient saab DHCP-st lease ajaga 8 tundi, kas ta kaotab ühenduse täpselt 8 tunni pärast? Põhjenda.
-
-5. Mida näitab käsk `nslookup google.com` ja kuidas aru saada, kas vastus tuli cache-st?
+1. Selgita oma sõnadega, mis on DHCP ja miks see eksisteerib.
+2. Selgita DORA protsessi nagu seletaksid sõbrale.
+3. Mis vahe on staatilisel IP-l ja DHCP-l? Millal kasutada kumbagi?
+4. Kuidas DNS päring liigub root serverist kuni lõpliku vastuseni?
+5. Miks DHCP annab ka DNS serveri aadressi, mitte ainult IP-d?
 
 ---
 
-*Õppematerjal põhineb Cisco NetAcad CCNA materjalidel (Moodul 15).*
+*Nüüd oled valmis laboriks! 🚀*
